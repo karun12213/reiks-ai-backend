@@ -1,26 +1,231 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ═══════════════════════════════════════════ */
+/* AUREUM — Design System                      */
+/* ═══════════════════════════════════════════ */
+
+@theme {
+  /* ─── Brand Colors ─── */
+  --color-aureum-black: #080808;
+  --color-aureum-dark: #0d0d0d;
+  --color-aureum-card: #111111;
+  --color-aureum-border: #1a1a1a;
+  --color-aureum-dim: #555555;
+  --color-aureum-mid: #888888;
+  --color-aureum-light: #cccccc;
+  --color-aureum-white: #f0f0f0;
+  --color-gold: #D4A853;
+  --color-gold-dark: #8B6914;
+  --color-gold-light: #E8C547;
+  --color-success: #4ade80;
+  --color-error: #f87171;
+  --color-warning: #fbbf24;
+  --color-info: #60a5fa;
+
+  /* ─── Fonts ─── */
+  --font-heading: "Playfair Display", serif;
+  --font-body: "DM Sans", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  /* ─── Animation ─── */
+  --animate-gold-shimmer: gold-shimmer 3s ease-in-out infinite;
+  --animate-price-flash-up: price-flash-up 0.6s ease-out;
+  --animate-price-flash-down: price-flash-down 0.6s ease-out;
+  --animate-fade-in: fade-in 0.4s ease-out;
+  --animate-slide-up: slide-up 0.5s ease-out;
+  --animate-pulse-gold: pulse-gold 2s ease-in-out infinite;
+  --animate-ticker: ticker 30s linear infinite;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ─── Base ─── */
+body {
+  background-color: #080808;
+  color: #f0f0f0;
+  font-family: "DM Sans", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+::selection {
+  background-color: rgba(212, 168, 83, 0.3);
+  color: #f0f0f0;
+}
+
+/* ─── Scrollbar ─── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0d0d0d;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #D4A853;
+}
+
+/* ─── Keyframes ─── */
+@keyframes gold-shimmer {
+
+  0%,
+  100% {
+    background-position: -200% center;
+  }
+
+  50% {
+    background-position: 200% center;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@keyframes price-flash-up {
+  0% {
+    color: #4ade80;
+    transform: scale(1.05);
+  }
+
+  100% {
+    color: inherit;
+    transform: scale(1);
+  }
+}
+
+@keyframes price-flash-down {
+  0% {
+    color: #f87171;
+    transform: scale(0.95);
+  }
+
+  100% {
+    color: inherit;
+    transform: scale(1);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse-gold {
+
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(212, 168, 83, 0.4);
+  }
+
+  50% {
+    box-shadow: 0 0 0 8px rgba(212, 168, 83, 0);
+  }
+}
+
+@keyframes ticker {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* ─── Utility Classes ─── */
+.text-gold-gradient {
+  background: linear-gradient(135deg, #D4A853, #E8C547, #8B6914);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gold-shimmer-bg {
+  background: linear-gradient(90deg, transparent, rgba(212, 168, 83, 0.08), transparent);
+  background-size: 200% 100%;
+  animation: gold-shimmer 3s ease-in-out infinite;
+}
+
+.gold-border-glow {
+  border: 1px solid rgba(212, 168, 83, 0.2);
+  box-shadow: 0 0 20px rgba(212, 168, 83, 0.05);
+}
+
+.card-hover {
+  transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+  border-color: rgba(212, 168, 83, 0.3);
+  box-shadow: 0 8px 32px rgba(212, 168, 83, 0.08);
+  transform: translateY(-2px);
+}
+
+/* ─── Gold Button ─── */
+.btn-gold {
+  background: linear-gradient(135deg, #D4A853, #8B6914);
+  color: #080808;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  transition: all 0.2s ease;
+}
+
+.btn-gold:hover {
+  background: linear-gradient(135deg, #E8C547, #D4A853);
+  box-shadow: 0 4px 16px rgba(212, 168, 83, 0.3);
+  transform: translateY(-1px);
+}
+
+.btn-outline-gold {
+  border: 1px solid rgba(212, 168, 83, 0.4);
+  color: #D4A853;
+  background: transparent;
+  transition: all 0.2s ease;
+}
+
+.btn-outline-gold:hover {
+  background: rgba(212, 168, 83, 0.1);
+  border-color: #D4A853;
+}
+
+/* ─── Responsive helpers ─── */
+@media (max-width: 767px) {
+  .desktop-only {
+    display: none !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .mobile-only {
+    display: none !important;
+  }
+}
+
+/* ─── Recharts Overrides ─── */
+.recharts-wrapper svg,
+.recharts-wrapper path,
+.recharts-surface,
+.recharts-layer {
+  outline: none !important;
 }
