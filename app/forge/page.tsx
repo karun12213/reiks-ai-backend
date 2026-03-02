@@ -66,7 +66,10 @@ function ForgeStudioContent() {
                 const mediaType = file.type || 'image/jpeg'
                 const res = await fetch('/api/vision', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-anthropic-key': localStorage.getItem('aureum_anthropic_key') || ''
+                    },
                     body: JSON.stringify({ imageBase64: base64, mediaType }),
                 })
 
@@ -107,7 +110,10 @@ function ForgeStudioContent() {
         try {
             const res = await fetch('/api/generate', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-replicate-key': localStorage.getItem('aureum_replicate_key') || ''
+                },
                 body: JSON.stringify({ prompt, metal, karat, category: analysis?.type || 'jewelry' }),
             })
 

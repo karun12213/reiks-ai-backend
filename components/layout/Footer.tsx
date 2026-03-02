@@ -60,8 +60,8 @@ export default function Footer() {
                         © {new Date().getFullYear()} AUREUM. All rights reserved.
                     </p>
                     <div className="flex items-center gap-4 text-[10px] text-aureum-dim">
-                        <Link href="/about" className="hover:text-gold transition-colors">About</Link>
-                        <Link href="/faq" className="hover:text-gold transition-colors">FAQ</Link>
+                        <Link href="/" className="hover:text-gold transition-colors">About</Link>
+                        <Link href="/" className="hover:text-gold transition-colors">FAQ</Link>
                         <span>Terms</span>
                         <span>Privacy</span>
                     </div>

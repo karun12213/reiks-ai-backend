@@ -58,6 +58,8 @@ export default function AdminPage() {
     const [alerts, setAlerts] = useState(ALERTS)
     const [sips, setSips] = useState<any[]>([]) // Add state for tracking SIPs
     const [collapsed, setCollapsed] = useState(false)
+    const [anthropicKey, setAnthropicKey] = useState('')
+    const [replicateKey, setReplicateKey] = useState('')
 
     const priceHistory = useMemo(genPriceHistory, [])
     const dailyRev = useMemo(genDailyRev, [])
@@ -70,6 +72,8 @@ export default function AdminPage() {
             const localLocks = JSON.parse(localStorage.getItem('aureum_locks') || '[]')
             if (localOrders.length > 0) setOrders([...localOrders, ...ORDERS])
             if (localLocks.length > 0) setLocks([...localLocks, ...LOCKS])
+            setAnthropicKey(localStorage.getItem('aureum_anthropic_key') || '')
+            setReplicateKey(localStorage.getItem('aureum_replicate_key') || '')
         }
     }, [])
 
@@ -582,6 +586,46 @@ export default function AdminPage() {
 
     const renderConfig = () => (
         <div className="space-y-4">
+            <Card>
+                <div className="flex justify-between items-center mb-4">
+                    <h3 className="text-sm font-semibold text-aureum-white">Live API Credentials</h3>
+                    <Badge text="LOCAL INJECTION" color="#60a5fa" />
+                </div>
+                <div className="space-y-4">
+                    <div>
+                        <label className="text-xs text-aureum-dim block mb-1">Anthropic API Key (Claude - Chat & Vision)</label>
+                        <input
+                            type="password"
+                            value={anthropicKey}
+                            onChange={e => setAnthropicKey(e.target.value)}
+                            onBlur={() => {
+                                localStorage.setItem('aureum_anthropic_key', anthropicKey)
+                                alert('Anthropic API key saved to browser session.')
+                            }}
+                            placeholder="sk-ant-api03-..."
+                            className="w-full px-3 py-2 bg-[#111] border border-aureum-border rounded-md text-xs font-mono text-aureum-white placeholder:text-aureum-dim focus:border-gold/50 focus:outline-none placeholder:opacity-40 transition-colors"
+                        />
+                    </div>
+                    <div>
+                        <label className="text-xs text-aureum-dim block mb-1">Replicate API Token (FLUX - Image Gen)</label>
+                        <input
+                            type="password"
+                            value={replicateKey}
+                            onChange={e => setReplicateKey(e.target.value)}
+                            onBlur={() => {
+                                localStorage.setItem('aureum_replicate_key', replicateKey)
+                                alert('Replicate API token saved to browser session.')
+                            }}
+                            placeholder="r8_..."
+                            className="w-full px-3 py-2 bg-[#111] border border-aureum-border rounded-md text-xs font-mono text-aureum-white placeholder:text-aureum-dim focus:border-gold/50 focus:outline-none placeholder:opacity-40 transition-colors"
+                        />
+                    </div>
+                    <p className="text-[10px] text-aureum-dim flex items-start gap-1.5 mt-2">
+                        <AlertTriangle size={12} className="shrink-0 mt-0.5 text-warning" />
+                        Keys injected here are securely stored exclusively in your browser's localStorage and attached to request headers dynamically, bypassing environment variables. Essential for live investor demos without backend redeployment.
+                    </p>
+                </div>
+            </Card>
             <Card>
                 <h3 className="text-sm font-semibold text-aureum-white mb-3">Feature Toggles <span className="text-[10px] text-aureum-dim font-normal ml-2">{activeFeatures} active · {features.length - activeFeatures} disabled</span></h3>
                 {['core', 'ai', 'finance', 'monetization', 'premium'].map(cat => (

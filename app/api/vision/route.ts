@@ -7,7 +7,8 @@ export const dynamic = 'force-dynamic'
 export async function POST(req: Request) {
     try {
         const { imageBase64, mediaType = 'image/jpeg' } = await req.json()
-        const anthropic = getAnthropicClient()
+        const customKey = req.headers.get('x-anthropic-key') || undefined
+        const anthropic = getAnthropicClient(customKey)
 
         if (!anthropic) {
             return NextResponse.json({ error: 'Anthropic API key not configured' }, { status: 503 })

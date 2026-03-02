@@ -3,12 +3,19 @@ import Anthropic from '@anthropic-ai/sdk'
 
 let client: Anthropic | null = null
 
-export function getAnthropicClient(): Anthropic | null {
-    if (client) return client
-    const key = process.env.ANTHROPIC_API_KEY
-    if (!key) return null
-    client = new Anthropic({ apiKey: key })
-    return client
+export function getAnthropicClient(customKey?: string): Anthropic | null {
+  // If a custom key is provided, instantiate a new client just for this request
+  if (customKey) {
+    return new Anthropic({ apiKey: customKey })
+  }
+
+  if (client) return client
+
+  // Fallback to environment variable
+  const key = process.env.ANTHROPIC_API_KEY
+  if (!key) return null
+  client = new Anthropic({ apiKey: key })
+  return client
 }
 
 // AUREUM Concierge system prompt template

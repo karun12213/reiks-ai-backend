@@ -56,7 +56,10 @@ export default function ConciergePage() {
 
             const res = await fetch('/api/chat', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-anthropic-key': localStorage.getItem('aureum_anthropic_key') || ''
+                },
                 body: JSON.stringify({ messages: chatMessages }),
             })
 
@@ -147,8 +150,8 @@ export default function ConciergePage() {
                                     {msg.role === 'assistant' ? <Bot size={13} className="text-gold" /> : <User size={13} className="text-aureum-mid" />}
                                 </div>
                                 <div className={`max-w-[80%] rounded-xl px-4 py-3 text-sm leading-relaxed ${msg.role === 'user'
-                                        ? 'bg-gold/10 text-aureum-white border border-gold/20'
-                                        : 'bg-aureum-card text-aureum-light border border-aureum-border'
+                                    ? 'bg-gold/10 text-aureum-white border border-gold/20'
+                                    : 'bg-aureum-card text-aureum-light border border-aureum-border'
                                     }`}>
                                     {msg.content || (
                                         <span className="flex items-center gap-2 text-aureum-dim">

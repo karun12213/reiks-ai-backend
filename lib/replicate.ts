@@ -3,7 +3,11 @@ import Replicate from 'replicate'
 
 let client: Replicate | null = null
 
-export function getReplicateClient(): Replicate | null {
+export function getReplicateClient(customToken?: string): Replicate | null {
+    if (customToken) {
+        return new Replicate({ auth: customToken })
+    }
+
     if (client) return client
     const token = process.env.REPLICATE_API_TOKEN
     if (!token) return null
