@@ -255,10 +255,14 @@ export default function CollectionPage() {
                                         className="block bg-aureum-card rounded-xl border border-aureum-border card-hover overflow-hidden group"
                                     >
                                         <div className="aspect-square bg-gradient-to-br from-aureum-card to-aureum-dark flex items-center justify-center relative overflow-hidden">
-                                            <div className="text-4xl opacity-20 group-hover:opacity-30 transition-opacity">
-                                                {product.category === 'rings' ? '💍' : product.category === 'chains' ? '🔗' : product.category === 'pendants' ? '📿' : product.category === 'bracelets' ? '⌚' : product.category === 'earrings' ? '✨' : product.category === 'bangles' ? '⭕' : '👑'}
-                                            </div>
-                                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                                            {product.images?.[0] ? (
+                                                <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                                            ) : (
+                                                <div className="text-4xl opacity-20 group-hover:opacity-30 transition-opacity">
+                                                    {product.category === 'rings' ? '💍' : product.category === 'chains' ? '🔗' : product.category === 'pendants' ? '📿' : product.category === 'bracelets' ? '⌚' : product.category === 'earrings' ? '✨' : product.category === 'bangles' ? '⭕' : '👑'}
+                                                </div>
+                                            )}
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80" />
 
                                             {/* Wishlist Button */}
                                             <button

@@ -73,9 +73,13 @@ export default function ProductDetailPage() {
                             animate={{ opacity: 1, x: 0 }}
                             className="aspect-square rounded-2xl bg-gradient-to-br from-aureum-card to-aureum-dark border border-aureum-border flex items-center justify-center relative overflow-hidden"
                         >
-                            <div className="text-8xl opacity-20">
-                                {product.category === 'rings' ? '💍' : product.category === 'chains' ? '🔗' : product.category === 'pendants' ? '📿' : product.category === 'bracelets' ? '⌚' : product.category === 'earrings' ? '✨' : product.category === 'bangles' ? '⭕' : '👑'}
-                            </div>
+                            {product.images?.[0] ? (
+                                <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover" />
+                            ) : (
+                                <div className="text-8xl opacity-20">
+                                    {product.category === 'rings' ? '💍' : product.category === 'chains' ? '🔗' : product.category === 'pendants' ? '📿' : product.category === 'bracelets' ? '⌚' : product.category === 'earrings' ? '✨' : product.category === 'bangles' ? '⭕' : '👑'}
+                                </div>
+                            )}
                             <div className="absolute top-4 left-4 flex gap-2">
                                 <span className="text-[10px] font-mono text-gold bg-black/60 px-2 py-1 rounded-md backdrop-blur-sm border border-gold/20">
                                     {product.default_karat}K · {metalLabel(product.metal)}
