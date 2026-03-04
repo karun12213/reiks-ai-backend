@@ -260,7 +260,7 @@ export const SEED_PRODUCTS: Omit<Product, 'id' | 'created_at' | 'views'>[] = [
         available_karats: [18, 22],
         base_weight_grams: 65,
         making_charges_per_gram: 550,
-        images: ["/images/Gemini_Generated_Image_xp4ffxp4ffxp4ffx (1).png"],
+        images: ["/images/Gemini_Generated_Image_xp4ffxp4ffxp4ffx_1.png"],
         thumbnail_url: null,
         model_3d_url: null,
         description: "A cascade of twisted light. This diamond-cut rope chain maximizes surface area to sparkle brilliantly with every movement. A thick and robust choice for a commanding presence.",
