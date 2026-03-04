@@ -31,7 +31,7 @@ export async function POST(req: Request) {
             .replace('{{GOLD_14K}}', String(gold?.gold_14k_gram || 4212))
 
         const stream = anthropic.messages.stream({
-            model: 'claude-3-5-haiku-20241022',
+            model: 'claude-sonnet-4-20250514',
             max_tokens: 600,
             system: [{ type: 'text', text: systemPrompt, cache_control: { type: 'ephemeral' } }],
             messages: messages.map((m: { role: string; content: string }) => ({
