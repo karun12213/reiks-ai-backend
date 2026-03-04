@@ -10,7 +10,15 @@ export function useGoldPrice() {
 
     const fetchPrice = useCallback(async () => {
         try {
-            const res = await fetch('/api/gold-price')
+            const headers: Record<string, string> = {}
+            if (typeof window !== 'undefined') {
+                const metalsKey = localStorage.getItem('aureum_metals_key')
+                const goldApiKey = localStorage.getItem('aureum_gold_api_key')
+                if (metalsKey) headers['x-metals-key'] = metalsKey
+                if (goldApiKey) headers['x-goldapi-key'] = goldApiKey
+            }
+
+            const res = await fetch('/api/gold-price', { headers })
             if (res.ok) {
                 const data = await res.json()
                 setPrice(data)

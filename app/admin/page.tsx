@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useMemo } from 'react'
+import { useGoldPrice } from '@/hooks/useGoldPrice'
 import { Shield, Key, TrendingUp, Users, Package, Sparkles, Cog, Check, AlertTriangle, ChevronRight, BarChart3, Zap, Star } from 'lucide-react'
 import { AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts'
 import { FEATURES, ORDERS, LOCKS, USERS, API_SERVICES, AI_QUEUE, ALERTS, GOLDSMITHS, REVENUE_STREAMS, genPriceHistory, genDailyRev } from '@/lib/admin-data'
@@ -50,9 +51,17 @@ export default function AdminPage() {
     const [authenticated, setAuthenticated] = useState(false)
     const [password, setPassword] = useState('')
     const [nav, setNav] = useState<Nav>('mission')
+    const { price: livePrice } = useGoldPrice()
     const [goldPrice, setGoldPrice] = useState(6523.4)
     const [goldDelta, setGoldDelta] = useState(0.82)
     const [time, setTime] = useState(new Date())
+
+    useEffect(() => {
+        if (livePrice) {
+            setGoldPrice(livePrice.gold_24k_gram)
+            setGoldDelta(livePrice.isLive ? 1.25 : 0.82)
+        }
+    }, [livePrice])
     const [features, setFeatures] = useState(FEATURES)
     const [orders, setOrders] = useState(ORDERS)
     const [locks, setLocks] = useState(LOCKS)
@@ -97,10 +106,8 @@ export default function AdminPage() {
     useEffect(() => {
         if (!authenticated) return
         const i = setInterval(() => {
-            setGoldPrice(p => p + (Math.random() - 0.48) * 3)
-            setGoldDelta(d => d + (Math.random() - 0.5) * 0.04)
             setTime(new Date())
-        }, 2500)
+        }, 1000)
         return () => clearInterval(i)
     }, [authenticated])
 

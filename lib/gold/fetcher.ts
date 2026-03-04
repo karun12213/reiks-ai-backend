@@ -22,7 +22,7 @@ export async function fetchGoldPrice(customMetalsKey?: string, customGoldApiKey?
     const usdInr = 91 // TODO: fetch real rate
 
     // 2. Try Metals-API
-    const metalsKey = process.env.METALS_API_KEY
+    const metalsKey = customMetalsKey || process.env.METALS_API_KEY
     if (metalsKey) {
         try {
             const res = await fetch(
@@ -41,7 +41,7 @@ export async function fetchGoldPrice(customMetalsKey?: string, customGoldApiKey?
 
     // 3. Try GoldAPI as backup
     if (!goldUsdOz) {
-        const goldApiKey = process.env.GOLDAPI_KEY
+        const goldApiKey = customGoldApiKey || process.env.GOLDAPI_KEY
         if (goldApiKey) {
             try {
                 const res = await fetch('https://www.goldapi.io/api/XAU/USD', {

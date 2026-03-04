@@ -9,8 +9,10 @@ export const revalidate = 0
 export async function GET(request: NextRequest) {
     const fresh = request.nextUrl.searchParams.get('fresh') === '1'
     const debug = request.nextUrl.searchParams.get('debug') === '1'
+    const customMetalsKey = request.headers.get('x-metals-key') || undefined
+    const customGoldApiKey = request.headers.get('x-goldapi-key') || undefined
     try {
-        const data = await fetchGoldPrice(undefined, undefined, fresh)
+        const data = await fetchGoldPrice(customMetalsKey, customGoldApiKey, fresh)
         const response: any = { ...data }
         if (debug) {
             response._debug = {
