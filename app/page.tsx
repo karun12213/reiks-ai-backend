@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { useGoldPrice } from '@/hooks/useGoldPrice'
 import { getSessionInfo, formatINR, calculatePrice } from '@/lib/utils'
@@ -211,13 +212,23 @@ export default function HomePage() {
                       href={`/product/${product.slug}`}
                       className="block bg-aureum-card rounded-xl border border-aureum-border card-hover overflow-hidden group"
                     >
-                      {/* Image placeholder */}
-                      <div className="aspect-square bg-gradient-to-br from-aureum-card to-aureum-dark flex items-center justify-center relative overflow-hidden">
-                        <div className="text-4xl opacity-20 group-hover:opacity-30 transition-opacity">
-                          {product.category === 'rings' ? '💍' : product.category === 'chains' ? '🔗' : product.category === 'pendants' ? '📿' : product.category === 'bracelets' ? '⌚' : product.category === 'earrings' ? '✨' : product.category === 'bangles' ? '⭕' : '👑'}
-                        </div>
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                        <div className="absolute bottom-3 left-3 right-3">
+                      {/* Image */}
+                      <div className="aspect-square bg-gradient-to-br from-aureum-card to-aureum-dark flex items-center justify-center relative overflow-hidden group">
+                        {product.images?.[0] ? (
+                          <Image
+                            src={product.images[0]}
+                            alt={product.name}
+                            fill
+                            className="object-cover group-hover:scale-105 transition-transform duration-700"
+                            sizes="(max-width: 768px) 50vw, 33vw"
+                          />
+                        ) : (
+                          <div className="text-4xl opacity-20 group-hover:opacity-30 transition-opacity">
+                            {product.category === 'rings' ? '💍' : product.category === 'chains' ? '🔗' : product.category === 'pendants' ? '📿' : product.category === 'bracelets' ? '⌚' : product.category === 'earrings' ? '✨' : product.category === 'bangles' ? '⭕' : '👑'}
+                          </div>
+                        )}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent z-10" />
+                        <div className="absolute bottom-3 left-3 right-3 z-20">
                           <span className="text-[10px] font-mono text-gold bg-black/60 px-2 py-0.5 rounded">
                             {product.default_karat}K {product.base_weight_grams}g
                           </span>

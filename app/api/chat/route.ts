@@ -5,6 +5,7 @@ import { cacheGet } from '@/lib/redis'
 import type { GoldPriceData } from '@/lib/types'
 
 export const dynamic = 'force-dynamic'
+export const maxDuration = 60
 
 export async function POST(req: Request) {
     try {
@@ -29,7 +30,7 @@ export async function POST(req: Request) {
             .replace('{{GOLD_14K}}', String(gold?.gold_14k_gram || 4212))
 
         const stream = anthropic.messages.stream({
-            model: 'claude-haiku-4-5-20251001',
+            model: 'claude-3-5-haiku-20241022',
             max_tokens: 600,
             system: [{ type: 'text', text: systemPrompt, cache_control: { type: 'ephemeral' } }],
             messages: messages.map((m: { role: string; content: string }) => ({

@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server'
 import { getReplicateClient, buildFluxPrompt, FLUX_DEFAULTS } from '@/lib/replicate'
 
 export const dynamic = 'force-dynamic'
+export const maxDuration = 60
 
 export async function POST(req: Request) {
     try {
@@ -33,8 +34,9 @@ export async function POST(req: Request) {
             images: output,
             prompt: fullPrompt,
         })
-    } catch (error) {
-        console.error('Generate API error:', error)
-        return NextResponse.json({ error: 'Generation failed' }, { status: 500 })
+    } catch (error: any) {
+        
+        console.error('Generate API error:', error.message || error)
+        return NextResponse.json({ error: error.message || 'Generation failed' }, { status: 500 })
     }
 }

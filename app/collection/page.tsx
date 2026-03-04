@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { useGoldPrice } from '@/hooks/useGoldPrice'
 import { calculatePrice, formatINR } from '@/lib/utils'
@@ -254,15 +255,21 @@ export default function CollectionPage() {
                                         href={`/product/${product.slug}`}
                                         className="block bg-aureum-card rounded-xl border border-aureum-border card-hover overflow-hidden group"
                                     >
-                                        <div className="aspect-square bg-gradient-to-br from-aureum-card to-aureum-dark flex items-center justify-center relative overflow-hidden">
+                                        <div className="aspect-square bg-gradient-to-br from-aureum-card to-aureum-dark flex items-center justify-center relative overflow-hidden group">
                                             {product.images?.[0] ? (
-                                                <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                                                <Image
+                                                    src={product.images[0]}
+                                                    alt={product.name}
+                                                    fill
+                                                    sizes="(max-width: 768px) 50vw, 25vw"
+                                                    className="object-cover group-hover:scale-105 transition-transform duration-700"
+                                                />
                                             ) : (
-                                                <div className="text-4xl opacity-20 group-hover:opacity-30 transition-opacity">
+                                                <div className="text-4xl opacity-20 group-hover:opacity-30 transition-opacity z-10">
                                                     {product.category === 'rings' ? '💍' : product.category === 'chains' ? '🔗' : product.category === 'pendants' ? '📿' : product.category === 'bracelets' ? '⌚' : product.category === 'earrings' ? '✨' : product.category === 'bangles' ? '⭕' : '👑'}
                                                 </div>
                                             )}
-                                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80" />
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-80 z-10 pointer-events-none" />
 
                                             {/* Wishlist Button */}
                                             <button

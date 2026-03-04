@@ -3,6 +3,7 @@
 import { useState, useMemo } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { useGoldPrice } from '@/hooks/useGoldPrice'
 import { calculatePrice, formatINR, metalLabel, karatLabel, formatWeight } from '@/lib/utils'
@@ -74,13 +75,20 @@ export default function ProductDetailPage() {
                             className="aspect-square rounded-2xl bg-gradient-to-br from-aureum-card to-aureum-dark border border-aureum-border flex items-center justify-center relative overflow-hidden"
                         >
                             {product.images?.[0] ? (
-                                <img src={product.images[0]} alt={product.name} className="w-full h-full object-cover" />
+                                <Image
+                                    src={product.images[0]}
+                                    alt={product.name}
+                                    fill
+                                    sizes="(max-width: 1024px) 100vw, 50vw"
+                                    className="object-cover"
+                                    priority
+                                />
                             ) : (
-                                <div className="text-8xl opacity-20">
+                                <div className="text-8xl opacity-20 z-10">
                                     {product.category === 'rings' ? '💍' : product.category === 'chains' ? '🔗' : product.category === 'pendants' ? '📿' : product.category === 'bracelets' ? '⌚' : product.category === 'earrings' ? '✨' : product.category === 'bangles' ? '⭕' : '👑'}
                                 </div>
                             )}
-                            <div className="absolute top-4 left-4 flex gap-2">
+                            <div className="absolute top-4 left-4 flex gap-2 z-20">
                                 <span className="text-[10px] font-mono text-gold bg-black/60 px-2 py-1 rounded-md backdrop-blur-sm border border-gold/20">
                                     {product.default_karat}K · {metalLabel(product.metal)}
                                 </span>

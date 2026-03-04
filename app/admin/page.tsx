@@ -68,6 +68,8 @@ export default function AdminPage() {
     const [supabaseAnonKey, setSupabaseAnonKey] = useState('')
     const [upstashUrl, setUpstashUrl] = useState('')
     const [upstashToken, setUpstashToken] = useState('')
+    const [testingKey, setTestingKey] = useState<string | null>(null)
+    const [testResults, setTestResults] = useState<Record<string, { status: 'success' | 'error', message: string }>>({})
 
     const priceHistory = useMemo(genPriceHistory, [])
     const dailyRev = useMemo(genDailyRev, [])
@@ -141,6 +143,51 @@ export default function AdminPage() {
     const toggleFeature = (id: string) => setFeatures(f => f.map(x => x.id === id ? { ...x, status: !x.status } : x))
     const resolveAlert = (id: number) => setAlerts(a => a.map(x => x.id === id ? { ...x, resolved: true } : x))
     const updateOrder = (id: string, status: string) => setOrders(o => o.map(x => x.id === id ? { ...x, status } : x))
+
+    const testKey = async (service: string, key: string) => {
+        if (!key) {
+            setTestResults(prev => ({ ...prev, [service]: { status: 'error', message: 'Please enter a key first.' } }))
+            return
+        }
+        setTestingKey(service)
+        setTestResults(prev => {
+            const next = { ...prev }
+            delete next[service]
+            return next
+        })
+
+        try {
+            const res = await fetch('/api/admin/test-key', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ service, key })
+            })
+            const data = await res.json()
+            if (res.ok && data.success) {
+                setTestResults(prev => ({ ...prev, [service]: { status: 'success', message: data.message } }))
+            } else {
+                setTestResults(prev => ({ ...prev, [service]: { status: 'error', message: data.error || 'Connection failed' } }))
+            }
+        } catch (e: any) {
+            setTestResults(prev => ({ ...prev, [service]: { status: 'error', message: e.message } }))
+        } finally {
+            setTestingKey(null)
+        }
+    }
+
+    const handleSaveKeys = () => {
+        if (typeof window === 'undefined') return
+        localStorage.setItem('aureum_anthropic_key', anthropicKey)
+        localStorage.setItem('aureum_replicate_key', replicateKey)
+        localStorage.setItem('aureum_metals_key', metalsKey)
+        localStorage.setItem('aureum_gold_api_key', goldApiKey)
+        localStorage.setItem('aureum_razorpay_key', razorpayKey)
+        localStorage.setItem('aureum_supabase_url', supabaseUrl)
+        localStorage.setItem('aureum_supabase_anon_key', supabaseAnonKey)
+        localStorage.setItem('aureum_upstash_url', upstashUrl)
+        localStorage.setItem('aureum_upstash_token', upstashToken)
+        alert('All credentials saved successfully to localStorage.')
+    }
 
     // ─── SECTIONS ───
     const renderMission = () => (
@@ -710,11 +757,23 @@ export default function AdminPage() {
             <Card>
                 <div className="flex justify-between items-center mb-4">
                     <h3 className="text-sm font-semibold text-aureum-white">Live API Credentials</h3>
-                    <Badge text="LOCAL INJECTION" color="#60a5fa" />
+                    <div className="flex items-center gap-3">
+                        <button
+                            onClick={handleSaveKeys}
+                            className="px-3 py-1 bg-gold/10 hover:bg-gold/20 border border-gold/30 rounded text-[10px] text-gold font-mono flex items-center gap-1.5 transition-colors"
+                        >
+                            <Check size={12} />
+                            Save All
+                        </button>
+                        <Badge text="LOCAL INJECTION" color="#60a5fa" />
+                    </div>
                 </div>
                 <div className="space-y-4">
                     <div>
-                        <label className="text-xs text-aureum-dim block mb-1">Anthropic API Key (Claude - Chat & Vision)</label>
+                        <div className="flex justify-between items-center mb-1">
+                            <label className="text-xs text-aureum-dim block">Anthropic API Key (Claude - Chat & Vision)</label>
+                            <button onClick={() => testKey('anthropic', anthropicKey)} disabled={testingKey === 'anthropic'} className="text-[10px] text-gold hover:text-white transition-colors disabled:opacity-50">{testingKey === 'anthropic' ? 'Testing...' : 'Test Connection'}</button>
+                        </div>
                         <input
                             type="password"
                             value={anthropicKey}
@@ -726,9 +785,17 @@ export default function AdminPage() {
                             placeholder="sk-ant-api03-..."
                             className="w-full px-3 py-2 bg-[#111] border border-aureum-border rounded-md text-xs font-mono text-aureum-white placeholder:text-aureum-dim focus:border-gold/50 focus:outline-none placeholder:opacity-40 transition-colors"
                         />
+                        {testResults['anthropic'] && (
+                            <div className={`text-[10px] mt-1.5 font-mono ${testResults['anthropic'].status === 'success' ? 'text-success' : 'text-error'}`}>
+                                {testResults['anthropic'].status === 'success' ? '✅' : '❌'} {testResults['anthropic'].message}
+                            </div>
+                        )}
                     </div>
                     <div>
-                        <label className="text-xs text-aureum-dim block mb-1">Replicate API Token (FLUX - Image Gen)</label>
+                        <div className="flex justify-between items-center mb-1">
+                            <label className="text-xs text-aureum-dim block">Replicate API Token (FLUX - Image Gen)</label>
+                            <button onClick={() => testKey('replicate', replicateKey)} disabled={testingKey === 'replicate'} className="text-[10px] text-gold hover:text-white transition-colors disabled:opacity-50">{testingKey === 'replicate' ? 'Testing...' : 'Test Connection'}</button>
+                        </div>
                         <input
                             type="password"
                             value={replicateKey}
@@ -740,10 +807,18 @@ export default function AdminPage() {
                             placeholder="r8_..."
                             className="w-full px-3 py-2 bg-[#111] border border-aureum-border rounded-md text-xs font-mono text-aureum-white placeholder:text-aureum-dim focus:border-gold/50 focus:outline-none placeholder:opacity-40 transition-colors"
                         />
+                        {testResults['replicate'] && (
+                            <div className={`text-[10px] mt-1.5 font-mono ${testResults['replicate'].status === 'success' ? 'text-success' : 'text-error'}`}>
+                                {testResults['replicate'].status === 'success' ? '✅' : '❌'} {testResults['replicate'].message}
+                            </div>
+                        )}
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label className="text-xs text-aureum-dim block mb-1">Metals-API Key</label>
+                            <div className="flex justify-between items-center mb-1">
+                                <label className="text-xs text-aureum-dim block">Metals-API Key</label>
+                                <button onClick={() => testKey('metals', metalsKey)} disabled={testingKey === 'metals'} className="text-[10px] text-gold hover:text-white disabled:opacity-50">{testingKey === 'metals' ? 'Testing...' : 'Test'}</button>
+                            </div>
                             <input
                                 type="password"
                                 value={metalsKey}
@@ -751,9 +826,17 @@ export default function AdminPage() {
                                 onBlur={() => localStorage.setItem('aureum_metals_key', metalsKey)}
                                 className="w-full px-3 py-2 bg-[#111] border border-aureum-border rounded-md text-xs font-mono text-aureum-white focus:border-gold/50 focus:outline-none"
                             />
+                            {testResults['metals'] && (
+                                <div className={`text-[9px] mt-1 font-mono ${testResults['metals'].status === 'success' ? 'text-success' : 'text-error'}`}>
+                                    {testResults['metals'].message}
+                                </div>
+                            )}
                         </div>
                         <div>
-                            <label className="text-xs text-aureum-dim block mb-1">GoldAPI.io Key</label>
+                            <div className="flex justify-between items-center mb-1">
+                                <label className="text-xs text-aureum-dim block">GoldAPI.io Key</label>
+                                <button onClick={() => testKey('goldapi', goldApiKey)} disabled={testingKey === 'goldapi'} className="text-[10px] text-gold hover:text-white disabled:opacity-50">{testingKey === 'goldapi' ? 'Testing...' : 'Test'}</button>
+                            </div>
                             <input
                                 type="password"
                                 value={goldApiKey}
@@ -761,10 +844,18 @@ export default function AdminPage() {
                                 onBlur={() => localStorage.setItem('aureum_gold_api_key', goldApiKey)}
                                 className="w-full px-3 py-2 bg-[#111] border border-aureum-border rounded-md text-xs font-mono text-aureum-white focus:border-gold/50 focus:outline-none"
                             />
+                            {testResults['goldapi'] && (
+                                <div className={`text-[9px] mt-1 font-mono ${testResults['goldapi'].status === 'success' ? 'text-success' : 'text-error'}`}>
+                                    {testResults['goldapi'].message}
+                                </div>
+                            )}
                         </div>
                     </div>
                     <div>
-                        <label className="text-xs text-aureum-dim block mb-1">Razorpay API Key (Live/Test ID)</label>
+                        <div className="flex justify-between items-center mb-1">
+                            <label className="text-xs text-aureum-dim block">Razorpay API Key (Live/Test ID)</label>
+                            <button onClick={() => testKey('razorpay', razorpayKey)} disabled={testingKey === 'razorpay'} className="text-[10px] text-gold hover:text-white disabled:opacity-50">{testingKey === 'razorpay' ? 'Testing...' : 'Test'}</button>
+                        </div>
                         <input
                             type="text"
                             value={razorpayKey}
@@ -773,10 +864,18 @@ export default function AdminPage() {
                             placeholder="rzp_live_..."
                             className="w-full px-3 py-2 bg-[#111] border border-aureum-border rounded-md text-xs font-mono text-aureum-white focus:border-gold/50 focus:outline-none"
                         />
+                        {testResults['razorpay'] && (
+                            <div className={`text-[9px] mt-1 font-mono ${testResults['razorpay'].status === 'success' ? 'text-success' : 'text-error'}`}>
+                                {testResults['razorpay'].message}
+                            </div>
+                        )}
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label className="text-xs text-aureum-dim block mb-1">Supabase Project URL</label>
+                            <div className="flex justify-between items-center mb-1">
+                                <label className="text-xs text-aureum-dim block">Supabase Project URL</label>
+                                <button onClick={() => testKey('supabaseUrl', supabaseUrl)} disabled={testingKey === 'supabaseUrl'} className="text-[10px] text-gold hover:text-white disabled:opacity-50">{testingKey === 'supabaseUrl' ? 'Testing...' : 'Test'}</button>
+                            </div>
                             <input
                                 type="text"
                                 value={supabaseUrl}
@@ -785,9 +884,17 @@ export default function AdminPage() {
                                 placeholder="https://xxx.supabase.co"
                                 className="w-full px-3 py-2 bg-[#111] border border-aureum-border rounded-md text-xs font-mono text-aureum-white focus:border-gold/50 focus:outline-none"
                             />
+                            {testResults['supabaseUrl'] && (
+                                <div className={`text-[9px] mt-1 font-mono ${testResults['supabaseUrl'].status === 'success' ? 'text-success' : 'text-error'}`}>
+                                    {testResults['supabaseUrl'].message}
+                                </div>
+                            )}
                         </div>
                         <div>
-                            <label className="text-xs text-aureum-dim block mb-1">Supabase Anon Key</label>
+                            <div className="flex justify-between items-center mb-1">
+                                <label className="text-xs text-aureum-dim block">Supabase Anon Key</label>
+                                <button onClick={() => testKey('supabaseKey', supabaseAnonKey)} disabled={testingKey === 'supabaseKey'} className="text-[10px] text-gold hover:text-white disabled:opacity-50">{testingKey === 'supabaseKey' ? 'Testing...' : 'Test'}</button>
+                            </div>
                             <input
                                 type="password"
                                 value={supabaseAnonKey}
@@ -795,11 +902,19 @@ export default function AdminPage() {
                                 onBlur={() => localStorage.setItem('aureum_supabase_anon_key', supabaseAnonKey)}
                                 className="w-full px-3 py-2 bg-[#111] border border-aureum-border rounded-md text-xs font-mono text-aureum-white focus:border-gold/50 focus:outline-none"
                             />
+                            {testResults['supabaseKey'] && (
+                                <div className={`text-[9px] mt-1 font-mono ${testResults['supabaseKey'].status === 'success' ? 'text-success' : 'text-error'}`}>
+                                    {testResults['supabaseKey'].message}
+                                </div>
+                            )}
                         </div>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label className="text-xs text-aureum-dim block mb-1">Upstash Redis REST URL</label>
+                            <div className="flex justify-between items-center mb-1">
+                                <label className="text-xs text-aureum-dim block">Upstash Redis REST URL</label>
+                                <button onClick={() => testKey('upstashUrl', upstashUrl)} disabled={testingKey === 'upstashUrl'} className="text-[10px] text-gold hover:text-white disabled:opacity-50">{testingKey === 'upstashUrl' ? 'Testing...' : 'Test'}</button>
+                            </div>
                             <input
                                 type="text"
                                 value={upstashUrl}
@@ -807,9 +922,17 @@ export default function AdminPage() {
                                 onBlur={() => localStorage.setItem('aureum_upstash_url', upstashUrl)}
                                 className="w-full px-3 py-2 bg-[#111] border border-aureum-border rounded-md text-xs font-mono text-aureum-white focus:border-gold/50 focus:outline-none"
                             />
+                            {testResults['upstashUrl'] && (
+                                <div className={`text-[9px] mt-1 font-mono ${testResults['upstashUrl'].status === 'success' ? 'text-success' : 'text-error'}`}>
+                                    {testResults['upstashUrl'].message}
+                                </div>
+                            )}
                         </div>
                         <div>
-                            <label className="text-xs text-aureum-dim block mb-1">Upstash Redis REST Token</label>
+                            <div className="flex justify-between items-center mb-1">
+                                <label className="text-xs text-aureum-dim block">Upstash Redis REST Token</label>
+                                <button onClick={() => testKey('upstashKey', upstashToken)} disabled={testingKey === 'upstashKey'} className="text-[10px] text-gold hover:text-white disabled:opacity-50">{testingKey === 'upstashKey' ? 'Testing...' : 'Test'}</button>
+                            </div>
                             <input
                                 type="password"
                                 value={upstashToken}
@@ -817,6 +940,11 @@ export default function AdminPage() {
                                 onBlur={() => localStorage.setItem('aureum_upstash_token', upstashToken)}
                                 className="w-full px-3 py-2 bg-[#111] border border-aureum-border rounded-md text-xs font-mono text-aureum-white focus:border-gold/50 focus:outline-none"
                             />
+                            {testResults['upstashKey'] && (
+                                <div className={`text-[9px] mt-1 font-mono ${testResults['upstashKey'].status === 'success' ? 'text-success' : 'text-error'}`}>
+                                    {testResults['upstashKey'].message}
+                                </div>
+                            )}
                         </div>
                     </div>
                     <p className="text-[10px] text-aureum-dim flex items-start gap-1.5 mt-2">

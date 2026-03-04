@@ -436,7 +436,7 @@ export default function AccountPage() {
                                                         {designs.map((d: any, index: number) => (
                                                             <div key={index} className="bg-aureum-card border border-aureum-border rounded-xl overflow-hidden group">
                                                                 <div className="aspect-square bg-aureum-dark relative">
-                                                                    <img src={d.imageUrl} alt={d.prompt} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                                                                    <img src={d.image || d.imageUrl} alt={d.prompt} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                                                                     <div className="absolute inset-0 bg-gradient-to-t from-aureum-black/80 via-transparent to-transparent" />
                                                                     <div className="absolute bottom-3 left-3 right-3">
                                                                         <p className="text-[10px] text-aureum-dim line-clamp-2 leading-tight">{d.prompt}</p>
