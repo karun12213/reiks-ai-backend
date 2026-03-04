@@ -1,36 +1,146 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AUREUM — India's First AI-Native Gold Jewelry Platform
 
-## Getting Started
+> Design jewelry with AI, lock live gold prices, buy from master goldsmiths. Zero markup on gold. Every piece made to order.
 
-First, run the development server:
+**Live Site**: Deployed on Vercel  
+**Stack**: Next.js 16 · TypeScript · Tailwind CSS 4 · Framer Motion
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## 🏗️ Architecture
+
+```
+aureum-next/
+├── app/                          # Next.js App Router pages & API routes
+│   ├── page.tsx                  # Homepage — hero, gold ticker, CTAs
+│   ├── layout.tsx                # Root layout — fonts, theme, metadata
+│   ├── globals.css               # Design system tokens & utility classes
+│   │
+│   ├── collection/page.tsx       # Product catalog — grid, filters, live pricing
+│   ├── product/[id]/page.tsx     # Product detail — specs, karat selector, pricing
+│   ├── forge/page.tsx            # AI Design Studio — upload, prompt, generate
+│   ├── concierge/page.tsx        # AI Chat — streaming Claude concierge
+│   ├── vault/page.tsx            # Gold Vault — SIP, price locks, balance
+│   ├── checkout/page.tsx         # Checkout — Razorpay integration
+│   ├── success/page.tsx          # Order confirmation
+│   ├── account/page.tsx          # User account & order history
+│   ├── admin/page.tsx            # Admin panel — ops center, API keys, metrics
+│   │
+│   └── api/                      # Serverless API routes
+│       ├── chat/route.ts         # Claude Sonnet 4 streaming concierge
+│       ├── generate/route.ts     # Image gen — Replicate FLUX → Meshy fallback
+│       ├── vision/route.ts       # Claude vision — jewelry analysis
+│       ├── gold-price/route.ts   # Live gold prices (GoldAPI.io)
+│       ├── admin/
+│       │   ├── status/route.ts   # System health check
+│       │   └── test-key/route.ts # API key validation
+│       └── payments/
+│           ├── create-order/route.ts  # Razorpay order creation
+│           └── verify/route.ts        # Payment verification
+│
+├── lib/                          # Shared utilities & configs
+│   ├── anthropic.ts              # Claude client + system prompts
+│   ├── replicate.ts              # Replicate client + FLUX prompt builder
+│   ├── redis.ts                  # Upstash Redis caching (with memory fallback)
+│   ├── razorpay.ts               # Payment gateway client
+│   ├── supabase/                 # Supabase clients (admin, server, browser)
+│   ├── gold/fetcher.ts           # Gold price fetching logic
+│   ├── seed-products.ts          # Product catalog data (35 items)
+│   ├── admin-data.ts             # Admin panel mock data
+│   ├── constants.ts              # App constants & config
+│   ├── types.ts                  # TypeScript interfaces (240 lines)
+│   └── utils.ts                  # Price calculation, formatting
+│
+├── components/layout/            # Shared UI components
+│   ├── Header.tsx                # Navigation bar with gold ticker
+│   └── Footer.tsx                # Footer with links
+│
+├── hooks/
+│   └── useGoldPrice.ts           # Real-time gold price hook (30s polling)
+│
+└── public/images/                # 35 product images (AI-generated)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🔑 Key Features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### AI Design Studio (Forge)
+- Upload jewelry photos or enter text prompts
+- **Claude Vision** analyzes uploaded images for style, metal, and karat
+- **Replicate FLUX** generates 4 photorealistic designs (primary)
+- **Meshy AI** text-to-image fallback when Replicate is unavailable
+- Design customization: metal, karat, weight adjustments
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### AI Concierge
+- Streaming chat powered by **Claude Sonnet 4**
+- Injected with live gold prices for accurate recommendations
+- Buffered stream parser for reliable chunk handling
+- Custom system prompt for luxury jewelry expertise
 
-## Learn More
+### Live Gold Pricing
+- Real-time prices from **GoldAPI.io** (24K, 22K, 18K, 14K)
+- 30-second polling with Redis caching
+- Price lock system with premium tiers
 
-To learn more about Next.js, take a look at the following resources:
+### Admin Panel
+- **Mission Control**: Revenue, users, API costs dashboard
+- **API Health**: Real-time status for Claude, GoldAPI, Replicate, Meshy
+- **API Key Management**: Save/test all keys with inline feedback
+- **Order Pipeline**: Track orders through manufacturing stages
+- **Activity Tracking**: Supabase call logging
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🛠️ Environment Variables
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Variable | Service | Required |
+|----------|---------|----------|
+| `ANTHROPIC_API_KEY` | Claude AI (Chat + Vision) | ✅ |
+| `MESHY_API_KEY` | Meshy AI (Image Gen Fallback) | ✅ |
+| `REPLICATE_API_TOKEN` | Replicate FLUX (Image Gen Primary) | Optional |
+| `GOLDAPI_KEY` | GoldAPI.io (Gold Prices) | ✅ |
+| `UPSTASH_REDIS_URL` | Upstash Redis (Caching) | Optional |
+| `UPSTASH_REDIS_TOKEN` | Upstash Redis (Caching) | Optional |
+| `RAZORPAY_KEY_ID` | Razorpay (Payments) | Optional |
+| `RAZORPAY_KEY_SECRET` | Razorpay (Payments) | Optional |
 
-## Deploy on Vercel
+## 🚀 Quick Start
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+# Install dependencies
+npm install
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+# Set up environment
+cp .env.example .env.local
+# Add your API keys to .env.local
+
+# Run development server
+npm run dev
+
+# Build for production
+npm run build
+```
+
+## 📦 Dependencies
+
+| Package | Purpose |
+|---------|---------|
+| `next` 16.1.6 | React framework |
+| `@anthropic-ai/sdk` | Claude AI integration |
+| `replicate` | FLUX image generation |
+| `framer-motion` | Animations |
+| `recharts` | Admin dashboard charts |
+| `@supabase/supabase-js` | Database & auth |
+| `@upstash/redis` | Edge-compatible caching |
+| `razorpay` | Payment processing |
+| `lucide-react` | Icons |
+| `zustand` | State management |
+| `zod` | Runtime validation |
+
+## 🎨 Design System
+
+- **Colors**: Dark theme with gold accents (`#D4A853`)
+- **Typography**: Playfair Display (headings), DM Sans (body), JetBrains Mono (code)
+- **Animations**: Framer Motion for page transitions and micro-interactions
+- **Responsive**: Mobile-first design with bottom navigation
+
+---
+
+Built with ❤️ by AUREUM · *Forged by Intelligence™*
