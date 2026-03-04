@@ -141,12 +141,15 @@ function ForgeStudioContent() {
             if (!res.ok) throw new Error('Generation failed')
             const data = await res.json()
             const rawImages = data.images || []
-            // Replicate output might be array of strings or array of objects with .url 
-            // Also handles when it's just a single string or object
             const imageArray = Array.isArray(rawImages) ? rawImages : [rawImages]
-            const images = imageArray.map(img => typeof img === 'string' ? img : img?.url || img?.toString() || '').filter(Boolean)
+            const images = imageArray.map(img => {
+                if (typeof img === 'string') return img
+                if (img && typeof img === 'object' && 'url' in img) return (img as any).url
+                return img?.toString() || ''
+            }).filter(Boolean) as string[]
 
             setGeneratedImages(images)
+            console.log('Forge: Generated images:', images)
 
             // Track generated design
             const newDesign = {

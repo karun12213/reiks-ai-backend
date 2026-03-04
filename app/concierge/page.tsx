@@ -65,6 +65,18 @@ export default function ConciergePage() {
 
             if (!res.ok) throw new Error('Chat failed')
 
+            // Ensure there is an assistant message to append to
+            setMessages(prev => {
+                const last = prev[prev.length - 1]
+                if (last && last.role === 'assistant') return prev
+                return [...prev, {
+                    id: Math.random().toString(36).substring(7),
+                    role: 'assistant',
+                    content: '',
+                    timestamp: Date.now()
+                }]
+            })
+
             const reader = res.body?.getReader()
             const decoder = new TextDecoder()
             let buffer = ''
@@ -86,18 +98,21 @@ export default function ConciergePage() {
 
                         try {
                             const parsed = JSON.parse(data)
-                            if (parsed.text) {
+                            console.log('Concierge: Parsed chunk:', parsed)
+
+                            const textContent = parsed.text || parsed.delta?.text || parsed.content || ''
+                            if (textContent) {
                                 setMessages(prev => {
                                     const updated = [...prev]
                                     const last = updated[updated.length - 1]
-                                    if (last.role === 'assistant') {
-                                        last.content += parsed.text
+                                    if (last && last.role === 'assistant') {
+                                        last.content += textContent
                                     }
                                     return [...updated]
                                 })
                             }
                         } catch (e) {
-                            console.error('Failed to parse chunk:', data, e)
+                            console.error('Concierge: Failed to parse chunk:', data, e)
                         }
                     }
                 }
