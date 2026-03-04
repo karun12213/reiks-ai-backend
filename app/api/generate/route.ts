@@ -30,12 +30,24 @@ export async function POST(req: Request) {
             },
         })
 
+        // Replicate SDK v1.4+ returns FileOutput objects (extending ReadableStream).
+        // JSON.stringify does NOT call toString() on them, so they serialize as {}.
+        // We must explicitly convert each to its URL string.
+        const outputArray = Array.isArray(output) ? output : [output]
+        const images = outputArray.map(item => {
+            if (typeof item === 'string') return item
+            // FileOutput.toString() returns the URL string
+            return String(item)
+        }).filter(url => url && url !== '[object Object]' && url !== '[object ReadableStream]')
+
+        console.log('Generate API: Converted images:', images)
+
         return NextResponse.json({
-            images: output,
+            images,
             prompt: fullPrompt,
         })
     } catch (error: any) {
-        
+
         console.error('Generate API error:', error.message || error)
         return NextResponse.json({ error: error.message || 'Generation failed' }, { status: 500 })
     }

@@ -65,18 +65,6 @@ export default function ConciergePage() {
 
             if (!res.ok) throw new Error('Chat failed')
 
-            // Ensure there is an assistant message to append to
-            setMessages(prev => {
-                const last = prev[prev.length - 1]
-                if (last && last.role === 'assistant') return prev
-                return [...prev, {
-                    id: Math.random().toString(36).substring(7),
-                    role: 'assistant',
-                    content: '',
-                    timestamp: Date.now()
-                }]
-            })
-
             const reader = res.body?.getReader()
             const decoder = new TextDecoder()
             let buffer = ''
