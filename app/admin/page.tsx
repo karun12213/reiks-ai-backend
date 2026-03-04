@@ -70,6 +70,7 @@ export default function AdminPage() {
     const [collapsed, setCollapsed] = useState(false)
     const [anthropicKey, setAnthropicKey] = useState('')
     const [replicateKey, setReplicateKey] = useState('')
+    const [meshyKey, setMeshyKey] = useState('')
     const [metalsKey, setMetalsKey] = useState('')
     const [goldApiKey, setGoldApiKey] = useState('')
     const [razorpayKey, setRazorpayKey] = useState('')
@@ -93,6 +94,7 @@ export default function AdminPage() {
             if (localLocks.length > 0) setLocks([...localLocks, ...LOCKS])
             setAnthropicKey(localStorage.getItem('aureum_anthropic_key') || '')
             setReplicateKey(localStorage.getItem('aureum_replicate_key') || '')
+            setMeshyKey(localStorage.getItem('aureum_meshy_key') || '')
             setMetalsKey(localStorage.getItem('aureum_metals_key') || '')
             setGoldApiKey(localStorage.getItem('aureum_gold_api_key') || '')
             setRazorpayKey(localStorage.getItem('aureum_razorpay_key') || '')
@@ -186,6 +188,7 @@ export default function AdminPage() {
         if (typeof window === 'undefined') return
         localStorage.setItem('aureum_anthropic_key', anthropicKey)
         localStorage.setItem('aureum_replicate_key', replicateKey)
+        localStorage.setItem('aureum_meshy_key', meshyKey)
         localStorage.setItem('aureum_metals_key', metalsKey)
         localStorage.setItem('aureum_gold_api_key', goldApiKey)
         localStorage.setItem('aureum_razorpay_key', razorpayKey)
@@ -817,6 +820,27 @@ export default function AdminPage() {
                         {testResults['replicate'] && (
                             <div className={`text-[10px] mt-1.5 font-mono ${testResults['replicate'].status === 'success' ? 'text-success' : 'text-error'}`}>
                                 {testResults['replicate'].status === 'success' ? '✅' : '❌'} {testResults['replicate'].message}
+                            </div>
+                        )}
+                    </div>
+                    <div>
+                        <div className="flex justify-between items-center mb-1">
+                            <label className="text-xs text-aureum-dim block">Meshy 3D API Key (Fallback Image Gen)</label>
+                            <button onClick={() => testKey('meshy', meshyKey)} disabled={testingKey === 'meshy'} className="text-[10px] text-gold hover:text-white transition-colors disabled:opacity-50">{testingKey === 'meshy' ? 'Testing...' : 'Test Connection'}</button>
+                        </div>
+                        <input
+                            type="password"
+                            value={meshyKey}
+                            onChange={e => setMeshyKey(e.target.value)}
+                            onBlur={() => {
+                                localStorage.setItem('aureum_meshy_key', meshyKey)
+                            }}
+                            placeholder="msy_..."
+                            className="w-full px-3 py-2 bg-[#111] border border-aureum-border rounded-md text-xs font-mono text-aureum-white placeholder:text-aureum-dim focus:border-gold/50 focus:outline-none placeholder:opacity-40 transition-colors"
+                        />
+                        {testResults['meshy'] && (
+                            <div className={`text-[10px] mt-1.5 font-mono ${testResults['meshy'].status === 'success' ? 'text-success' : 'text-error'}`}>
+                                {testResults['meshy'].status === 'success' ? '✅' : '❌'} {testResults['meshy'].message}
                             </div>
                         )}
                     </div>

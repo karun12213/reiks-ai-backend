@@ -133,7 +133,8 @@ function ForgeStudioContent() {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'x-replicate-key': localStorage.getItem('aureum_replicate_key') || ''
+                    'x-replicate-key': localStorage.getItem('aureum_replicate_key') || '',
+                    'x-meshy-key': localStorage.getItem('aureum_meshy_key') || ''
                 },
                 body: JSON.stringify({ prompt, metal, karat, category: analysis?.type || 'jewelry' }),
             })
