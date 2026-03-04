@@ -1,3 +1,4 @@
+// Trigger fresh deployment for model synchronization
 // POST /api/chat — Claude Haiku streaming concierge
 import { NextResponse } from 'next/server'
 import { getAnthropicClient, CONCIERGE_SYSTEM_PROMPT } from '@/lib/anthropic'
