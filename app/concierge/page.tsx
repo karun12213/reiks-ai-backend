@@ -67,16 +67,20 @@ export default function ConciergePage() {
 
             const reader = res.body?.getReader()
             const decoder = new TextDecoder()
+            let buffer = ''
 
             if (reader) {
                 while (true) {
                     const { done, value } = await reader.read()
                     if (done) break
 
-                    const text = decoder.decode(value)
-                    const lines = text.split('\n').filter(l => l.startsWith('data: '))
+                    buffer += decoder.decode(value, { stream: true })
+                    const lines = buffer.split('\n')
+                    // Keep the last partial line in the buffer
+                    buffer = lines.pop() || ''
 
                     for (const line of lines) {
+                        if (!line.startsWith('data: ')) continue
                         const data = line.slice(6)
                         if (data === '[DONE]') break
 
@@ -92,7 +96,9 @@ export default function ConciergePage() {
                                     return [...updated]
                                 })
                             }
-                        } catch { }
+                        } catch (e) {
+                            console.error('Failed to parse chunk:', data, e)
+                        }
                     }
                 }
             }

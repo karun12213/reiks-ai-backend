@@ -140,14 +140,19 @@ function ForgeStudioContent() {
 
             if (!res.ok) throw new Error('Generation failed')
             const data = await res.json()
-            const images = data.images || []
+            const rawImages = data.images || []
+            // Replicate output might be array of strings or array of objects with .url 
+            // Also handles when it's just a single string or object
+            const imageArray = Array.isArray(rawImages) ? rawImages : [rawImages]
+            const images = imageArray.map(img => typeof img === 'string' ? img : img?.url || img?.toString() || '').filter(Boolean)
+
             setGeneratedImages(images)
 
             // Track generated design
             const newDesign = {
                 id: `DSGN-${Math.floor(Math.random() * 10000).toString().padStart(4, '0')}`,
                 prompt: prompt || analysis?.description || 'Custom Jewelry Design',
-                image: images[0],
+                image: images[0] || 'https://placehold.co/512x512/111111/D4A853?text=Design+Failed',
                 date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
             }
             const existingDesigns = JSON.parse(localStorage.getItem('aureum_designs') || '[]')
