@@ -55,6 +55,7 @@ export interface Product {
     sort_order: number
     views: number
     created_at: string
+    specifications?: { label: string; value: string }[]
 }
 
 export interface PriceBreakdown {

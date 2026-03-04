@@ -27,7 +27,7 @@ export default function VaultPage() {
     const [convertingId, setConvertingId] = useState<string | null>(null)
 
     const chartData = useMemo(() => {
-        const base = price?.gold_24k_gram || 7200
+        const base = price?.gold_24k_gram || 14573
         const points = timeRange === '24h' ? 24 : timeRange === '7d' ? 48 : 60
         return generatePriceHistory(base, points, (i) => {
             if (timeRange === '24h') return `${(i % 24).toString().padStart(2, '0')}:00`
@@ -51,8 +51,8 @@ export default function VaultPage() {
     // Simulated active locks merged with localStorage
     const activeLocks = useMemo(() => {
         const defaults = [
-            { id: '1', product: 'Cuban Link 20"', karat: 22, weight: 18, locked: 6850, current: price?.gold_24k_gram || 7200, duration: '48h', expiresIn: '23h 14m', pnl: ((price?.gold_24k_gram || 7200) - 6850) * 18 * 0.916 },
-            { id: '2', product: 'Om Pendant', karat: 22, weight: 4, locked: 7100, current: price?.gold_24k_gram || 7200, duration: '24h', expiresIn: '5h 42m', pnl: ((price?.gold_24k_gram || 7200) - 7100) * 4 * 0.916 },
+            { id: '1', product: 'Cuban Link 20"', karat: 22, weight: 18, locked: 6850, current: price?.gold_24k_gram || 14573, duration: '48h', expiresIn: '23h 14m', pnl: ((price?.gold_24k_gram || 14573) - 6850) * 18 * 0.916 },
+            { id: '2', product: 'Om Pendant', karat: 22, weight: 4, locked: 7100, current: price?.gold_24k_gram || 14573, duration: '24h', expiresIn: '5h 42m', pnl: ((price?.gold_24k_gram || 14573) - 7100) * 4 * 0.916 },
         ]
         const merged = localLocks.filter(l => l.status === 'active').map(l => ({
             id: l.id,
@@ -60,10 +60,10 @@ export default function VaultPage() {
             karat: 22,
             weight: 10,
             locked: l.locked,
-            current: price?.gold_24k_gram || 7200,
+            current: price?.gold_24k_gram || 14573,
             duration: l.duration,
             expiresIn: l.duration,
-            pnl: ((price?.gold_24k_gram || 7200) - l.locked) * 10
+            pnl: ((price?.gold_24k_gram || 14573) - l.locked) * 10
         }))
         return [...merged, ...defaults]
     }, [localLocks, price?.gold_24k_gram])
@@ -356,7 +356,7 @@ export default function VaultPage() {
                                             frequency: 'monthly',
                                             nextDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
                                             totalInvested: sipAmount, // 1st month processed upon confirmation 
-                                            goldAccumulated: Number((sipAmount / (price?.gold_24k_gram || 7200)).toFixed(4)),
+                                            goldAccumulated: Number((sipAmount / (price?.gold_24k_gram || 14573)).toFixed(4)),
                                         }
                                         localStorage.setItem('aureum_sip', JSON.stringify(newSip))
                                     }} className="btn-gold w-full py-3 rounded-lg text-sm">Start SIP — ₹{sipAmount.toLocaleString()}/mo</button>

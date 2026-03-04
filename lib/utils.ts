@@ -131,7 +131,7 @@ export function metalLabel(metal: string): string {
  * Generate simulated gold price (fallback when API unavailable)
  */
 export function simulateGoldPrice(): number {
-    const base = 7200 // approximate ₹/gram for 24K
+    const base = 14573 // approximate ₹/gram for 24K
     const variance = (Math.random() - 0.5) * 100
     return Math.round((base + variance) * 100) / 100
 }

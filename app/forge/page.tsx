@@ -53,55 +53,76 @@ function ForgeStudioContent() {
         }
     }, [searchParams, stage])
 
+    const handleAnalysis = useCallback(async (imageUrl: string) => {
+        setStage('analyzing')
+        try {
+            // Check if it's a data URL or a remote URL
+            let base64 = ''
+            let mediaType = 'image/jpeg'
+
+            if (imageUrl.startsWith('data:')) {
+                base64 = imageUrl.split(',')[1]
+                mediaType = imageUrl.split(';')[0].split(':')[1]
+            } else {
+                // For remote URLs (Instagram placeholders), we fetch and convert to base64
+                // In a real app, the vision API might take a URL directly or we proxy it
+                const response = await fetch(imageUrl)
+                const blob = await response.blob()
+                mediaType = blob.type
+                base64 = await new Promise((resolve) => {
+                    const reader = new FileReader()
+                    reader.onloadend = () => resolve((reader.result as string).split(',')[1])
+                    reader.readAsDataURL(blob)
+                })
+            }
+
+            const res = await fetch('/api/vision', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-anthropic-key': localStorage.getItem('aureum_anthropic_key') || ''
+                },
+                body: JSON.stringify({ imageBase64: base64, mediaType }),
+            })
+
+            if (!res.ok) throw new Error('Analysis failed')
+            const data: VisionAnalysis = await res.json()
+            setAnalysis(data)
+            setPrompt(data.description)
+            setMetal(data.metal || 'gold')
+            setKarat(parseInt(data.suggested_karat || '22') as Karat)
+            setWeight(data.estimated_weight_grams || 8)
+            setStage('analysis')
+        } catch {
+            // Simulate analysis for demo
+            const simAnalysis: VisionAnalysis = {
+                type: 'ring',
+                metal: 'gold',
+                style: 'modern',
+                motifs: ['geometric', 'minimalist'],
+                estimated_weight_grams: 6,
+                suggested_karat: '22',
+                complexity: 'moderate',
+                occasions: ['daily', 'office'],
+                description: 'Elegant modern gold ring with geometric patterns and clean lines, suitable for daily wear',
+            }
+            setAnalysis(simAnalysis)
+            setPrompt(simAnalysis.description)
+            setWeight(simAnalysis.estimated_weight_grams)
+            setStage('analysis')
+        }
+    }, [])
+
     const handleUpload = useCallback(async (file: File) => {
         setError(null)
         const reader = new FileReader()
         reader.onload = async (e) => {
             const dataUrl = e.target?.result as string
             setUploadedImage(dataUrl)
-            setStage('analyzing')
-
-            try {
-                const base64 = dataUrl.split(',')[1]
-                const mediaType = file.type || 'image/jpeg'
-                const res = await fetch('/api/vision', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'x-anthropic-key': localStorage.getItem('aureum_anthropic_key') || ''
-                    },
-                    body: JSON.stringify({ imageBase64: base64, mediaType }),
-                })
-
-                if (!res.ok) throw new Error('Analysis failed')
-                const data: VisionAnalysis = await res.json()
-                setAnalysis(data)
-                setPrompt(data.description)
-                setMetal(data.metal || 'gold')
-                setKarat(parseInt(data.suggested_karat || '22') as Karat)
-                setWeight(data.estimated_weight_grams || 8)
-                setStage('analysis')
-            } catch {
-                // Simulate analysis for demo
-                const simAnalysis: VisionAnalysis = {
-                    type: 'ring',
-                    metal: 'gold',
-                    style: 'modern',
-                    motifs: ['geometric', 'minimalist'],
-                    estimated_weight_grams: 6,
-                    suggested_karat: '22',
-                    complexity: 'moderate',
-                    occasions: ['daily', 'office'],
-                    description: 'Elegant modern gold ring with geometric patterns and clean lines, suitable for daily wear',
-                }
-                setAnalysis(simAnalysis)
-                setPrompt(simAnalysis.description)
-                setWeight(simAnalysis.estimated_weight_grams)
-                setStage('analysis')
-            }
+            handleAnalysis(dataUrl)
         }
         reader.readAsDataURL(file)
-    }, [])
+    }, [handleAnalysis])
 
     const handleGenerate = useCallback(async () => {
         setStage('generating')
@@ -221,12 +242,9 @@ function ForgeStudioContent() {
                                     <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={e => e.target.files?.[0] && handleUpload(e.target.files[0])} />
                                 </div>
 
-                                {/* Instagram Connect */}
+                                { /* Instagram Connect & Photo Selector */}
                                 <div className="mt-6 mb-8 text-center">
-                                    <button onClick={() => { alert('Instagram API integration placeholder. Would trigger OAuth flow.') }} className="px-6 py-2.5 rounded-lg text-sm border border-[#E1306C]/50 hover:border-[#E1306C] bg-gradient-to-r hover:from-[#f09433]/10 hover:via-[#e6683c]/10 hover:to-[#bc1888]/10 text-aureum-white transition-all flex items-center gap-2 mx-auto justify-center group">
-                                        <Instagram size={16} className="text-[#E1306C] group-hover:scale-110 transition-transform" />
-                                        Connect Instagram to Select Photo
-                                    </button>
+                                    <InstagramSelector onSelect={(url) => { setUploadedImage(url); setStage('analyzing'); handleAnalysis(url) }} />
                                 </div>
 
                                 {/* Or text prompt */}
@@ -475,6 +493,61 @@ function ForgeStudioContent() {
             </main>
             <Footer />
         </>
+    )
+}
+
+function InstagramSelector({ onSelect }: { onSelect: (url: string) => void }) {
+    const [isOpen, setIsOpen] = useState(false)
+
+    const instagramPhotos = [
+        'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=400',
+        'https://images.unsplash.com/photo-1611085583191-a3b181a88401?q=80&w=400',
+        'https://images.unsplash.com/photo-1626784213176-92c73534d0b0?q=80&w=400',
+        'https://images.unsplash.com/photo-1573408301185-9146fe634ad0?q=80&w=400',
+        'https://images.unsplash.com/photo-1599643478518-a78bbd51b22e?q=80&w=400',
+        'https://images.unsplash.com/photo-1589128777073-263566ae5e4d?q=80&w=400'
+    ]
+
+    return (
+        <div className="relative inline-block">
+            <button
+                onClick={() => setIsOpen(!isOpen)}
+                className="px-6 py-2.5 rounded-lg text-sm border border-[#E1306C]/50 hover:border-[#E1306C] bg-gradient-to-r hover:from-[#f09433]/10 hover:via-[#e6683c]/10 hover:to-[#bc1888]/10 text-aureum-white transition-all flex items-center gap-2 mx-auto justify-center group"
+            >
+                <Instagram size={16} className="text-[#E1306C] group-hover:scale-110 transition-transform" />
+                Connect Instagram to Select Photo
+            </button>
+
+            <AnimatePresence>
+                {isOpen && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                        className="absolute top-full left-1/2 -translate-x-1/2 mt-4 p-4 bg-aureum-card border border-aureum-border rounded-xl shadow-2xl z-50 w-[300px] sm:w-[400px]"
+                    >
+                        <div className="flex justify-between items-center mb-4">
+                            <h4 className="text-xs font-bold text-aureum-white uppercase tracking-wider">Select Instagram Photo</h4>
+                            <button onClick={() => setIsOpen(false)} className="text-aureum-dim hover:text-aureum-white"><X size={14} /></button>
+                        </div>
+                        <div className="grid grid-cols-3 gap-2">
+                            {instagramPhotos.map((url, i) => (
+                                <button
+                                    key={i}
+                                    onClick={() => { onSelect(url); setIsOpen(false) }}
+                                    className="aspect-square rounded-lg overflow-hidden border border-transparent hover:border-gold transition-all"
+                                >
+                                    <img src={url} alt={`Instagram ${i}`} className="w-full h-full object-cover" />
+                                </button>
+                            ))}
+                        </div>
+                        <p className="mt-4 text-[10px] text-aureum-dim text-center">
+                            Signed in as <span className="text-gold">@aureum_vault</span>
+                        </p>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </div>
     )
 }
 

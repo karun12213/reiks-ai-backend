@@ -22,7 +22,7 @@ export async function POST(req: Request) {
         // Inject live gold prices
         const gold = await cacheGet<GoldPriceData>('gold:latest')
         const systemPrompt = CONCIERGE_SYSTEM_PROMPT
-            .replace('{{GOLD_PRICE}}', `₹${gold?.gold_inr_gram || 7200}`)
+            .replace('{{GOLD_PRICE}}', `₹${gold?.gold_inr_gram || 14573}`)
             .replace('{{SESSION}}', gold?.session || 'UNKNOWN')
             .replace('{{GOLD_22K}}', String(gold?.gold_22k_gram || 6595))
             .replace('{{GOLD_18K}}', String(gold?.gold_18k_gram || 5400))

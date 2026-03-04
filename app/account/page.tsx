@@ -43,7 +43,7 @@ export default function AccountPage() {
 
         const localSip = JSON.parse(localStorage.getItem('aureum_sip') || 'null')
         if (localSip) {
-            localSip.currentValue = localSip.goldAccumulated * (price?.gold_24k_gram || 7200)
+            localSip.currentValue = localSip.goldAccumulated * (price?.gold_24k_gram || 14573)
             setFetchedSip(localSip)
         }
 
@@ -62,7 +62,7 @@ export default function AccountPage() {
         nextDate: 'Oct 15, 2026',
         totalInvested: 45000,
         goldAccumulated: 6.25,
-        currentValue: 6.25 * (price?.gold_24k_gram || 7200),
+        currentValue: 6.25 * (price?.gold_24k_gram || 14573),
     }
 
     // sync initial slider when opening modal

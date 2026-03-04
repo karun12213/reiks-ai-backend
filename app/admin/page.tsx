@@ -5,12 +5,13 @@ import { Shield, Key, TrendingUp, Users, Package, Sparkles, Cog, Check, AlertTri
 import { AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts'
 import { FEATURES, ORDERS, LOCKS, USERS, API_SERVICES, AI_QUEUE, ALERTS, GOLDSMITHS, REVENUE_STREAMS, genPriceHistory, genDailyRev } from '@/lib/admin-data'
 
-type Nav = 'mission' | 'gold' | 'orders' | 'ai' | 'users' | 'revenue' | 'system' | 'config'
+type Nav = 'mission' | 'gold' | 'orders' | 'sip' | 'ai' | 'users' | 'revenue' | 'system' | 'config'
 
 const NAV_ITEMS: { id: Nav; icon: string; label: string }[] = [
     { id: 'mission', icon: '◉', label: 'Mission Control' },
     { id: 'gold', icon: '◈', label: 'Gold Ops' },
     { id: 'orders', icon: '◆', label: 'Orders' },
+    { id: 'sip', icon: '⧖', label: 'SIP Manager' },
     { id: 'ai', icon: '◎', label: 'AI Engine' },
     { id: 'users', icon: '◇', label: 'Users' },
     { id: 'revenue', icon: '◊', label: 'Revenue' },
@@ -60,6 +61,13 @@ export default function AdminPage() {
     const [collapsed, setCollapsed] = useState(false)
     const [anthropicKey, setAnthropicKey] = useState('')
     const [replicateKey, setReplicateKey] = useState('')
+    const [metalsKey, setMetalsKey] = useState('')
+    const [goldApiKey, setGoldApiKey] = useState('')
+    const [razorpayKey, setRazorpayKey] = useState('')
+    const [supabaseUrl, setSupabaseUrl] = useState('')
+    const [supabaseAnonKey, setSupabaseAnonKey] = useState('')
+    const [upstashUrl, setUpstashUrl] = useState('')
+    const [upstashToken, setUpstashToken] = useState('')
 
     const priceHistory = useMemo(genPriceHistory, [])
     const dailyRev = useMemo(genDailyRev, [])
@@ -74,6 +82,13 @@ export default function AdminPage() {
             if (localLocks.length > 0) setLocks([...localLocks, ...LOCKS])
             setAnthropicKey(localStorage.getItem('aureum_anthropic_key') || '')
             setReplicateKey(localStorage.getItem('aureum_replicate_key') || '')
+            setMetalsKey(localStorage.getItem('aureum_metals_key') || '')
+            setGoldApiKey(localStorage.getItem('aureum_gold_api_key') || '')
+            setRazorpayKey(localStorage.getItem('aureum_razorpay_key') || '')
+            setSupabaseUrl(localStorage.getItem('aureum_supabase_url') || '')
+            setSupabaseAnonKey(localStorage.getItem('aureum_supabase_anon_key') || '')
+            setUpstashUrl(localStorage.getItem('aureum_upstash_url') || '')
+            setUpstashToken(localStorage.getItem('aureum_upstash_token') || '')
         }
     }, [])
 
@@ -313,6 +328,112 @@ export default function AdminPage() {
             </Card>
         </div>
     )
+
+    const renderSip = () => (
+        <div className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <Stat label="Active SIPs" value="4" sub="1 paused" trend="+4.2%" accent />
+                <Stat label="Total AUM" value="₹3.24L" sub="49.1 grams accumulated" trend="+4.2%" />
+                <Stat label="Monthly Inflow" value="₹21,000" sub="Next cycle: Mar 1-15" />
+                <Stat label="Mgmt Fee Earned" value="₹1,250" sub="1% annual on AUM" accent />
+            </div>
+
+            <Card>
+                <div className="flex justify-between items-center mb-6">
+                    <h3 className="text-sm font-semibold text-aureum-white font-heading tracking-tight">GOLD SIP INVESTORS</h3>
+                    <div className="flex gap-2">
+                        <Badge text="AUTO-BUY ACTIVE" color="#4ade80" />
+                        <Badge text="REBALANCE: 3d" color="#D4A853" />
+                    </div>
+                </div>
+                <div className="overflow-x-auto -mx-4">
+                    <table className="w-full text-left border-collapse min-w-[700px]">
+                        <thead>
+                            <tr className="border-b border-aureum-border bg-[#0a0a0a]">
+                                <th className="px-6 py-3 text-[10px] font-mono text-aureum-dim uppercase tracking-wider">Investor</th>
+                                <th className="px-6 py-3 text-[10px] font-mono text-aureum-dim uppercase tracking-wider">Plan</th>
+                                <th className="px-6 py-3 text-[10px] font-mono text-aureum-dim uppercase tracking-wider">Weight</th>
+                                <th className="px-6 py-3 text-[10px] font-mono text-aureum-dim uppercase tracking-wider">Next Buy</th>
+                                <th className="px-6 py-3 text-[10px] font-mono text-aureum-dim uppercase tracking-wider">ROI</th>
+                                <th className="px-6 py-3 text-[10px] font-mono text-aureum-dim uppercase tracking-wider text-right">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-[#111]">
+                            {[
+                                { id: 1, user: "Arjun M.", amount: 2000, freq: "Monthly", weight: "4.2g", date: "Mar 15", roi: "+3.2%", status: "active" },
+                                { id: 2, user: "Priya S.", amount: 5000, freq: "Monthly", weight: "11.8g", date: "Mar 01", roi: "+5.1%", status: "active" },
+                                { id: 3, user: "Rahul K.", amount: 1000, freq: "Weekly", weight: "2.1g", date: "Mar 03", roi: "+1.8%", status: "active" },
+                                { id: 4, user: "Deepa R.", amount: 3000, freq: "Monthly", weight: "3.6g", date: "Mar 10", roi: "+2.4%", status: "active" },
+                                { id: 5, user: "Vikram T.", amount: 10000, freq: "Monthly", weight: "28.4g", date: "Paused", roi: "+8.7%", status: "paused" },
+                            ].map(sip => (
+                                <tr key={sip.id} className="hover:bg-gold/5 transition-colors group">
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                        <div className="text-sm font-medium text-aureum-white">{sip.user}</div>
+                                        <div className="text-[10px] text-aureum-dim">ID: {sip.id * 123}</div>
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap">
+                                        <div className="text-xs text-gold font-mono">₹{sip.amount.toLocaleString()}</div>
+                                        <div className="text-[10px] text-aureum-mid">{sip.freq}</div>
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-aureum-white">{sip.weight}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-xs text-aureum-mid">{sip.date}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap"><Badge text={sip.roi} color="#4ade80" /></td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-right">
+                                        <button className={`px-3 py-1.5 rounded-md text-[10px] font-bold tracking-tight transition-all border ${sip.status === 'active' ? 'bg-orange-500/10 border-orange-500/30 text-orange-500 hover:bg-orange-500/20' : 'bg-success/10 border-success/30 text-success hover:bg-success/20'}`}>
+                                            {sip.status === 'active' ? 'PAUSE SIP' : 'RESUME SIP'}
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </Card>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <Card gold>
+                    <h3 className="text-sm font-bold text-gold mb-4 flex items-center gap-2">
+                        <TrendingUp size={16} /> SIP ENGINE LOGS
+                    </h3>
+                    <div className="space-y-3 font-mono text-[10px]">
+                        {[
+                            { t: "14:22:01", m: "Buy window open for 12 users", c: "text-aureum-mid" },
+                            { t: "14:22:05", m: "Price dip detected: ₹14,548 (-0.2%)", c: "text-success" },
+                            { t: "14:22:06", m: "Executing batch purchase: 14.2g", c: "text-gold" },
+                            { t: "14:23:10", m: "Razorpay mandate captured: ₹2,000 (Arjun M.)", c: "text-aureum-dim" },
+                        ].map((log, i) => (
+                            <div key={i} className="flex gap-3 border-l border-gold/20 pl-3">
+                                <span className="text-gold/50 shrink-0">{log.t}</span>
+                                <span className={log.c}>{log.m}</span>
+                            </div>
+                        ))}
+                    </div>
+                </Card>
+                <div className="space-y-4">
+                    <Card>
+                        <h4 className="text-xs font-bold text-aureum-white mb-2">MATERIALIZATION PIPELINE</h4>
+                        <div className="flex justify-between items-center bg-[#111] p-3 rounded-lg border border-aureum-border">
+                            <div>
+                                <div className="text-xs text-gold font-bold">Vikram T.</div>
+                                <div className="text-[10px] text-aureum-dim">28.4g ready to materialize</div>
+                            </div>
+                            <button className="bg-gold text-black px-3 py-1.5 rounded-md text-[10px] font-bold hover:bg-gold-light transition-colors">START FORGE</button>
+                        </div>
+                    </Card>
+                    <Card>
+                        <h4 className="text-xs font-bold text-aureum-white mb-2">SIP GROWTH TARGETS</h4>
+                        <div className="space-y-2">
+                            <div className="flex justify-between text-[10px] text-aureum-mid"><span>Investor Retention</span><span>92%</span></div>
+                            <div className="w-full h-1.5 bg-[#111] rounded-full overflow-hidden"><div className="h-full bg-gold" style={{ width: '92%' }}></div></div>
+                            <div className="flex justify-between text-[10px] text-aureum-mid"><span>AUM Growth (MTD)</span><span>₹1.2L / ₹2.0L</span></div>
+                            <div className="w-full h-1.5 bg-[#111] rounded-full overflow-hidden"><div className="h-full bg-success" style={{ width: '60%' }}></div></div>
+                        </div>
+                    </Card>
+                </div>
+            </div>
+        </div>
+    )
+
 
     const renderOrders = () => (
         <div className="space-y-4">
@@ -600,7 +721,7 @@ export default function AdminPage() {
                             onChange={e => setAnthropicKey(e.target.value)}
                             onBlur={() => {
                                 localStorage.setItem('aureum_anthropic_key', anthropicKey)
-                                alert('Anthropic API key saved to browser session.')
+                                alert('Anthropic API key saved.')
                             }}
                             placeholder="sk-ant-api03-..."
                             className="w-full px-3 py-2 bg-[#111] border border-aureum-border rounded-md text-xs font-mono text-aureum-white placeholder:text-aureum-dim focus:border-gold/50 focus:outline-none placeholder:opacity-40 transition-colors"
@@ -614,15 +735,93 @@ export default function AdminPage() {
                             onChange={e => setReplicateKey(e.target.value)}
                             onBlur={() => {
                                 localStorage.setItem('aureum_replicate_key', replicateKey)
-                                alert('Replicate API token saved to browser session.')
+                                alert('Replicate API token saved.')
                             }}
                             placeholder="r8_..."
                             className="w-full px-3 py-2 bg-[#111] border border-aureum-border rounded-md text-xs font-mono text-aureum-white placeholder:text-aureum-dim focus:border-gold/50 focus:outline-none placeholder:opacity-40 transition-colors"
                         />
                     </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label className="text-xs text-aureum-dim block mb-1">Metals-API Key</label>
+                            <input
+                                type="password"
+                                value={metalsKey}
+                                onChange={e => setMetalsKey(e.target.value)}
+                                onBlur={() => localStorage.setItem('aureum_metals_key', metalsKey)}
+                                className="w-full px-3 py-2 bg-[#111] border border-aureum-border rounded-md text-xs font-mono text-aureum-white focus:border-gold/50 focus:outline-none"
+                            />
+                        </div>
+                        <div>
+                            <label className="text-xs text-aureum-dim block mb-1">GoldAPI.io Key</label>
+                            <input
+                                type="password"
+                                value={goldApiKey}
+                                onChange={e => setGoldApiKey(e.target.value)}
+                                onBlur={() => localStorage.setItem('aureum_gold_api_key', goldApiKey)}
+                                className="w-full px-3 py-2 bg-[#111] border border-aureum-border rounded-md text-xs font-mono text-aureum-white focus:border-gold/50 focus:outline-none"
+                            />
+                        </div>
+                    </div>
+                    <div>
+                        <label className="text-xs text-aureum-dim block mb-1">Razorpay API Key (Live/Test ID)</label>
+                        <input
+                            type="text"
+                            value={razorpayKey}
+                            onChange={e => setRazorpayKey(e.target.value)}
+                            onBlur={() => localStorage.setItem('aureum_razorpay_key', razorpayKey)}
+                            placeholder="rzp_live_..."
+                            className="w-full px-3 py-2 bg-[#111] border border-aureum-border rounded-md text-xs font-mono text-aureum-white focus:border-gold/50 focus:outline-none"
+                        />
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label className="text-xs text-aureum-dim block mb-1">Supabase Project URL</label>
+                            <input
+                                type="text"
+                                value={supabaseUrl}
+                                onChange={e => setSupabaseUrl(e.target.value)}
+                                onBlur={() => localStorage.setItem('aureum_supabase_url', supabaseUrl)}
+                                placeholder="https://xxx.supabase.co"
+                                className="w-full px-3 py-2 bg-[#111] border border-aureum-border rounded-md text-xs font-mono text-aureum-white focus:border-gold/50 focus:outline-none"
+                            />
+                        </div>
+                        <div>
+                            <label className="text-xs text-aureum-dim block mb-1">Supabase Anon Key</label>
+                            <input
+                                type="password"
+                                value={supabaseAnonKey}
+                                onChange={e => setSupabaseAnonKey(e.target.value)}
+                                onBlur={() => localStorage.setItem('aureum_supabase_anon_key', supabaseAnonKey)}
+                                className="w-full px-3 py-2 bg-[#111] border border-aureum-border rounded-md text-xs font-mono text-aureum-white focus:border-gold/50 focus:outline-none"
+                            />
+                        </div>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label className="text-xs text-aureum-dim block mb-1">Upstash Redis REST URL</label>
+                            <input
+                                type="text"
+                                value={upstashUrl}
+                                onChange={e => setUpstashUrl(e.target.value)}
+                                onBlur={() => localStorage.setItem('aureum_upstash_url', upstashUrl)}
+                                className="w-full px-3 py-2 bg-[#111] border border-aureum-border rounded-md text-xs font-mono text-aureum-white focus:border-gold/50 focus:outline-none"
+                            />
+                        </div>
+                        <div>
+                            <label className="text-xs text-aureum-dim block mb-1">Upstash Redis REST Token</label>
+                            <input
+                                type="password"
+                                value={upstashToken}
+                                onChange={e => setUpstashToken(e.target.value)}
+                                onBlur={() => localStorage.setItem('aureum_upstash_token', upstashToken)}
+                                className="w-full px-3 py-2 bg-[#111] border border-aureum-border rounded-md text-xs font-mono text-aureum-white focus:border-gold/50 focus:outline-none"
+                            />
+                        </div>
+                    </div>
                     <p className="text-[10px] text-aureum-dim flex items-start gap-1.5 mt-2">
                         <AlertTriangle size={12} className="shrink-0 mt-0.5 text-warning" />
-                        Keys injected here are securely stored exclusively in your browser's localStorage and attached to request headers dynamically, bypassing environment variables. Essential for live investor demos without backend redeployment.
+                        Credentials saved here are stored in your browser's localStorage and injected into API requests. This allows you to test live integrations immediately.
                     </p>
                 </div>
             </Card>
@@ -679,7 +878,17 @@ export default function AdminPage() {
         </div>
     )
 
-    const sections: Record<Nav, () => React.ReactNode> = { mission: renderMission, gold: renderGold, orders: renderOrders, ai: renderAI, users: renderUsers, revenue: renderRevenue, system: renderSystem, config: renderConfig }
+    const sections: Record<Nav, () => React.ReactNode> = {
+        mission: renderMission,
+        gold: renderGold,
+        orders: renderOrders,
+        sip: renderSip,
+        ai: renderAI,
+        users: renderUsers,
+        revenue: renderRevenue,
+        system: renderSystem,
+        config: renderConfig
+    }
 
     return (
         <div className="flex min-h-screen bg-[#080808] text-aureum-white font-body">

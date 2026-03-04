@@ -222,6 +222,21 @@ export default function ProductDetailPage() {
                                 </label>
                             </div>
 
+                            {/* Specifications Table */}
+                            {product.specifications && product.specifications.length > 0 && (
+                                <div className="mt-8 border-t border-aureum-border pt-8">
+                                    <h3 className="text-xs font-bold text-aureum-white uppercase tracking-[0.2em] mb-4">Specifications</h3>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3">
+                                        {product.specifications.map((spec, i) => (
+                                            <div key={i} className="flex justify-between py-2 border-b border-aureum-border/30">
+                                                <span className="text-[10px] text-aureum-dim uppercase tracking-wider">{spec.label}</span>
+                                                <span className="text-[11px] text-aureum-white font-medium text-right ml-4">{spec.value}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
                             {/* Action Buttons */}
                             <div className="flex flex-col gap-3 mt-auto">
                                 <button

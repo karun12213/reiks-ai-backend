@@ -9,10 +9,12 @@ const CACHE_TTL = 1800 // 30 minutes
 /**
  * Fetch current gold prices — tries cache → API → simulation
  */
-export async function fetchGoldPrice(): Promise<GoldPriceData> {
-    // 1. Check cache
-    const cached = await cacheGet<GoldPriceData>(CACHE_KEY)
-    if (cached) return cached
+export async function fetchGoldPrice(customMetalsKey?: string, customGoldApiKey?: string, skipCache?: boolean): Promise<GoldPriceData> {
+    // 1. Check cache (unless skipCache)
+    if (!skipCache) {
+        const cached = await cacheGet<GoldPriceData>(CACHE_KEY)
+        if (cached) return cached
+    }
 
     const session = getTradingSession()
     let goldUsdOz: number | null = null
