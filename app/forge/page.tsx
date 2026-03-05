@@ -27,6 +27,7 @@ function ForgeStudioContent() {
     const [karat, setKarat] = useState<Karat>(22)
     const [weight, setWeight] = useState(8)
     const [error, setError] = useState<string | null>(null)
+    const [regenerating, setRegenerating] = useState(false)
 
     useEffect(() => {
         const initPrompt = searchParams.get('prompt')
@@ -194,6 +195,44 @@ function ForgeStudioContent() {
     }, [handleUpload])
 
     const priceBreakdown = price ? calculatePrice(price.gold_24k_gram, weight, karat) : null
+
+    // Re-generate images when metal changes in editing/results stage
+    const handleMetalChange = useCallback(async (newMetal: MetalType) => {
+        if (newMetal === metal) return
+        setMetal(newMetal)
+        setRegenerating(true)
+        setError(null)
+
+        try {
+            const res = await fetch('/api/generate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-replicate-key': localStorage.getItem('aureum_replicate_key') || '',
+                    'x-meshy-key': localStorage.getItem('aureum_meshy_key') || ''
+                },
+                body: JSON.stringify({ prompt, metal: newMetal, karat, category: analysis?.type || 'jewelry' }),
+            })
+
+            if (!res.ok) throw new Error('Regeneration failed')
+            const data = await res.json()
+            const rawImages = data.images || []
+            const imageArray = Array.isArray(rawImages) ? rawImages : [rawImages]
+            const images = imageArray.map((img: unknown) => {
+                if (typeof img === 'string') return img
+                if (img && typeof img === 'object' && 'url' in (img as Record<string, unknown>)) return (img as { url: string }).url
+                return String(img)
+            }).filter(Boolean) as string[]
+
+            setGeneratedImages(images)
+            setSelectedImage(images[0] || null)
+            console.log('Forge: Re-generated images for', newMetal, ':', images)
+        } catch {
+            console.error('Forge: Metal re-generation failed')
+        } finally {
+            setRegenerating(false)
+        }
+    }, [metal, prompt, karat, analysis])
 
     return (
         <>
@@ -402,14 +441,21 @@ function ForgeStudioContent() {
                                                 {(['gold', 'rose_gold', 'silver', 'platinum'] as MetalType[]).map(m => (
                                                     <button
                                                         key={m}
-                                                        onClick={() => setMetal(m)}
+                                                        onClick={() => handleMetalChange(m)}
+                                                        disabled={regenerating}
                                                         className={`px-3 py-2 rounded-lg text-xs font-medium transition-all ${metal === m ? 'bg-gold text-aureum-black' : 'bg-aureum-dark text-aureum-mid border border-aureum-border hover:border-gold/30'
-                                                            }`}
+                                                            } ${regenerating ? 'opacity-50 cursor-wait' : ''}`}
                                                     >
                                                         {metalLabel(m)}
                                                     </button>
                                                 ))}
                                             </div>
+                                            {regenerating && (
+                                                <div className="flex items-center gap-2 mt-2 text-xs text-gold">
+                                                    <Loader2 size={12} className="animate-spin" />
+                                                    <span>Regenerating designs for {metalLabel(metal)}...</span>
+                                                </div>
+                                            )}
                                         </div>
 
                                         {/* Karat */}
