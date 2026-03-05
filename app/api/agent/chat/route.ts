@@ -31,7 +31,11 @@ Logs: ${JSON.stringify(logs.slice(0, 50))}`;
 
         return NextResponse.json({ report: content });
     } catch (error: any) {
-        console.error('CEO Agent Error:', error);
-        return NextResponse.json({ error: error.message }, { status: 500 });
+        console.error('CEO Agent Error Detailed:', error);
+        return NextResponse.json({
+            success: false,
+            error: error.message || 'Unknown error occurred in agent backend',
+            details: error.stack
+        }, { status: 500 });
     }
 }
