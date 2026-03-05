@@ -1,18 +1,20 @@
 import { NextResponse } from 'next/server';
-import { Anthropic } from '@anthropic-ai/sdk';
+import { getAnthropicClient } from '@/lib/anthropic';
+
+// Standardize on the known-working model ID from the Vision API
+const AGENT_MODEL = 'claude-sonnet-4-20250514';
 
 /**
  * Option 2A: The Daily Briefing Agent
  * This route is designed to be called by a Vercel Cron Job (e.g., every 12 hours)
  */
 export async function GET(req: Request) {
-    const authKey = process.env.ANTHROPIC_API_KEY; // In production, use env variable
+    const customKey = req.headers.get('x-anthropic-key') || undefined;
+    const anthropic = getAnthropicClient(customKey);
 
-    if (!authKey) {
-        return NextResponse.json({ error: 'Server Anthropic key missing' }, { status: 500 });
+    if (!anthropic) {
+        return NextResponse.json({ error: 'Server Anthropic key missing' }, { status: 503 });
     }
-
-    const anthropic = new Anthropic({ apiKey: authKey });
 
     try {
         // In a real app, we would fetch logs from a DB like Supabase/Upstash here.
@@ -33,7 +35,7 @@ Analyze the provided activity logs and highlight:
 Keep it under 150 words. Use formatting for readability.`;
 
         const response = await anthropic.messages.create({
-            model: "claude-3-5-sonnet-latest",
+            model: AGENT_MODEL,
             max_tokens: 500,
             system: systemPrompt,
             messages: [{ role: 'user', content: `Analyze these logs and generate the briefing: ${JSON.stringify(mockLogs)}` }],

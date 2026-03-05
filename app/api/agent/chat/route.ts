@@ -1,14 +1,16 @@
 import { NextResponse } from 'next/server';
-import { Anthropic } from '@anthropic-ai/sdk';
+import { getAnthropicClient } from '@/lib/anthropic';
+
+// Standardize on the known-working model ID from the Vision API
+const AGENT_MODEL = 'claude-sonnet-4-20250514';
 
 export async function POST(req: Request) {
-    const authKey = req.headers.get('x-anthropic-key') || process.env.ANTHROPIC_API_KEY;
+    const customKey = req.headers.get('x-anthropic-key') || undefined;
+    const anthropic = getAnthropicClient(customKey);
 
-    if (!authKey) {
-        return NextResponse.json({ error: 'Auth key missing' }, { status: 401 });
+    if (!anthropic) {
+        return NextResponse.json({ error: 'Anthropic API key not configured' }, { status: 503 });
     }
-
-    const anthropic = new Anthropic({ apiKey: authKey });
 
     try {
         const { logs, query } = await req.json();
@@ -21,7 +23,7 @@ Be professional, concise, and proactive. Use emojis where appropriate.
 Logs: ${JSON.stringify(logs.slice(0, 50))}`;
 
         const response = await anthropic.messages.create({
-            model: "claude-3-5-sonnet-latest",
+            model: AGENT_MODEL,
             max_tokens: 1024,
             system: systemPrompt,
             messages: [{ role: 'user', content: query || "Give me a summary of how the site is performing today." }],
@@ -34,8 +36,7 @@ Logs: ${JSON.stringify(logs.slice(0, 50))}`;
         console.error('CEO Agent Error Detailed:', error);
         return NextResponse.json({
             success: false,
-            error: error.message || 'Unknown error occurred in agent backend',
-            details: error.stack
+            error: error.message || 'Unknown error occurred in agent backend'
         }, { status: 500 });
     }
 }
