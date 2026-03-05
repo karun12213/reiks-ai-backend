@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -11,6 +11,7 @@ import { SEED_PRODUCTS } from '@/lib/seed-products'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import { Lock, ShoppingBag, Sparkles, ArrowLeft, Minus, Plus, Info, ChevronDown } from 'lucide-react'
+import { trackEvent } from '@/lib/tracking'
 import type { Karat } from '@/lib/types'
 
 export default function ProductDetailPage() {
@@ -31,6 +32,13 @@ export default function ProductDetailPage() {
         if (!price || !product) return null
         return calculatePrice(price.gold_24k_gram, weight, selectedKarat, product.making_charges_per_gram, isRush)
     }, [price, product, weight, selectedKarat, isRush])
+
+    // Track product view
+    useEffect(() => {
+        if (product) {
+            trackEvent('product_view', { id: product.slug, name: product.name, category: product.category })
+        }
+    }, [product])
 
     if (!product) {
         return (
@@ -248,7 +256,10 @@ export default function ProductDetailPage() {
                             {/* Action Buttons */}
                             <div className="flex flex-col gap-3 mt-auto">
                                 <button
-                                    onClick={() => router.push(`/checkout?mode=buy&name=${encodeURIComponent(product.name)}&weight=${weight}&karat=${selectedKarat}&price=${breakdown?.total || 0}`)}
+                                    onClick={() => {
+                                        trackEvent('buy_now', { from: 'product_page', product: product.slug, price: breakdown?.total });
+                                        router.push(`/checkout?mode=buy&name=${encodeURIComponent(product.name)}&weight=${weight}&karat=${selectedKarat}&price=${breakdown?.total || 0}`)
+                                    }}
                                     className="btn-gold w-full py-3.5 rounded-lg text-sm tracking-wider flex items-center justify-center gap-2"
                                 >
                                     <ShoppingBag size={16} />
@@ -256,7 +267,10 @@ export default function ProductDetailPage() {
                                 </button>
                                 <div className="grid grid-cols-2 gap-3">
                                     <button
-                                        onClick={() => router.push(`/checkout?mode=lock&name=${encodeURIComponent(product.name)}&weight=${weight}&karat=${selectedKarat}&price=${breakdown?.total || 0}`)}
+                                        onClick={() => {
+                                            trackEvent('price_lock', { from: 'product_page', product: product.slug, price: breakdown?.total });
+                                            router.push(`/checkout?mode=lock&name=${encodeURIComponent(product.name)}&weight=${weight}&karat=${selectedKarat}&price=${breakdown?.total || 0}`)
+                                        }}
                                         className="btn-outline-gold py-3 rounded-lg text-sm tracking-wider flex items-center justify-center gap-2"
                                     >
                                         <Lock size={14} />

@@ -6,7 +6,7 @@ import { Shield, Key, TrendingUp, Users, Package, Sparkles, Cog, Check, AlertTri
 import { AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts'
 import { FEATURES, ORDERS, LOCKS, USERS, API_SERVICES, AI_QUEUE, ALERTS, GOLDSMITHS, REVENUE_STREAMS, genPriceHistory, genDailyRev } from '@/lib/admin-data'
 
-type Nav = 'mission' | 'gold' | 'orders' | 'sip' | 'ai' | 'users' | 'revenue' | 'system' | 'config'
+type Nav = 'mission' | 'gold' | 'orders' | 'sip' | 'ai' | 'users' | 'activity' | 'revenue' | 'system' | 'config'
 
 const NAV_ITEMS: { id: Nav; icon: string; label: string }[] = [
     { id: 'mission', icon: '◉', label: 'Mission Control' },
@@ -15,6 +15,7 @@ const NAV_ITEMS: { id: Nav; icon: string; label: string }[] = [
     { id: 'sip', icon: '⧖', label: 'SIP Manager' },
     { id: 'ai', icon: '◎', label: 'AI Engine' },
     { id: 'users', icon: '◇', label: 'Users' },
+    { id: 'activity', icon: '◷', label: 'Activity Logs' },
     { id: 'revenue', icon: '◊', label: 'Revenue' },
     { id: 'system', icon: '⬡', label: 'System' },
     { id: 'config', icon: '⚙', label: 'Settings' },
@@ -66,6 +67,7 @@ export default function AdminPage() {
     const [orders, setOrders] = useState(ORDERS)
     const [locks, setLocks] = useState(LOCKS)
     const [alerts, setAlerts] = useState(ALERTS)
+    const [events, setEvents] = useState<any[]>([])
     const [sips, setSips] = useState<any[]>([]) // Add state for tracking SIPs
     const [collapsed, setCollapsed] = useState(false)
     const [anthropicKey, setAnthropicKey] = useState('')
@@ -90,8 +92,10 @@ export default function AdminPage() {
         if (typeof window !== 'undefined') {
             const localOrders = JSON.parse(localStorage.getItem('aureum_orders') || '[]')
             const localLocks = JSON.parse(localStorage.getItem('aureum_locks') || '[]')
+            const localEvents = JSON.parse(localStorage.getItem('aureum_events') || '[]')
             if (localOrders.length > 0) setOrders([...localOrders, ...ORDERS])
             if (localLocks.length > 0) setLocks([...localLocks, ...LOCKS])
+            if (localEvents.length > 0) setEvents(localEvents)
             setAnthropicKey(localStorage.getItem('aureum_anthropic_key') || '')
             setReplicateKey(localStorage.getItem('aureum_replicate_key') || '')
             setMeshyKey(localStorage.getItem('aureum_meshy_key') || '')
@@ -1037,6 +1041,47 @@ export default function AdminPage() {
         </div>
     )
 
+    const renderActivity = () => (
+        <div className="space-y-4">
+            <Card>
+                <div className="flex justify-between items-center mb-4">
+                    <h3 className="text-sm font-semibold text-aureum-white">User Activity Logs</h3>
+                    <div className="text-aureum-dim text-xs">Last 500 actions</div>
+                </div>
+                <div className="overflow-x-auto">
+                    <table className="w-full text-left">
+                        <thead><tr className="border-b border-aureum-border">
+                            {['Timestamp', 'Action', 'Metadata'].map(h => <th key={h} className="px-3 py-2 text-[9px] font-mono font-semibold text-aureum-dim uppercase tracking-wider">{h}</th>)}
+                        </tr></thead>
+                        <tbody>
+                            {events.map((e, i) => (
+                                <tr key={e.id || i} className="border-b border-[#111] hover:bg-[#111] transition-colors">
+                                    <td className="px-3 py-2 text-[10px] text-aureum-dim whitespace-nowrap">{new Date(e.timestamp).toLocaleString()}</td>
+                                    <td className="px-3 py-2">
+                                        <Badge
+                                            text={e.action.toUpperCase()}
+                                            color={e.action.includes('buy') ? '#4ade80' : e.action.includes('design') || e.action.includes('forge') ? '#c084fc' : e.action.includes('chat') ? '#60a5fa' : '#fbbf24'}
+                                        />
+                                    </td>
+                                    <td className="px-3 py-2 text-[10px] font-mono text-aureum-mid max-w-lg truncate">
+                                        {JSON.stringify(e.metadata)}
+                                    </td>
+                                </tr>
+                            ))}
+                            {events.length === 0 && (
+                                <tr>
+                                    <td colSpan={3} className="px-3 py-8 text-center text-aureum-dim text-xs">
+                                        No recent activity to display.
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
+            </Card>
+        </div>
+    )
+
     const sections: Record<Nav, () => React.ReactNode> = {
         mission: renderMission,
         gold: renderGold,
@@ -1044,6 +1089,7 @@ export default function AdminPage() {
         sip: renderSip,
         ai: renderAI,
         users: renderUsers,
+        activity: renderActivity,
         revenue: renderRevenue,
         system: renderSystem,
         config: renderConfig

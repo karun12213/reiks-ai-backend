@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import { Send, Sparkles, Loader2, Bot, User, Trash2 } from 'lucide-react'
+import { trackEvent } from '@/lib/tracking'
 
 interface Message {
     id: string
@@ -45,6 +46,8 @@ export default function ConciergePage() {
 
         const userMsg: Message = { id: Date.now().toString(), role: 'user', content: text }
         const assistantMsg: Message = { id: (Date.now() + 1).toString(), role: 'assistant', content: '' }
+
+        trackEvent('concierge_chat', { message: text })
 
         setMessages(prev => [...prev, userMsg, assistantMsg])
         setInput('')

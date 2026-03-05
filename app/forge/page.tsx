@@ -8,6 +8,7 @@ import { calculatePrice, formatINR, metalLabel, karatLabel } from '@/lib/utils'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import { Upload, Wand2, Sparkles, Loader2, Image as ImageIcon, X, Lock, ShoppingBag, ChevronRight, Instagram } from 'lucide-react'
+import { trackEvent } from '@/lib/tracking'
 import type { VisionAnalysis, Karat, MetalType } from '@/lib/types'
 
 type Stage = 'upload' | 'analyzing' | 'analysis' | 'generating' | 'results' | 'editing'
@@ -54,10 +55,66 @@ function ForgeStudioContent() {
         }
     }, [searchParams, stage])
 
+    const generateDesigns = async (genPrompt: string, genMetal: MetalType, genKarat: Karat, genCategory: string) => {
+        setStage('generating')
+        setError(null)
+        setRegenerating(true)
+
+        try {
+            const res = await fetch('/api/generate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-replicate-key': localStorage.getItem('aureum_replicate_key') || '',
+                    'x-meshy-key': localStorage.getItem('aureum_meshy_key') || ''
+                },
+                body: JSON.stringify({ prompt: genPrompt, metal: genMetal, karat: genKarat, category: genCategory }),
+            })
+
+            if (!res.ok) throw new Error('Generation failed')
+            const data = await res.json()
+            const rawImages = data.images || []
+            const imageArray = Array.isArray(rawImages) ? rawImages : [rawImages]
+            const images = imageArray.map((img: unknown) => {
+                if (typeof img === 'string') return img
+                if (img && typeof img === 'object' && 'url' in (img as Record<string, unknown>)) return (img as { url: string }).url
+                return String(img)
+            }).filter(Boolean) as string[]
+
+            setGeneratedImages(images)
+            setSelectedImage(images[0] || null)
+            console.log('Forge: Generated images:', images)
+            trackEvent('forge_generate', { prompt: genPrompt, metal: genMetal, karat: genKarat })
+
+            // Track generated design
+            const newDesign = {
+                id: `DSGN-${Math.floor(Math.random() * 10000).toString().padStart(4, '0')}`,
+                prompt: genPrompt || 'Custom Jewelry Design',
+                image: images[0] || 'https://placehold.co/512x512/111111/D4A853?text=Design+Failed',
+                date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+            }
+            const existingDesigns = JSON.parse(localStorage.getItem('aureum_designs') || '[]')
+            localStorage.setItem('aureum_designs', JSON.stringify([newDesign, ...existingDesigns]))
+
+            setStage('results')
+        } catch {
+            const demoImages = [
+                'https://placehold.co/512x512/111111/D4A853?text=Design+1',
+                'https://placehold.co/512x512/111111/D4A853?text=Design+2',
+                'https://placehold.co/512x512/111111/D4A853?text=Design+3',
+                'https://placehold.co/512x512/111111/D4A853?text=Design+4',
+            ]
+            setGeneratedImages(demoImages)
+            setSelectedImage(demoImages[0])
+            setStage('results')
+        } finally {
+            setRegenerating(false)
+        }
+    }
+
     const handleAnalysis = useCallback(async (imageUrl: string) => {
         setStage('analyzing')
         try {
-            // Check if it's a data URL or a remote URL
             let base64 = ''
             let mediaType = 'image/jpeg'
 
@@ -65,8 +122,6 @@ function ForgeStudioContent() {
                 base64 = imageUrl.split(',')[1]
                 mediaType = imageUrl.split(';')[0].split(':')[1]
             } else {
-                // For remote URLs (Instagram placeholders), we fetch and convert to base64
-                // In a real app, the vision API might take a URL directly or we proxy it
                 const response = await fetch(imageUrl)
                 const blob = await response.blob()
                 mediaType = blob.type
@@ -90,12 +145,15 @@ function ForgeStudioContent() {
             const data: VisionAnalysis = await res.json()
             setAnalysis(data)
             setPrompt(data.description)
-            setMetal(data.metal || 'gold')
-            setKarat(parseInt(data.suggested_karat || '22') as Karat)
+            const newMetal = (data.metal as MetalType) || 'gold'
+            const newKarat = parseInt(data.suggested_karat || '22') as Karat
+            setMetal(newMetal)
+            setKarat(newKarat)
             setWeight(data.estimated_weight_grams || 8)
-            setStage('analysis')
+
+            // Auto-generate immediately after analysis
+            generateDesigns(data.description, newMetal, newKarat, data.type || 'jewelry')
         } catch {
-            // Simulate analysis for demo
             const simAnalysis: VisionAnalysis = {
                 type: 'ring',
                 metal: 'gold',
@@ -110,11 +168,14 @@ function ForgeStudioContent() {
             setAnalysis(simAnalysis)
             setPrompt(simAnalysis.description)
             setWeight(simAnalysis.estimated_weight_grams)
-            setStage('analysis')
+
+            generateDesigns(simAnalysis.description, simAnalysis.metal as MetalType, parseInt(simAnalysis.suggested_karat) as Karat, simAnalysis.type)
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const handleUpload = useCallback(async (file: File) => {
+        trackEvent('forge_upload', { fileName: file.name, fileSize: file.size })
         setError(null)
         const reader = new FileReader()
         reader.onload = async (e) => {
@@ -125,68 +186,7 @@ function ForgeStudioContent() {
         reader.readAsDataURL(file)
     }, [handleAnalysis])
 
-    const handleGenerate = useCallback(async () => {
-        setStage('generating')
-        setError(null)
-
-        try {
-            const res = await fetch('/api/generate', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'x-replicate-key': localStorage.getItem('aureum_replicate_key') || '',
-                    'x-meshy-key': localStorage.getItem('aureum_meshy_key') || ''
-                },
-                body: JSON.stringify({ prompt, metal, karat, category: analysis?.type || 'jewelry' }),
-            })
-
-            if (!res.ok) throw new Error('Generation failed')
-            const data = await res.json()
-            const rawImages = data.images || []
-            const imageArray = Array.isArray(rawImages) ? rawImages : [rawImages]
-            const images = imageArray.map(img => {
-                if (typeof img === 'string') return img
-                if (img && typeof img === 'object' && 'url' in img) return (img as any).url
-                return img?.toString() || ''
-            }).filter(Boolean) as string[]
-
-            setGeneratedImages(images)
-            console.log('Forge: Generated images:', images)
-
-            // Track generated design
-            const newDesign = {
-                id: `DSGN-${Math.floor(Math.random() * 10000).toString().padStart(4, '0')}`,
-                prompt: prompt || analysis?.description || 'Custom Jewelry Design',
-                image: images[0] || 'https://placehold.co/512x512/111111/D4A853?text=Design+Failed',
-                date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-            }
-            const existingDesigns = JSON.parse(localStorage.getItem('aureum_designs') || '[]')
-            localStorage.setItem('aureum_designs', JSON.stringify([newDesign, ...existingDesigns]))
-
-            setStage('results')
-        } catch {
-            // Placeholder images for demo
-            const demoImages = [
-                'https://placehold.co/512x512/111111/D4A853?text=Design+1',
-                'https://placehold.co/512x512/111111/D4A853?text=Design+2',
-                'https://placehold.co/512x512/111111/D4A853?text=Design+3',
-                'https://placehold.co/512x512/111111/D4A853?text=Design+4',
-            ]
-            setGeneratedImages(demoImages)
-
-            // Track generated design
-            const newDesign = {
-                id: `DSGN-${Math.floor(Math.random() * 10000).toString().padStart(4, '0')}`,
-                prompt: prompt || analysis?.description || 'Custom Jewelry Design',
-                image: demoImages[0],
-                date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-            }
-            const existingDesigns = JSON.parse(localStorage.getItem('aureum_designs') || '[]')
-            localStorage.setItem('aureum_designs', JSON.stringify([newDesign, ...existingDesigns]))
-
-            setStage('results')
-        }
-    }, [prompt, metal, karat, analysis])
+    const handleGenerate = () => generateDesigns(prompt, metal, karat, analysis?.type || 'jewelry')
 
     const handleDrop = useCallback((e: React.DragEvent) => {
         e.preventDefault()
@@ -196,42 +196,11 @@ function ForgeStudioContent() {
 
     const priceBreakdown = price ? calculatePrice(price.gold_24k_gram, weight, karat) : null
 
-    // Re-generate images when metal changes in editing/results stage
-    const handleMetalChange = useCallback(async (newMetal: MetalType) => {
+    const handleMetalChange = useCallback((newMetal: MetalType) => {
         if (newMetal === metal) return
         setMetal(newMetal)
-        setRegenerating(true)
-        setError(null)
-
-        try {
-            const res = await fetch('/api/generate', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'x-replicate-key': localStorage.getItem('aureum_replicate_key') || '',
-                    'x-meshy-key': localStorage.getItem('aureum_meshy_key') || ''
-                },
-                body: JSON.stringify({ prompt, metal: newMetal, karat, category: analysis?.type || 'jewelry' }),
-            })
-
-            if (!res.ok) throw new Error('Regeneration failed')
-            const data = await res.json()
-            const rawImages = data.images || []
-            const imageArray = Array.isArray(rawImages) ? rawImages : [rawImages]
-            const images = imageArray.map((img: unknown) => {
-                if (typeof img === 'string') return img
-                if (img && typeof img === 'object' && 'url' in (img as Record<string, unknown>)) return (img as { url: string }).url
-                return String(img)
-            }).filter(Boolean) as string[]
-
-            setGeneratedImages(images)
-            setSelectedImage(images[0] || null)
-            console.log('Forge: Re-generated images for', newMetal, ':', images)
-        } catch {
-            console.error('Forge: Metal re-generation failed')
-        } finally {
-            setRegenerating(false)
-        }
+        generateDesigns(prompt, newMetal, karat, analysis?.type || 'jewelry')
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [metal, prompt, karat, analysis])
 
     return (
@@ -507,10 +476,16 @@ function ForgeStudioContent() {
 
                                         {/* Actions */}
                                         <div className="mt-4 space-y-2">
-                                            <button onClick={() => router.push(`/checkout?mode=buy&name=${encodeURIComponent((prompt || analysis?.type || 'Custom Design').substring(0, 30))}&weight=${weight}&karat=${karat}&price=${priceBreakdown?.total || 0}`)} className="btn-gold w-full py-3 rounded-lg text-sm flex items-center justify-center gap-2">
+                                            <button onClick={() => {
+                                                trackEvent('buy_now', { from: 'forge', price: priceBreakdown?.total });
+                                                router.push(`/checkout?mode=buy&name=${encodeURIComponent((prompt || analysis?.type || 'Custom Design').substring(0, 30))}&weight=${weight}&karat=${karat}&price=${priceBreakdown?.total || 0}`)
+                                            }} className="btn-gold w-full py-3 rounded-lg text-sm flex items-center justify-center gap-2">
                                                 <ShoppingBag size={16} /> Buy Now
                                             </button>
-                                            <button onClick={() => router.push(`/checkout?mode=lock&name=${encodeURIComponent((prompt || analysis?.type || 'Custom Design').substring(0, 30))}&weight=${weight}&karat=${karat}&price=${priceBreakdown?.total || 0}`)} className="btn-outline-gold w-full py-3 rounded-lg text-sm flex items-center justify-center gap-2">
+                                            <button onClick={() => {
+                                                trackEvent('price_lock', { from: 'forge', price: priceBreakdown?.total });
+                                                router.push(`/checkout?mode=lock&name=${encodeURIComponent((prompt || analysis?.type || 'Custom Design').substring(0, 30))}&weight=${weight}&karat=${karat}&price=${priceBreakdown?.total || 0}`)
+                                            }} className="btn-outline-gold w-full py-3 rounded-lg text-sm flex items-center justify-center gap-2">
                                                 <Lock size={16} /> Lock This Price
                                             </button>
                                         </div>
