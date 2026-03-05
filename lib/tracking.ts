@@ -35,6 +35,14 @@ export function trackEvent(action: EventAction, metadata?: Record<string, any>) 
 
         localStorage.setItem('aureum_events', JSON.stringify(trimmedEvents));
         console.log(`[AUREUM TRACK] ${action}`, metadata);
+
+        // Async sync to Agent Backend for real-time processing (Options 2B, 2C)
+        fetch('/api/agent/ingest', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newEvent)
+        }).catch(e => console.error('Agent sync failed', e));
+
     } catch (e) {
         console.error('Failed to track event:', e);
     }

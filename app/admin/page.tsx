@@ -6,7 +6,7 @@ import { Shield, Key, TrendingUp, Users, Package, Sparkles, Cog, Check, AlertTri
 import { AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts'
 import { FEATURES, ORDERS, LOCKS, USERS, API_SERVICES, AI_QUEUE, ALERTS, GOLDSMITHS, REVENUE_STREAMS, genPriceHistory, genDailyRev } from '@/lib/admin-data'
 
-type Nav = 'mission' | 'gold' | 'orders' | 'sip' | 'ai' | 'users' | 'activity' | 'revenue' | 'system' | 'config'
+type Nav = 'mission' | 'gold' | 'orders' | 'sip' | 'ai' | 'users' | 'activity' | 'ceo' | 'revenue' | 'system' | 'config'
 
 const NAV_ITEMS: { id: Nav; icon: string; label: string }[] = [
     { id: 'mission', icon: '◉', label: 'Mission Control' },
@@ -16,6 +16,7 @@ const NAV_ITEMS: { id: Nav; icon: string; label: string }[] = [
     { id: 'ai', icon: '◎', label: 'AI Engine' },
     { id: 'users', icon: '◇', label: 'Users' },
     { id: 'activity', icon: '◷', label: 'Activity Logs' },
+    { id: 'ceo', icon: '♔', label: 'CEO Agent' },
     { id: 'revenue', icon: '◊', label: 'Revenue' },
     { id: 'system', icon: '⬡', label: 'System' },
     { id: 'config', icon: '⚙', label: 'Settings' },
@@ -68,6 +69,11 @@ export default function AdminPage() {
     const [locks, setLocks] = useState(LOCKS)
     const [alerts, setAlerts] = useState(ALERTS)
     const [events, setEvents] = useState<any[]>([])
+    const [agentMessages, setAgentMessages] = useState<{ role: 'user' | 'agent', text: string }[]>([
+        { role: 'agent', text: 'Good evening. I am your AUREUM COO Agent. How can I help you manage the business today?' }
+    ])
+    const [agentPrompt, setAgentPrompt] = useState('')
+    const [isAgentTyping, setIsAgentTyping] = useState(false)
     const [sips, setSips] = useState<any[]>([]) // Add state for tracking SIPs
     const [collapsed, setCollapsed] = useState(false)
     const [anthropicKey, setAnthropicKey] = useState('')
@@ -1041,6 +1047,128 @@ export default function AdminPage() {
         </div>
     )
 
+    const renderCEO = () => (
+        <div className="space-y-4">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                {/* Agent Chat Interface (Option 2D) */}
+                <div className="lg:col-span-2 space-y-4">
+                    <Card gold>
+                        <h3 className="text-sm font-bold text-gold mb-4 flex items-center gap-2">
+                            <Sparkles size={16} /> CONVERSATIONAL COO
+                        </h3>
+                        <div className="h-96 flex flex-col">
+                            <div className="flex-1 overflow-y-auto space-y-4 mb-4 pr-2 custom-scrollbar">
+                                {agentMessages.map((msg, i) => (
+                                    <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                                        <div className={`max-w-[80%] p-3 rounded-xl text-xs leading-relaxed ${msg.role === 'user'
+                                            ? 'bg-gold text-black rounded-tr-none'
+                                            : 'bg-[#111] border border-aureum-border text-aureum-white rounded-tl-none'
+                                            }`}>
+                                            {msg.text}
+                                        </div>
+                                    </div>
+                                ))}
+                                {isAgentTyping && (
+                                    <div className="flex justify-start">
+                                        <div className="bg-[#111] border border-aureum-border text-aureum-dim p-3 rounded-xl rounded-tl-none text-xs italic">
+                                            COO is analyzing logs...
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                            <div className="flex gap-2">
+                                <input
+                                    type="text"
+                                    value={agentPrompt}
+                                    onChange={e => setAgentPrompt(e.target.value)}
+                                    onKeyDown={e => e.key === 'Enter' && handleAgentChat()}
+                                    placeholder="Ask about business performance, logs, or costs..."
+                                    className="flex-1 bg-[#0a0a0a] border border-aureum-border rounded-lg px-4 py-2 text-xs focus:border-gold/50 outline-none"
+                                />
+                                <button
+                                    onClick={() => handleAgentChat()}
+                                    disabled={isAgentTyping || !agentPrompt.trim()}
+                                    className="px-4 py-2 bg-gold text-black rounded-lg text-xs font-bold hover:bg-gold-light transition-colors"
+                                >
+                                    SEND
+                                </button>
+                            </div>
+                        </div>
+                    </Card>
+                </div>
+
+                {/* Agent Briefing & Alerts (Option 2A, 2B, 2C) */}
+                <div className="space-y-4">
+                    <Card>
+                        <h3 className="text-sm font-bold text-aureum-white mb-3">DAILY BRIEFING (2A)</h3>
+                        <button
+                            onClick={() => handleAgentChat("Give me a comprehensive daily briefing based on the logs.")}
+                            className="w-full py-2 bg-gold/10 border border-gold/30 text-gold text-[10px] font-bold rounded mb-3 hover:bg-gold/20 transition-colors"
+                        >
+                            GENERATE MORNING BRIEF
+                        </button>
+                        <div className="text-[10px] text-aureum-dim leading-relaxed p-3 bg-[#111] rounded-lg border border-aureum-border">
+                            Nightly report status: <span className="text-success">Generated at 08:00 AM</span>
+                            <div className="mt-2 text-aureum-mid">
+                                "High activity on Forge AI today. One user spent 12 mins on a custom design — follow up recommended."
+                            </div>
+                        </div>
+                    </Card>
+
+                    <Card>
+                        <h3 className="text-sm font-bold text-aureum-white mb-3">GUARDIAN ALERTS (2B, 2C)</h3>
+                        <div className="space-y-3">
+                            <div className="p-2.5 bg-error/5 border border-error/20 rounded-lg">
+                                <div className="text-[10px] font-bold text-error flex justify-between">
+                                    <span>FINANCIAL RISK</span>
+                                    <span>2h ago</span>
+                                </div>
+                                <div className="text-[10px] text-aureum-dim mt-1">Gold price spiked 1.2%. Profit margin on 7d locks now below 5%.</div>
+                            </div>
+                            <div className="p-2.5 bg-success/5 border border-success/20 rounded-lg">
+                                <div className="text-[10px] font-bold text-success flex justify-between">
+                                    <span>SALES OPPORTUNITY</span>
+                                    <span>5h ago</span>
+                                </div>
+                                <div className="text-[10px] text-aureum-dim mt-1">High-intent user abandoned a ₹1.2L checkout. Discount ping sent via Agent 2B.</div>
+                            </div>
+                        </div>
+                    </Card>
+                </div>
+            </div>
+        </div>
+    )
+
+    async function handleAgentChat(directMsg?: string) {
+        const query = directMsg || agentPrompt
+        if (!query.trim()) return
+
+        setAgentMessages(prev => [...prev, { role: 'user', text: query }])
+        setAgentPrompt('')
+        setIsAgentTyping(true)
+
+        try {
+            const res = await fetch('/api/agent/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-anthropic-key': localStorage.getItem('aureum_anthropic_key') || ''
+                },
+                body: JSON.stringify({ logs: events, query })
+            })
+            const data = await res.json()
+            if (data.report) {
+                setAgentMessages(prev => [...prev, { role: 'agent', text: data.report }])
+            } else {
+                setAgentMessages(prev => [...prev, { role: 'agent', text: "I'm having trouble analyzing the data right now. Please check your Anthropic key." }])
+            }
+        } catch (e) {
+            setAgentMessages(prev => [...prev, { role: 'agent', text: "Error connecting to Agent backend." }])
+        } finally {
+            setIsAgentTyping(false)
+        }
+    }
+
     const renderActivity = () => (
         <div className="space-y-4">
             <Card>
@@ -1090,6 +1218,7 @@ export default function AdminPage() {
         ai: renderAI,
         users: renderUsers,
         activity: renderActivity,
+        ceo: renderCEO,
         revenue: renderRevenue,
         system: renderSystem,
         config: renderConfig
