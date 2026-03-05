@@ -21,7 +21,7 @@ Be professional, concise, and proactive. Use emojis where appropriate.
 Logs: ${JSON.stringify(logs.slice(0, 50))}`;
 
         const response = await anthropic.messages.create({
-            model: "claude-3-5-sonnet-20241022",
+            model: "claude-3-5-sonnet-latest",
             max_tokens: 1024,
             system: systemPrompt,
             messages: [{ role: 'user', content: query || "Give me a summary of how the site is performing today." }],

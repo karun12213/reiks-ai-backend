@@ -33,7 +33,7 @@ Analyze the provided activity logs and highlight:
 Keep it under 150 words. Use formatting for readability.`;
 
         const response = await anthropic.messages.create({
-            model: "claude-3-5-sonnet-20241022",
+            model: "claude-3-5-sonnet-latest",
             max_tokens: 500,
             system: systemPrompt,
             messages: [{ role: 'user', content: `Analyze these logs and generate the briefing: ${JSON.stringify(mockLogs)}` }],

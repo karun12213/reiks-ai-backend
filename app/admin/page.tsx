@@ -1160,7 +1160,7 @@ export default function AdminPage() {
             if (data.report) {
                 setAgentMessages(prev => [...prev, { role: 'agent', text: data.report }])
             } else {
-                setAgentMessages(prev => [...prev, { role: 'agent', text: `Agent Error: ${data.error || 'The agent returned an empty response. Please check your Anthropic key and logs.'}` }])
+                setAgentMessages(prev => [...prev, { role: 'agent', text: `Agent Feedback: ${data.error || 'The agent is temporarily unreachable. Please check your credentials.'}` }])
             }
         } catch (e) {
             setAgentMessages(prev => [...prev, { role: 'agent', text: "Error connecting to Agent backend." }])
