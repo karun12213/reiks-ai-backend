@@ -16,10 +16,10 @@ export async function POST(req: Request) {
         const order = await razorpay.orders.create({
             amount: Math.round(amount * 100), // paise
             currency: 'INR',
-            receipt: orderId || `aureum_${Date.now()}`,
+            receipt: orderId || `reiks_${Date.now()}`,
             notes: {
-                product: productName || 'AUREUM Jewelry',
-                platform: 'aureum',
+                product: productName || 'REIKS Jewelry',
+                platform: 'reiks',
             },
         })
 

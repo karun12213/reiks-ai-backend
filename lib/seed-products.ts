@@ -1,4 +1,4 @@
-// 36 product seed data for AUREUM catalog
+// 36 product seed data for REIKS catalog
 import type { Product } from './types'
 
 export const SEED_PRODUCTS: Omit<Product, 'id' | 'created_at' | 'views'>[] = [

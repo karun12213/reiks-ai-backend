@@ -2,13 +2,13 @@ import type { Metadata } from "next"
 import "./globals.css"
 
 export const metadata: Metadata = {
-  title: "AUREUM — Forged by Intelligence",
+  title: "REIKS — Forged by Intelligence",
   description: "India's first AI-native gold jewelry platform. Design with AI, lock prices in real-time, buy with confidence.",
-  keywords: ["gold jewelry", "AI jewelry design", "gold price lock", "luxury jewelry", "AUREUM", "Chennai"],
+  keywords: ["gold jewelry", "AI jewelry design", "gold price lock", "luxury jewelry", "REIKS", "Chennai"],
   openGraph: {
-    title: "AUREUM — Forged by Intelligence",
+    title: "REIKS — Forged by Intelligence",
     description: "India's first AI-native gold jewelry platform. Design with AI, lock gold prices live.",
-    siteName: "AUREUM",
+    siteName: "REIKS",
     type: "website",
   },
 }
@@ -28,7 +28,7 @@ export default function RootLayout({
         <meta name="theme-color" content="#080808" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
       </head>
-      <body className="bg-aureum-black text-aureum-white font-body antialiased min-h-screen">
+      <body className="bg-reiks-black text-reiks-white font-body antialiased min-h-screen">
         <div className="flex flex-col min-h-screen">
           {children}
         </div>

@@ -46,7 +46,7 @@ export default function ProductDetailPage() {
                 <Header />
                 <main className="flex-1 flex items-center justify-center py-32">
                     <div className="text-center">
-                        <p className="text-aureum-dim text-lg">Product not found</p>
+                        <p className="text-reiks-dim text-lg">Product not found</p>
                         <Link href="/collection" className="mt-4 inline-flex items-center gap-2 text-gold text-sm hover:text-gold-light">
                             <ArrowLeft size={14} /> Back to Collection
                         </Link>
@@ -67,12 +67,12 @@ export default function ProductDetailPage() {
             <main className="flex-1 pb-20 md:pb-0">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
                     {/* Breadcrumb */}
-                    <nav className="mb-6 flex items-center gap-2 text-xs text-aureum-dim">
+                    <nav className="mb-6 flex items-center gap-2 text-xs text-reiks-dim">
                         <Link href="/collection" className="hover:text-gold transition-colors">Collection</Link>
                         <span>→</span>
                         <span className="capitalize">{product.category}</span>
                         <span>→</span>
-                        <span className="text-aureum-mid">{product.name}</span>
+                        <span className="text-reiks-mid">{product.name}</span>
                     </nav>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
@@ -80,7 +80,7 @@ export default function ProductDetailPage() {
                         <motion.div
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
-                            className="aspect-square rounded-2xl bg-gradient-to-br from-aureum-card to-aureum-dark border border-aureum-border flex items-center justify-center relative overflow-hidden"
+                            className="aspect-square rounded-2xl bg-gradient-to-br from-reiks-card to-reiks-dark border border-reiks-border flex items-center justify-center relative overflow-hidden"
                         >
                             {product.images?.[0] ? (
                                 <Image
@@ -103,7 +103,7 @@ export default function ProductDetailPage() {
                             </div>
                             {product.is_featured && (
                                 <div className="absolute top-4 right-4">
-                                    <span className="text-[10px] font-mono text-aureum-black bg-gold px-2 py-1 rounded-md font-bold">
+                                    <span className="text-[10px] font-mono text-reiks-black bg-gold px-2 py-1 rounded-md font-bold">
                                         FEATURED
                                     </span>
                                 </div>
@@ -116,16 +116,16 @@ export default function ProductDetailPage() {
                             animate={{ opacity: 1, x: 0 }}
                             className="flex flex-col"
                         >
-                            <h1 className="text-2xl md:text-3xl font-heading font-bold text-aureum-white mb-2">
+                            <h1 className="text-2xl md:text-3xl font-heading font-bold text-reiks-white mb-2">
                                 {product.name}
                             </h1>
-                            <p className="text-sm text-aureum-mid leading-relaxed mb-6">{product.description}</p>
+                            <p className="text-sm text-reiks-mid leading-relaxed mb-6">{product.description}</p>
 
                             {/* Price Display */}
-                            <div className="p-5 bg-aureum-card rounded-xl border border-aureum-border gold-border-glow mb-6">
+                            <div className="p-5 bg-reiks-card rounded-xl border border-reiks-border gold-border-glow mb-6">
                                 <div className="flex items-center justify-between mb-4">
-                                    <span className="text-xs text-aureum-dim font-mono uppercase">Total Price</span>
-                                    <span className="text-[10px] font-mono text-aureum-dim">
+                                    <span className="text-xs text-reiks-dim font-mono uppercase">Total Price</span>
+                                    <span className="text-[10px] font-mono text-reiks-dim">
                                         {price?.isLive ? '🟢 LIVE' : '🟡 SIMULATED'}
                                     </span>
                                 </div>
@@ -134,9 +134,9 @@ export default function ProductDetailPage() {
                                         {formatINR(breakdown.total)}
                                     </div>
                                 ) : (
-                                    <div className="h-9 w-40 bg-aureum-border rounded animate-pulse" />
+                                    <div className="h-9 w-40 bg-reiks-border rounded animate-pulse" />
                                 )}
-                                <div className="mt-1 text-xs text-aureum-dim">
+                                <div className="mt-1 text-xs text-reiks-dim">
                                     incl. 3% GST · {karatLabel(selectedKarat)} · {formatWeight(weight)}
                                 </div>
 
@@ -154,19 +154,19 @@ export default function ProductDetailPage() {
                                     <motion.div
                                         initial={{ opacity: 0, height: 0 }}
                                         animate={{ opacity: 1, height: 'auto' }}
-                                        className="mt-3 pt-3 border-t border-aureum-border space-y-1.5"
+                                        className="mt-3 pt-3 border-t border-reiks-border space-y-1.5"
                                     >
                                         <div className="flex justify-between text-xs">
-                                            <span className="text-aureum-dim">Gold (₹{breakdown.goldPricePerGram.toFixed(0)}/g × {formatWeight(weight)} × {(breakdown.purity * 100).toFixed(1)}%)</span>
-                                            <span className="text-aureum-mid font-mono">{formatINR(breakdown.goldCost)}</span>
+                                            <span className="text-reiks-dim">Gold (₹{breakdown.goldPricePerGram.toFixed(0)}/g × {formatWeight(weight)} × {(breakdown.purity * 100).toFixed(1)}%)</span>
+                                            <span className="text-reiks-mid font-mono">{formatINR(breakdown.goldCost)}</span>
                                         </div>
                                         <div className="flex justify-between text-xs">
-                                            <span className="text-aureum-dim">Making Charges (₹{product.making_charges_per_gram}/g{isRush ? ' × 1.25 rush' : ''})</span>
-                                            <span className="text-aureum-mid font-mono">{formatINR(breakdown.makingCharges)}</span>
+                                            <span className="text-reiks-dim">Making Charges (₹{product.making_charges_per_gram}/g{isRush ? ' × 1.25 rush' : ''})</span>
+                                            <span className="text-reiks-mid font-mono">{formatINR(breakdown.makingCharges)}</span>
                                         </div>
-                                        <div className="flex justify-between text-xs pt-1 border-t border-aureum-border/50">
-                                            <span className="text-aureum-dim">GST (3%)</span>
-                                            <span className="text-aureum-mid font-mono">{formatINR(breakdown.gst)}</span>
+                                        <div className="flex justify-between text-xs pt-1 border-t border-reiks-border/50">
+                                            <span className="text-reiks-dim">GST (3%)</span>
+                                            <span className="text-reiks-mid font-mono">{formatINR(breakdown.gst)}</span>
                                         </div>
                                     </motion.div>
                                 )}
@@ -176,15 +176,15 @@ export default function ProductDetailPage() {
                             <div className="space-y-4 mb-6">
                                 {/* Karat */}
                                 <div>
-                                    <label className="text-xs text-aureum-dim font-semibold uppercase tracking-wider mb-2 block">Karat</label>
+                                    <label className="text-xs text-reiks-dim font-semibold uppercase tracking-wider mb-2 block">Karat</label>
                                     <div className="flex gap-2">
                                         {product.available_karats.map(k => (
                                             <button
                                                 key={k}
                                                 onClick={() => setSelectedKarat(k)}
                                                 className={`px-4 py-2 rounded-lg text-sm font-mono font-semibold transition-all ${selectedKarat === k
-                                                    ? 'bg-gold text-aureum-black'
-                                                    : 'bg-aureum-dark border border-aureum-border text-aureum-mid hover:border-gold/30 hover:text-gold'
+                                                    ? 'bg-gold text-reiks-black'
+                                                    : 'bg-reiks-dark border border-reiks-border text-reiks-mid hover:border-gold/30 hover:text-gold'
                                                     }`}
                                             >
                                                 {k}K
@@ -195,13 +195,13 @@ export default function ProductDetailPage() {
 
                                 {/* Weight Multiplier */}
                                 <div>
-                                    <label className="text-xs text-aureum-dim font-semibold uppercase tracking-wider mb-2 block">
+                                    <label className="text-xs text-reiks-dim font-semibold uppercase tracking-wider mb-2 block">
                                         Weight: {formatWeight(weight)}
                                     </label>
                                     <div className="flex items-center gap-3">
                                         <button
                                             onClick={() => setWeightMultiplier(prev => Math.max(0.5, prev - 0.25))}
-                                            className="w-10 h-10 rounded-lg bg-aureum-dark border border-aureum-border text-aureum-mid hover:text-gold hover:border-gold/30 flex items-center justify-center transition-colors"
+                                            className="w-10 h-10 rounded-lg bg-reiks-dark border border-reiks-border text-reiks-mid hover:text-gold hover:border-gold/30 flex items-center justify-center transition-colors"
                                         >
                                             <Minus size={14} />
                                         </button>
@@ -216,7 +216,7 @@ export default function ProductDetailPage() {
                                         />
                                         <button
                                             onClick={() => setWeightMultiplier(prev => Math.min(3, prev + 0.25))}
-                                            className="w-10 h-10 rounded-lg bg-aureum-dark border border-aureum-border text-aureum-mid hover:text-gold hover:border-gold/30 flex items-center justify-center transition-colors"
+                                            className="w-10 h-10 rounded-lg bg-reiks-dark border border-reiks-border text-reiks-mid hover:text-gold hover:border-gold/30 flex items-center justify-center transition-colors"
                                         >
                                             <Plus size={14} />
                                         </button>
@@ -224,7 +224,7 @@ export default function ProductDetailPage() {
                                 </div>
 
                                 {/* Rush */}
-                                <label className="flex items-center gap-3 p-3 bg-aureum-dark rounded-lg border border-aureum-border cursor-pointer">
+                                <label className="flex items-center gap-3 p-3 bg-reiks-dark rounded-lg border border-reiks-border cursor-pointer">
                                     <input
                                         type="checkbox"
                                         checked={isRush}
@@ -232,21 +232,21 @@ export default function ProductDetailPage() {
                                         className="accent-gold w-4 h-4"
                                     />
                                     <div>
-                                        <span className="text-sm text-aureum-white font-medium">Rush Manufacturing</span>
-                                        <span className="text-xs text-aureum-dim block">3-day delivery · +25% making charges</span>
+                                        <span className="text-sm text-reiks-white font-medium">Rush Manufacturing</span>
+                                        <span className="text-xs text-reiks-dim block">3-day delivery · +25% making charges</span>
                                     </div>
                                 </label>
                             </div>
 
                             {/* Specifications Table */}
                             {product.specifications && product.specifications.length > 0 && (
-                                <div className="mt-8 border-t border-aureum-border pt-8">
-                                    <h3 className="text-xs font-bold text-aureum-white uppercase tracking-[0.2em] mb-4">Specifications</h3>
+                                <div className="mt-8 border-t border-reiks-border pt-8">
+                                    <h3 className="text-xs font-bold text-reiks-white uppercase tracking-[0.2em] mb-4">Specifications</h3>
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3">
                                         {product.specifications.map((spec, i) => (
-                                            <div key={i} className="flex justify-between py-2 border-b border-aureum-border/30">
-                                                <span className="text-[10px] text-aureum-dim uppercase tracking-wider">{spec.label}</span>
-                                                <span className="text-[11px] text-aureum-white font-medium text-right ml-4">{spec.value}</span>
+                                            <div key={i} className="flex justify-between py-2 border-b border-reiks-border/30">
+                                                <span className="text-[10px] text-reiks-dim uppercase tracking-wider">{spec.label}</span>
+                                                <span className="text-[11px] text-reiks-white font-medium text-right ml-4">{spec.value}</span>
                                             </div>
                                         ))}
                                     </div>
@@ -278,7 +278,7 @@ export default function ProductDetailPage() {
                                     </button>
                                     <Link
                                         href={`/forge?prompt=${encodeURIComponent(`A customised version of the ${product.name}.`)}&weight=${weight}&karat=${selectedKarat}&metal=${product.metal}&category=${product.category}`}
-                                        className="border border-aureum-border text-aureum-mid hover:text-gold hover:border-gold/30 py-3 rounded-lg text-sm tracking-wider flex items-center justify-center gap-2 transition-colors"
+                                        className="border border-reiks-border text-reiks-mid hover:text-gold hover:border-gold/30 py-3 rounded-lg text-sm tracking-wider flex items-center justify-center gap-2 transition-colors"
                                     >
                                         <Sparkles size={14} />
                                         Customize
@@ -291,7 +291,7 @@ export default function ProductDetailPage() {
                     {/* Related Products */}
                     {relatedProducts.length > 0 && (
                         <section className="mt-16">
-                            <h2 className="text-xl font-heading font-bold text-aureum-white mb-6">
+                            <h2 className="text-xl font-heading font-bold text-reiks-white mb-6">
                                 More in <span className="text-gold capitalize">{product.category}</span>
                             </h2>
                             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -303,15 +303,15 @@ export default function ProductDetailPage() {
                                         <Link
                                             key={rp.slug}
                                             href={`/product/${rp.slug}`}
-                                            className="block bg-aureum-card rounded-xl border border-aureum-border card-hover overflow-hidden group"
+                                            className="block bg-reiks-card rounded-xl border border-reiks-border card-hover overflow-hidden group"
                                         >
-                                            <div className="aspect-square bg-gradient-to-br from-aureum-card to-aureum-dark flex items-center justify-center">
+                                            <div className="aspect-square bg-gradient-to-br from-reiks-card to-reiks-dark flex items-center justify-center">
                                                 <div className="text-3xl opacity-20 group-hover:opacity-30 transition-opacity">
                                                     {rp.category === 'rings' ? '💍' : rp.category === 'chains' ? '🔗' : '📿'}
                                                 </div>
                                             </div>
                                             <div className="p-3">
-                                                <h3 className="text-xs font-semibold text-aureum-white group-hover:text-gold transition-colors truncate">
+                                                <h3 className="text-xs font-semibold text-reiks-white group-hover:text-gold transition-colors truncate">
                                                     {rp.name}
                                                 </h3>
                                                 {rpPrice && (

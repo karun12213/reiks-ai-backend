@@ -41,7 +41,7 @@ export default function CollectionPage() {
 
     // Load wishlist on mount
     useEffect(() => {
-        const saved = JSON.parse(localStorage.getItem('aureum_wishlist') || '[]')
+        const saved = JSON.parse(localStorage.getItem('reiks_wishlist') || '[]')
         setWishlist(saved)
     }, [])
 
@@ -52,7 +52,7 @@ export default function CollectionPage() {
             : [...wishlist, productId]
 
         setWishlist(newWishlist)
-        localStorage.setItem('aureum_wishlist', JSON.stringify(newWishlist))
+        localStorage.setItem('reiks_wishlist', JSON.stringify(newWishlist))
     }
 
     const filtered = useMemo(() => {
@@ -99,10 +99,10 @@ export default function CollectionPage() {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                     {/* Header */}
                     <div className="mb-8">
-                        <h1 className="text-3xl md:text-4xl font-heading font-bold text-aureum-white">
+                        <h1 className="text-3xl md:text-4xl font-heading font-bold text-reiks-white">
                             Gold <span className="text-gold">Collection</span>
                         </h1>
-                        <p className="mt-2 text-sm text-aureum-mid">
+                        <p className="mt-2 text-sm text-reiks-mid">
                             {filtered.length} pieces · Prices update live with the gold market
                         </p>
                     </div>
@@ -111,13 +111,13 @@ export default function CollectionPage() {
                     <div className="flex items-center gap-3 mb-6">
                         {/* Search */}
                         <div className="flex-1 relative">
-                            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-aureum-dim" />
+                            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-reiks-dim" />
                             <input
                                 type="text"
                                 placeholder="Search rings, chains, pendants..."
                                 value={search}
                                 onChange={e => setSearch(e.target.value)}
-                                className="w-full pl-9 pr-4 py-2.5 bg-aureum-card border border-aureum-border rounded-lg text-sm text-aureum-white placeholder:text-aureum-dim focus:outline-none focus:border-gold/40 transition-colors"
+                                className="w-full pl-9 pr-4 py-2.5 bg-reiks-card border border-reiks-border rounded-lg text-sm text-reiks-white placeholder:text-reiks-dim focus:outline-none focus:border-gold/40 transition-colors"
                             />
                         </div>
 
@@ -126,13 +126,13 @@ export default function CollectionPage() {
                             onClick={() => setShowFilters(!showFilters)}
                             className={`flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm border transition-colors ${showFilters || activeFilterCount
                                 ? 'bg-gold/10 border-gold/30 text-gold'
-                                : 'bg-aureum-card border-aureum-border text-aureum-mid hover:text-gold'
+                                : 'bg-reiks-card border-reiks-border text-reiks-mid hover:text-gold'
                                 }`}
                         >
                             <SlidersHorizontal size={14} />
                             Filters
                             {activeFilterCount > 0 && (
-                                <span className="w-5 h-5 bg-gold text-aureum-black rounded-full text-xs flex items-center justify-center font-bold">
+                                <span className="w-5 h-5 bg-gold text-reiks-black rounded-full text-xs flex items-center justify-center font-bold">
                                     {activeFilterCount}
                                 </span>
                             )}
@@ -142,7 +142,7 @@ export default function CollectionPage() {
                         <select
                             value={sort}
                             onChange={e => setSort(e.target.value)}
-                            className="hidden sm:block px-4 py-2.5 bg-aureum-card border border-aureum-border rounded-lg text-sm text-aureum-mid focus:outline-none focus:border-gold/40 appearance-none cursor-pointer"
+                            className="hidden sm:block px-4 py-2.5 bg-reiks-card border border-reiks-border rounded-lg text-sm text-reiks-mid focus:outline-none focus:border-gold/40 appearance-none cursor-pointer"
                         >
                             {SORT_OPTIONS.map(o => (
                                 <option key={o.value} value={o.value}>{o.label}</option>
@@ -156,16 +156,16 @@ export default function CollectionPage() {
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: 'auto' }}
                             exit={{ opacity: 0, height: 0 }}
-                            className="mb-6 p-4 bg-aureum-card rounded-xl border border-aureum-border"
+                            className="mb-6 p-4 bg-reiks-card rounded-xl border border-reiks-border"
                         >
                             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                                 {/* Category */}
                                 <div>
-                                    <label className="text-xs text-aureum-dim font-semibold uppercase tracking-wider mb-2 block">Category</label>
+                                    <label className="text-xs text-reiks-dim font-semibold uppercase tracking-wider mb-2 block">Category</label>
                                     <div className="flex flex-wrap gap-1.5">
                                         <button
                                             onClick={() => setCategory('')}
-                                            className={`px-3 py-1.5 rounded-md text-xs transition-colors ${!category ? 'bg-gold text-aureum-black font-bold' : 'bg-aureum-dark text-aureum-mid hover:text-gold'}`}
+                                            className={`px-3 py-1.5 rounded-md text-xs transition-colors ${!category ? 'bg-gold text-reiks-black font-bold' : 'bg-reiks-dark text-reiks-mid hover:text-gold'}`}
                                         >
                                             All
                                         </button>
@@ -173,7 +173,7 @@ export default function CollectionPage() {
                                             <button
                                                 key={c.id}
                                                 onClick={() => setCategory(c.id as ProductCategory)}
-                                                className={`px-3 py-1.5 rounded-md text-xs transition-colors ${category === c.id ? 'bg-gold text-aureum-black font-bold' : 'bg-aureum-dark text-aureum-mid hover:text-gold'}`}
+                                                className={`px-3 py-1.5 rounded-md text-xs transition-colors ${category === c.id ? 'bg-gold text-reiks-black font-bold' : 'bg-reiks-dark text-reiks-mid hover:text-gold'}`}
                                             >
                                                 {c.icon} {c.label}
                                             </button>
@@ -183,11 +183,11 @@ export default function CollectionPage() {
 
                                 {/* Metal */}
                                 <div>
-                                    <label className="text-xs text-aureum-dim font-semibold uppercase tracking-wider mb-2 block">Metal</label>
+                                    <label className="text-xs text-reiks-dim font-semibold uppercase tracking-wider mb-2 block">Metal</label>
                                     <div className="flex flex-wrap gap-1.5">
                                         <button
                                             onClick={() => setMetal('')}
-                                            className={`px-3 py-1.5 rounded-md text-xs transition-colors ${!metal ? 'bg-gold text-aureum-black font-bold' : 'bg-aureum-dark text-aureum-mid hover:text-gold'}`}
+                                            className={`px-3 py-1.5 rounded-md text-xs transition-colors ${!metal ? 'bg-gold text-reiks-black font-bold' : 'bg-reiks-dark text-reiks-mid hover:text-gold'}`}
                                         >
                                             All
                                         </button>
@@ -195,7 +195,7 @@ export default function CollectionPage() {
                                             <button
                                                 key={m.value}
                                                 onClick={() => setMetal(m.value)}
-                                                className={`px-3 py-1.5 rounded-md text-xs transition-colors ${metal === m.value ? 'bg-gold text-aureum-black font-bold' : 'bg-aureum-dark text-aureum-mid hover:text-gold'}`}
+                                                className={`px-3 py-1.5 rounded-md text-xs transition-colors ${metal === m.value ? 'bg-gold text-reiks-black font-bold' : 'bg-reiks-dark text-reiks-mid hover:text-gold'}`}
                                             >
                                                 {m.label}
                                             </button>
@@ -205,11 +205,11 @@ export default function CollectionPage() {
 
                                 {/* Karat */}
                                 <div>
-                                    <label className="text-xs text-aureum-dim font-semibold uppercase tracking-wider mb-2 block">Karat</label>
+                                    <label className="text-xs text-reiks-dim font-semibold uppercase tracking-wider mb-2 block">Karat</label>
                                     <div className="flex flex-wrap gap-1.5">
                                         <button
                                             onClick={() => setKarat(0)}
-                                            className={`px-3 py-1.5 rounded-md text-xs transition-colors ${!karat ? 'bg-gold text-aureum-black font-bold' : 'bg-aureum-dark text-aureum-mid hover:text-gold'}`}
+                                            className={`px-3 py-1.5 rounded-md text-xs transition-colors ${!karat ? 'bg-gold text-reiks-black font-bold' : 'bg-reiks-dark text-reiks-mid hover:text-gold'}`}
                                         >
                                             All
                                         </button>
@@ -217,7 +217,7 @@ export default function CollectionPage() {
                                             <button
                                                 key={k}
                                                 onClick={() => setKarat(k)}
-                                                className={`px-3 py-1.5 rounded-md text-xs transition-colors ${karat === k ? 'bg-gold text-aureum-black font-bold' : 'bg-aureum-dark text-aureum-mid hover:text-gold'}`}
+                                                className={`px-3 py-1.5 rounded-md text-xs transition-colors ${karat === k ? 'bg-gold text-reiks-black font-bold' : 'bg-reiks-dark text-reiks-mid hover:text-gold'}`}
                                             >
                                                 {k}K
                                             </button>
@@ -253,9 +253,9 @@ export default function CollectionPage() {
                                 >
                                     <Link
                                         href={`/product/${product.slug}`}
-                                        className="block bg-aureum-card rounded-xl border border-aureum-border card-hover overflow-hidden group"
+                                        className="block bg-reiks-card rounded-xl border border-reiks-border card-hover overflow-hidden group"
                                     >
-                                        <div className="aspect-square bg-gradient-to-br from-aureum-card to-aureum-dark flex items-center justify-center relative overflow-hidden group">
+                                        <div className="aspect-square bg-gradient-to-br from-reiks-card to-reiks-dark flex items-center justify-center relative overflow-hidden group">
                                             {product.images?.[0] ? (
                                                 <Image
                                                     src={product.images[0]}
@@ -287,7 +287,7 @@ export default function CollectionPage() {
                                                     {product.default_karat}K · {product.base_weight_grams}g
                                                 </span>
                                                 {product.is_featured && (
-                                                    <span className="text-[9px] font-mono text-aureum-black bg-gold px-1.5 py-0.5 rounded font-bold">
+                                                    <span className="text-[9px] font-mono text-reiks-black bg-gold px-1.5 py-0.5 rounded font-bold">
                                                         FEATURED
                                                     </span>
                                                 )}
@@ -295,19 +295,19 @@ export default function CollectionPage() {
                                         </div>
 
                                         <div className="p-3 sm:p-4">
-                                            <h3 className="text-xs sm:text-sm font-semibold text-aureum-white group-hover:text-gold transition-colors truncate">
+                                            <h3 className="text-xs sm:text-sm font-semibold text-reiks-white group-hover:text-gold transition-colors truncate">
                                                 {product.name}
                                             </h3>
-                                            <p className="text-[10px] sm:text-xs text-aureum-dim mt-0.5 truncate">{product.short_description}</p>
+                                            <p className="text-[10px] sm:text-xs text-reiks-dim mt-0.5 truncate">{product.short_description}</p>
                                             <div className="mt-2 flex items-center justify-between">
                                                 {livePrice ? (
                                                     <span className="text-sm sm:text-base font-mono font-bold text-gold">
                                                         {formatINR(livePrice.total)}
                                                     </span>
                                                 ) : (
-                                                    <div className="h-5 w-16 bg-aureum-border rounded animate-pulse" />
+                                                    <div className="h-5 w-16 bg-reiks-border rounded animate-pulse" />
                                                 )}
-                                                <span className="text-[9px] font-mono text-aureum-dim">
+                                                <span className="text-[9px] font-mono text-reiks-dim">
                                                     {price?.isLive ? 'LIVE' : 'SIM'}
                                                 </span>
                                             </div>
@@ -320,7 +320,7 @@ export default function CollectionPage() {
 
                     {filtered.length === 0 && (
                         <div className="text-center py-20">
-                            <p className="text-aureum-dim text-sm">No products match your filters.</p>
+                            <p className="text-reiks-dim text-sm">No products match your filters.</p>
                             <button
                                 onClick={() => { setSearch(''); setCategory(''); setMetal(''); setKarat(0) }}
                                 className="mt-3 text-sm text-gold hover:text-gold-light"

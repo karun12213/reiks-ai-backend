@@ -19,7 +19,7 @@ export function trackEvent(action: EventAction, metadata?: Record<string, any>) 
     if (typeof window === 'undefined') return;
 
     try {
-        const events: TrackingEvent[] = JSON.parse(localStorage.getItem('aureum_events') || '[]');
+        const events: TrackingEvent[] = JSON.parse(localStorage.getItem('reiks_events') || '[]');
 
         const newEvent: TrackingEvent = {
             id: `evt_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
@@ -33,8 +33,8 @@ export function trackEvent(action: EventAction, metadata?: Record<string, any>) 
         // Keep last 500 events to prevent localStorage overflow
         const trimmedEvents = events.slice(0, 500);
 
-        localStorage.setItem('aureum_events', JSON.stringify(trimmedEvents));
-        console.log(`[AUREUM TRACK] ${action}`, metadata);
+        localStorage.setItem('reiks_events', JSON.stringify(trimmedEvents));
+        console.log(`[REIKS TRACK] ${action}`, metadata);
 
         // Async sync to Agent Backend for real-time processing (Options 2B, 2C)
         fetch('/api/agent/ingest', {

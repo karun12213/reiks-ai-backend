@@ -15,7 +15,7 @@ export async function POST(req: Request) {
     try {
         const { logs, query } = await req.json();
 
-        const systemPrompt = `You are the AUREUM AI Chief Operating Officer (COO). 
+        const systemPrompt = `You are the REIKS AI Chief Operating Officer (COO). 
 Your job is to manage the website and report to the owner. 
 You have access to the recent activity logs of the website.
 Analyze the logs and answer the owner's query. 

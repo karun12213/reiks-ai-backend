@@ -22,50 +22,50 @@ export default function Header() {
     return (
         <>
             {/* Gold Ticker Strip */}
-            <div className="h-8 bg-aureum-dark border-b border-aureum-border flex items-center overflow-hidden relative z-50">
+            <div className="h-8 bg-reiks-dark border-b border-reiks-border flex items-center overflow-hidden relative z-50">
                 <div className="flex items-center gap-6 px-4 text-xs font-mono whitespace-nowrap animate-ticker">
                     {price && (
                         <>
                             <span className="text-gold font-semibold">
                                 XAU ₹{price.gold_24k_gram.toFixed(0)}/g
                             </span>
-                            <span className="text-aureum-mid">
+                            <span className="text-reiks-mid">
                                 22K ₹{price.gold_22k_gram.toFixed(0)}
                             </span>
-                            <span className="text-aureum-mid">
+                            <span className="text-reiks-mid">
                                 18K ₹{price.gold_18k_gram.toFixed(0)}
                             </span>
-                            <span className="text-aureum-dim">•</span>
+                            <span className="text-reiks-dim">•</span>
                             {sessionInfo && (
                                 <span style={{ color: sessionInfo.color }}>
                                     ● {price.session} {sessionInfo.emoji}
                                 </span>
                             )}
-                            <span className="text-aureum-dim">•</span>
-                            <span className="text-aureum-dim">
+                            <span className="text-reiks-dim">•</span>
+                            <span className="text-reiks-dim">
                                 Silver ₹{price.silver_inr_gram.toFixed(0)}/g
                             </span>
                             {!price.isLive && (
                                 <>
-                                    <span className="text-aureum-dim">•</span>
+                                    <span className="text-reiks-dim">•</span>
                                     <span className="text-warning text-[10px]">SIMULATED</span>
                                 </>
                             )}
                             {/* Duplicate for seamless ticker scroll */}
-                            <span className="text-aureum-dim">•</span>
+                            <span className="text-reiks-dim">•</span>
                             <span className="text-gold font-semibold">
                                 XAU ₹{price.gold_24k_gram.toFixed(0)}/g
                             </span>
-                            <span className="text-aureum-mid">
+                            <span className="text-reiks-mid">
                                 22K ₹{price.gold_22k_gram.toFixed(0)}
                             </span>
-                            <span className="text-aureum-mid">
+                            <span className="text-reiks-mid">
                                 18K ₹{price.gold_18k_gram.toFixed(0)}
                             </span>
                         </>
                     )}
                     {!price && (
-                        <span className="text-aureum-dim">Loading gold prices...</span>
+                        <span className="text-reiks-dim">Loading gold prices...</span>
                     )}
                 </div>
             </div>
@@ -73,7 +73,7 @@ export default function Header() {
             {/* Main Nav */}
             <header
                 className={`sticky top-0 z-40 transition-all duration-300 ${scrolled
-                        ? 'bg-aureum-black/95 backdrop-blur-md border-b border-aureum-border'
+                        ? 'bg-reiks-black/95 backdrop-blur-md border-b border-reiks-border'
                         : 'bg-transparent'
                     }`}
             >
@@ -82,7 +82,7 @@ export default function Header() {
                         {/* Logo */}
                         <Link href="/" className="flex items-center gap-2 group">
                             <span className="text-2xl font-heading font-extrabold text-gold tracking-widest group-hover:text-gold-light transition-colors">
-                                AUREUM
+                                REIKS
                             </span>
                         </Link>
 
@@ -97,7 +97,7 @@ export default function Header() {
                                 <Link
                                     key={item.href}
                                     href={item.href}
-                                    className="flex items-center gap-1.5 text-sm text-aureum-mid hover:text-gold transition-colors font-medium"
+                                    className="flex items-center gap-1.5 text-sm text-reiks-mid hover:text-gold transition-colors font-medium"
                                 >
                                     <item.icon size={14} />
                                     {item.label}
@@ -108,8 +108,8 @@ export default function Header() {
                         {/* Desktop Actions */}
                         <div className="hidden md:flex items-center gap-4">
                             {price && (
-                                <div className="flex items-center gap-2 px-3 py-1.5 bg-aureum-card rounded-lg border border-aureum-border">
-                                    <span className="text-xs font-mono text-aureum-mid">24K</span>
+                                <div className="flex items-center gap-2 px-3 py-1.5 bg-reiks-card rounded-lg border border-reiks-border">
+                                    <span className="text-xs font-mono text-reiks-mid">24K</span>
                                     <span className="text-sm font-mono font-bold text-gold">
                                         ₹{price.gold_24k_gram.toFixed(0)}
                                     </span>
@@ -117,7 +117,7 @@ export default function Header() {
                             )}
                             <Link
                                 href="/account"
-                                className="p-2 rounded-lg hover:bg-aureum-card transition-colors text-aureum-mid hover:text-gold"
+                                className="p-2 rounded-lg hover:bg-reiks-card transition-colors text-reiks-mid hover:text-gold"
                             >
                                 <User size={18} />
                             </Link>
@@ -126,7 +126,7 @@ export default function Header() {
                         {/* Mobile Menu Toggle */}
                         <button
                             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                            className="md:hidden p-2 text-aureum-mid hover:text-gold transition-colors"
+                            className="md:hidden p-2 text-reiks-mid hover:text-gold transition-colors"
                         >
                             {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
                         </button>
@@ -135,7 +135,7 @@ export default function Header() {
 
                 {/* Mobile Menu */}
                 {mobileMenuOpen && (
-                    <div className="md:hidden bg-aureum-dark border-t border-aureum-border animate-fade-in">
+                    <div className="md:hidden bg-reiks-dark border-t border-reiks-border animate-fade-in">
                         <nav className="px-4 py-3 flex flex-col gap-1">
                             {[
                                 { href: '/', label: 'Home', icon: Home },
@@ -149,7 +149,7 @@ export default function Header() {
                                     key={item.href}
                                     href={item.href}
                                     onClick={() => setMobileMenuOpen(false)}
-                                    className="flex items-center gap-3 px-3 py-3 rounded-lg text-aureum-mid hover:text-gold hover:bg-aureum-card transition-colors"
+                                    className="flex items-center gap-3 px-3 py-3 rounded-lg text-reiks-mid hover:text-gold hover:bg-reiks-card transition-colors"
                                 >
                                     <item.icon size={18} />
                                     <span className="text-sm font-medium">{item.label}</span>
@@ -161,7 +161,7 @@ export default function Header() {
             </header>
 
             {/* Mobile Bottom Tab Bar */}
-            <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-aureum-dark/95 backdrop-blur-md border-t border-aureum-border">
+            <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-reiks-dark/95 backdrop-blur-md border-t border-reiks-border">
                 <nav className="flex items-center justify-around h-14 px-2">
                     {[
                         { href: '/', label: 'Home', icon: Home },
@@ -173,7 +173,7 @@ export default function Header() {
                         <Link
                             key={item.href}
                             href={item.href}
-                            className="flex flex-col items-center gap-0.5 text-aureum-dim hover:text-gold transition-colors"
+                            className="flex flex-col items-center gap-0.5 text-reiks-dim hover:text-gold transition-colors"
                         >
                             <item.icon size={18} />
                             <span className="text-[10px] font-medium">{item.label}</span>

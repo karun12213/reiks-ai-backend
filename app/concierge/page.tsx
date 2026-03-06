@@ -27,7 +27,7 @@ export default function ConciergePage() {
         {
             id: 'welcome',
             role: 'assistant',
-            content: 'Welcome to AUREUM. I\'m your personal gold jewelry concierge — powered by AI but trained in tradition.\n\nI can help you find the perfect piece, calculate prices in real-time, design custom jewelry with AI, or explain when to lock the best gold prices.\n\nWhat can I help you with today?',
+            content: 'Welcome to REIKS. I\'m your personal gold jewelry concierge — powered by AI but trained in tradition.\n\nI can help you find the perfect piece, calculate prices in real-time, design custom jewelry with AI, or explain when to lock the best gold prices.\n\nWhat can I help you with today?',
         },
     ])
     const [input, setInput] = useState('')
@@ -61,7 +61,7 @@ export default function ConciergePage() {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'x-anthropic-key': localStorage.getItem('aureum_anthropic_key') || ''
+                    'x-anthropic-key': localStorage.getItem('reiks_anthropic_key') || ''
                 },
                 body: JSON.stringify({ messages: chatMessages }),
             })
@@ -129,19 +129,19 @@ export default function ConciergePage() {
             <main className="flex-1 flex flex-col h-[calc(100vh-8rem)] md:h-[calc(100vh-5rem)] pb-14 md:pb-0">
                 <div className="max-w-3xl mx-auto w-full flex flex-col flex-1 px-4">
                     {/* Header */}
-                    <div className="flex items-center justify-between py-4 border-b border-aureum-border">
+                    <div className="flex items-center justify-between py-4 border-b border-reiks-border">
                         <div className="flex items-center gap-3">
                             <div className="w-9 h-9 rounded-full bg-gold/10 flex items-center justify-center">
                                 <Sparkles size={16} className="text-gold" />
                             </div>
                             <div>
-                                <h1 className="text-sm font-semibold text-aureum-white">AUREUM Concierge</h1>
-                                <span className="text-[10px] text-aureum-dim font-mono">Claude Haiku · Live Gold Data</span>
+                                <h1 className="text-sm font-semibold text-reiks-white">REIKS Concierge</h1>
+                                <span className="text-[10px] text-reiks-dim font-mono">Claude Haiku · Live Gold Data</span>
                             </div>
                         </div>
                         <button
                             onClick={() => setMessages([messages[0]])}
-                            className="p-2 text-aureum-dim hover:text-gold transition-colors"
+                            className="p-2 text-reiks-dim hover:text-gold transition-colors"
                             title="Clear chat"
                         >
                             <Trash2 size={14} />
@@ -157,16 +157,16 @@ export default function ConciergePage() {
                                 animate={{ opacity: 1, y: 0 }}
                                 className={`flex gap-3 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}
                             >
-                                <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 ${msg.role === 'assistant' ? 'bg-gold/10' : 'bg-aureum-card'
+                                <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 ${msg.role === 'assistant' ? 'bg-gold/10' : 'bg-reiks-card'
                                     }`}>
-                                    {msg.role === 'assistant' ? <Bot size={13} className="text-gold" /> : <User size={13} className="text-aureum-mid" />}
+                                    {msg.role === 'assistant' ? <Bot size={13} className="text-gold" /> : <User size={13} className="text-reiks-mid" />}
                                 </div>
                                 <div className={`max-w-[80%] rounded-xl px-4 py-3 text-sm leading-relaxed ${msg.role === 'user'
-                                    ? 'bg-gold/10 text-aureum-white border border-gold/20'
-                                    : 'bg-aureum-card text-aureum-light border border-aureum-border'
+                                    ? 'bg-gold/10 text-reiks-white border border-gold/20'
+                                    : 'bg-reiks-card text-reiks-light border border-reiks-border'
                                     }`}>
                                     {msg.content || (
-                                        <span className="flex items-center gap-2 text-aureum-dim">
+                                        <span className="flex items-center gap-2 text-reiks-dim">
                                             <Loader2 size={12} className="animate-spin" /> Thinking...
                                         </span>
                                     )}
@@ -183,7 +183,7 @@ export default function ConciergePage() {
                                 <button
                                     key={action}
                                     onClick={() => sendMessage(action)}
-                                    className="text-xs px-3 py-1.5 bg-aureum-card border border-aureum-border rounded-lg text-aureum-mid hover:text-gold hover:border-gold/30 transition-colors"
+                                    className="text-xs px-3 py-1.5 bg-reiks-card border border-reiks-border rounded-lg text-reiks-mid hover:text-gold hover:border-gold/30 transition-colors"
                                 >
                                     {action}
                                 </button>
@@ -192,7 +192,7 @@ export default function ConciergePage() {
                     )}
 
                     {/* Input */}
-                    <div className="py-3 border-t border-aureum-border">
+                    <div className="py-3 border-t border-reiks-border">
                         <form
                             onSubmit={e => { e.preventDefault(); sendMessage(input) }}
                             className="flex items-center gap-2"
@@ -204,7 +204,7 @@ export default function ConciergePage() {
                                 value={input}
                                 onChange={e => setInput(e.target.value)}
                                 disabled={streaming}
-                                className="flex-1 px-4 py-3 bg-aureum-card border border-aureum-border rounded-lg text-sm text-aureum-white placeholder:text-aureum-dim focus:outline-none focus:border-gold/40 disabled:opacity-50 transition-colors"
+                                className="flex-1 px-4 py-3 bg-reiks-card border border-reiks-border rounded-lg text-sm text-reiks-white placeholder:text-reiks-dim focus:outline-none focus:border-gold/40 disabled:opacity-50 transition-colors"
                             />
                             <button
                                 type="submit"

@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════
-// AUREUM — Constants & Configuration
+// REIKS — Constants & Configuration
 // ═══════════════════════════════════════════
 
 import type { Karat, LockDuration, UserTier } from './types'

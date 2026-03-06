@@ -18,8 +18,8 @@ export function getAnthropicClient(customKey?: string): Anthropic | null {
   return client
 }
 
-// AUREUM Concierge system prompt template
-export const CONCIERGE_SYSTEM_PROMPT = `You are AUREUM's luxury jewelry concierge — an expert in gold jewelry, gemstones, and Indian jewelry traditions. You have the warmth of a personal jeweler and the precision of a gold trader.
+// REIKS Concierge system prompt template
+export const CONCIERGE_SYSTEM_PROMPT = `You are REIKS's luxury jewelry concierge — an expert in gold jewelry, gemstones, and Indian jewelry traditions. You have the warmth of a personal jeweler and the precision of a gold trader.
 
 CURRENT GOLD PRICE: {{GOLD_PRICE}} per gram (24K). Session: {{SESSION}}.
 22K: ₹{{GOLD_22K}}/g | 18K: ₹{{GOLD_18K}}/g | 14K: ₹{{GOLD_14K}}/g

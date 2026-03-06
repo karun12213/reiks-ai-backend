@@ -33,12 +33,12 @@ function Badge({ text, color }: { text: string; color: string }) {
 function Stat({ label, value, sub, trend, accent }: { label: string; value: string; sub?: string; trend?: string; accent?: boolean }) {
     const trendColor = trend?.startsWith('+') || trend === 'Healthy' || trend === 'On Track' || trend === 'All green' || trend?.includes('✓') ? '#4ade80' : trend?.startsWith('-') ? '#f87171' : '#fbbf24'
     return (
-        <div className={`rounded-xl p-3.5 border relative overflow-hidden ${accent ? 'border-gold/40 bg-gradient-to-br from-[#1a1205] to-[#2a1f0a]' : 'border-aureum-border bg-aureum-dark'}`}>
+        <div className={`rounded-xl p-3.5 border relative overflow-hidden ${accent ? 'border-gold/40 bg-gradient-to-br from-[#1a1205] to-[#2a1f0a]' : 'border-reiks-border bg-reiks-dark'}`}>
             {accent && <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-gold to-[#8B6914]" />}
-            <div className="text-[10px] text-aureum-dim uppercase tracking-widest font-mono truncate">{label}</div>
-            <div className={`text-xl font-mono font-bold mt-1 ${accent ? 'text-gold' : 'text-aureum-white'}`}>{value}</div>
+            <div className="text-[10px] text-reiks-dim uppercase tracking-widest font-mono truncate">{label}</div>
+            <div className={`text-xl font-mono font-bold mt-1 ${accent ? 'text-gold' : 'text-reiks-white'}`}>{value}</div>
             <div className="flex justify-between items-center mt-1">
-                {sub && <span className="text-[10px] text-aureum-dim">{sub}</span>}
+                {sub && <span className="text-[10px] text-reiks-dim">{sub}</span>}
                 {trend && <span className="text-[10px] font-mono" style={{ color: trendColor }}>{trend}</span>}
             </div>
         </div>
@@ -46,7 +46,7 @@ function Stat({ label, value, sub, trend, accent }: { label: string; value: stri
 }
 
 function Card({ children, gold }: { children: React.ReactNode; gold?: boolean }) {
-    return <div className={`rounded-xl p-4 border ${gold ? 'border-gold/30 bg-gradient-to-br from-[#1a1205] to-[#1f1808]' : 'border-aureum-border bg-aureum-dark'}`}>{children}</div>
+    return <div className={`rounded-xl p-4 border ${gold ? 'border-gold/30 bg-gradient-to-br from-[#1a1205] to-[#1f1808]' : 'border-reiks-border bg-reiks-dark'}`}>{children}</div>
 }
 
 export default function AdminPage() {
@@ -70,7 +70,7 @@ export default function AdminPage() {
     const [alerts, setAlerts] = useState(ALERTS)
     const [events, setEvents] = useState<any[]>([])
     const [agentMessages, setAgentMessages] = useState<{ role: 'user' | 'agent', text: string }[]>([
-        { role: 'agent', text: 'Good evening. I am your AUREUM COO Agent. How can I help you manage the business today?' }
+        { role: 'agent', text: 'Good evening. I am your REIKS COO Agent. How can I help you manage the business today?' }
     ])
     const [agentPrompt, setAgentPrompt] = useState('')
     const [isAgentTyping, setIsAgentTyping] = useState(false)
@@ -93,25 +93,25 @@ export default function AdminPage() {
     const dailyRev = useMemo(genDailyRev, [])
 
     useEffect(() => {
-        const isAuth = typeof window !== 'undefined' && sessionStorage.getItem('aureum-admin') === 'true'
+        const isAuth = typeof window !== 'undefined' && sessionStorage.getItem('reiks-admin') === 'true'
         setAuthenticated(isAuth)
         if (typeof window !== 'undefined') {
-            const localOrders = JSON.parse(localStorage.getItem('aureum_orders') || '[]')
-            const localLocks = JSON.parse(localStorage.getItem('aureum_locks') || '[]')
-            const localEvents = JSON.parse(localStorage.getItem('aureum_events') || '[]')
+            const localOrders = JSON.parse(localStorage.getItem('reiks_orders') || '[]')
+            const localLocks = JSON.parse(localStorage.getItem('reiks_locks') || '[]')
+            const localEvents = JSON.parse(localStorage.getItem('reiks_events') || '[]')
             if (localOrders.length > 0) setOrders([...localOrders, ...ORDERS])
             if (localLocks.length > 0) setLocks([...localLocks, ...LOCKS])
             if (localEvents.length > 0) setEvents(localEvents)
-            setAnthropicKey(localStorage.getItem('aureum_anthropic_key') || '')
-            setReplicateKey(localStorage.getItem('aureum_replicate_key') || '')
-            setMeshyKey(localStorage.getItem('aureum_meshy_key') || '')
-            setMetalsKey(localStorage.getItem('aureum_metals_key') || '')
-            setGoldApiKey(localStorage.getItem('aureum_gold_api_key') || '')
-            setRazorpayKey(localStorage.getItem('aureum_razorpay_key') || '')
-            setSupabaseUrl(localStorage.getItem('aureum_supabase_url') || '')
-            setSupabaseAnonKey(localStorage.getItem('aureum_supabase_anon_key') || '')
-            setUpstashUrl(localStorage.getItem('aureum_upstash_url') || '')
-            setUpstashToken(localStorage.getItem('aureum_upstash_token') || '')
+            setAnthropicKey(localStorage.getItem('reiks_anthropic_key') || '')
+            setReplicateKey(localStorage.getItem('reiks_replicate_key') || '')
+            setMeshyKey(localStorage.getItem('reiks_meshy_key') || '')
+            setMetalsKey(localStorage.getItem('reiks_metals_key') || '')
+            setGoldApiKey(localStorage.getItem('reiks_gold_api_key') || '')
+            setRazorpayKey(localStorage.getItem('reiks_razorpay_key') || '')
+            setSupabaseUrl(localStorage.getItem('reiks_supabase_url') || '')
+            setSupabaseAnonKey(localStorage.getItem('reiks_supabase_anon_key') || '')
+            setUpstashUrl(localStorage.getItem('reiks_upstash_url') || '')
+            setUpstashToken(localStorage.getItem('reiks_upstash_token') || '')
         }
     }, [])
 
@@ -124,9 +124,9 @@ export default function AdminPage() {
     }, [authenticated])
 
     function handleLogin() {
-        const pw = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || 'aureum-admin-2024'
+        const pw = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || 'reiks-admin-2024'
         if (password === pw) {
-            sessionStorage.setItem('aureum-admin', 'true')
+            sessionStorage.setItem('reiks-admin', 'true')
             setAuthenticated(true)
         }
     }
@@ -139,13 +139,13 @@ export default function AdminPage() {
                         <div className="w-14 h-14 bg-gold/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
                             <Shield size={24} className="text-gold" />
                         </div>
-                        <h1 className="text-2xl font-heading font-bold text-gold tracking-widest">AUREUM</h1>
-                        <p className="text-xs text-aureum-dim mt-1">Operations Center — Admin Access Required</p>
+                        <h1 className="text-2xl font-heading font-bold text-gold tracking-widest">REIKS</h1>
+                        <p className="text-xs text-reiks-dim mt-1">Operations Center — Admin Access Required</p>
                     </div>
                     <form onSubmit={e => { e.preventDefault(); handleLogin() }}>
-                        <input type="password" placeholder="Admin password" value={password} onChange={e => setPassword(e.target.value)} className="w-full px-4 py-3 bg-aureum-card border border-aureum-border rounded-lg text-sm text-aureum-white placeholder:text-aureum-dim focus:outline-none focus:border-gold/40 mb-3" />
+                        <input type="password" placeholder="Admin password" value={password} onChange={e => setPassword(e.target.value)} className="w-full px-4 py-3 bg-reiks-card border border-reiks-border rounded-lg text-sm text-reiks-white placeholder:text-reiks-dim focus:outline-none focus:border-gold/40 mb-3" />
                         <button type="submit" className="btn-gold w-full py-3 rounded-lg text-sm">Access Ops Center</button>
-                        <p className="text-[10px] text-aureum-dim mt-3 text-center">Default: aureum-admin-2024</p>
+                        <p className="text-[10px] text-reiks-dim mt-3 text-center">Default: reiks-admin-2024</p>
                     </form>
                 </div>
             </div>
@@ -196,16 +196,16 @@ export default function AdminPage() {
 
     const handleSaveKeys = () => {
         if (typeof window === 'undefined') return
-        localStorage.setItem('aureum_anthropic_key', anthropicKey)
-        localStorage.setItem('aureum_replicate_key', replicateKey)
-        localStorage.setItem('aureum_meshy_key', meshyKey)
-        localStorage.setItem('aureum_metals_key', metalsKey)
-        localStorage.setItem('aureum_gold_api_key', goldApiKey)
-        localStorage.setItem('aureum_razorpay_key', razorpayKey)
-        localStorage.setItem('aureum_supabase_url', supabaseUrl)
-        localStorage.setItem('aureum_supabase_anon_key', supabaseAnonKey)
-        localStorage.setItem('aureum_upstash_url', upstashUrl)
-        localStorage.setItem('aureum_upstash_token', upstashToken)
+        localStorage.setItem('reiks_anthropic_key', anthropicKey)
+        localStorage.setItem('reiks_replicate_key', replicateKey)
+        localStorage.setItem('reiks_meshy_key', meshyKey)
+        localStorage.setItem('reiks_metals_key', metalsKey)
+        localStorage.setItem('reiks_gold_api_key', goldApiKey)
+        localStorage.setItem('reiks_razorpay_key', razorpayKey)
+        localStorage.setItem('reiks_supabase_url', supabaseUrl)
+        localStorage.setItem('reiks_supabase_anon_key', supabaseAnonKey)
+        localStorage.setItem('reiks_upstash_url', upstashUrl)
+        localStorage.setItem('reiks_upstash_token', upstashToken)
         alert('All credentials saved successfully to localStorage.')
     }
 
@@ -222,7 +222,7 @@ export default function AdminPage() {
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 <Card>
-                    <h3 className="text-sm font-semibold text-aureum-white mb-3">Gold Price — 48h</h3>
+                    <h3 className="text-sm font-semibold text-reiks-white mb-3">Gold Price — 48h</h3>
                     <div className="flex gap-2 mb-3 flex-wrap">
                         <Badge text={`● ${session}`} color={sessionClr} />
                         <Badge text={`24K: ₹${goldPrice.toFixed(0)}`} color="#D4A853" />
@@ -242,25 +242,25 @@ export default function AdminPage() {
                     </div>
                 </Card>
                 <Card>
-                    <h3 className="text-sm font-semibold text-aureum-white mb-3">Active Alerts</h3>
+                    <h3 className="text-sm font-semibold text-reiks-white mb-3">Active Alerts</h3>
                     <div className="space-y-2 max-h-56 overflow-y-auto">
                         {alerts.filter(a => !a.resolved).map(a => (
                             <div key={a.id} className="flex gap-2 items-start p-2 bg-[#111] rounded-md" style={{ borderLeft: `3px solid ${a.type === 'critical' ? '#f87171' : a.type === 'warning' ? '#fbbf24' : '#60a5fa'}` }}>
                                 <span className="text-[10px]">{a.type === 'critical' ? '🔴' : a.type === 'warning' ? '🟡' : '🔵'}</span>
                                 <div className="flex-1 min-w-0">
-                                    <div className="text-[11px] font-semibold text-aureum-white">{a.title}</div>
-                                    <div className="text-[10px] text-aureum-dim">{a.msg}</div>
+                                    <div className="text-[11px] font-semibold text-reiks-white">{a.title}</div>
+                                    <div className="text-[10px] text-reiks-dim">{a.msg}</div>
                                 </div>
-                                <button onClick={() => resolveAlert(a.id)} className="text-[9px] border border-aureum-border text-aureum-dim px-1.5 py-0.5 rounded hover:text-gold shrink-0">✓</button>
+                                <button onClick={() => resolveAlert(a.id)} className="text-[9px] border border-reiks-border text-reiks-dim px-1.5 py-0.5 rounded hover:text-gold shrink-0">✓</button>
                             </div>
                         ))}
-                        {unresolvedAlerts === 0 && <p className="text-xs text-aureum-dim text-center py-4">All clear ✓</p>}
+                        {unresolvedAlerts === 0 && <p className="text-xs text-reiks-dim text-center py-4">All clear ✓</p>}
                     </div>
                 </Card>
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 <Card>
-                    <h3 className="text-sm font-semibold text-aureum-white mb-3">Order Pipeline</h3>
+                    <h3 className="text-sm font-semibold text-reiks-white mb-3">Order Pipeline</h3>
                     {[
                         { label: 'Payment Pending', count: orders.filter(o => o.status === 'payment_pending').length, color: '#fbbf24' },
                         { label: 'Confirmed', count: orders.filter(o => o.status === 'confirmed').length, color: '#c084fc' },
@@ -270,13 +270,13 @@ export default function AdminPage() {
                     ].map(s => (
                         <div key={s.label} className="flex items-center gap-3 py-1.5">
                             <div className="w-2 h-2 rounded-full shrink-0" style={{ background: s.color }} />
-                            <span className="flex-1 text-xs text-aureum-mid">{s.label}</span>
-                            <span className="text-sm font-mono font-bold text-aureum-white">{s.count}</span>
+                            <span className="flex-1 text-xs text-reiks-mid">{s.label}</span>
+                            <span className="text-sm font-mono font-bold text-reiks-white">{s.count}</span>
                         </div>
                     ))}
                 </Card>
                 <Card>
-                    <h3 className="text-sm font-semibold text-aureum-white mb-3">Daily Revenue (30d)</h3>
+                    <h3 className="text-sm font-semibold text-reiks-white mb-3">Daily Revenue (30d)</h3>
                     <div className="h-36">
                         <ResponsiveContainer width="100%" height="100%">
                             <BarChart data={dailyRev}>
@@ -291,12 +291,12 @@ export default function AdminPage() {
                 </Card>
             </div>
             <Card>
-                <h3 className="text-sm font-semibold text-aureum-white mb-3">API Health Overview</h3>
+                <h3 className="text-sm font-semibold text-reiks-white mb-3">API Health Overview</h3>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                     {API_SERVICES.slice(0, 8).map(api => (
                         <div key={api.name} className="p-2.5 bg-[#111] rounded-md" style={{ borderLeft: `3px solid ${statusColor(api.status)}` }}>
-                            <div className="text-[11px] font-semibold text-aureum-white mb-1">{api.name}</div>
-                            <div className="flex justify-between text-[10px] text-aureum-dim">
+                            <div className="text-[11px] font-semibold text-reiks-white mb-1">{api.name}</div>
+                            <div className="flex justify-between text-[10px] text-reiks-dim">
                                 <span>{api.latency}</span>
                                 <span style={{ color: statusColor(api.status) }}>{api.status}</span>
                             </div>
@@ -322,11 +322,11 @@ export default function AdminPage() {
             {/* New Active SIPs Table */}
             {sips.length > 0 && (
                 <Card>
-                    <h3 className="text-sm font-semibold text-aureum-white mb-3 flex items-center gap-2"><Sparkles size={14} className="text-gold" /> Active VaultTrade SIPs</h3>
+                    <h3 className="text-sm font-semibold text-reiks-white mb-3 flex items-center gap-2"><Sparkles size={14} className="text-gold" /> Active VaultTrade SIPs</h3>
                     <div className="overflow-x-auto">
                         <table className="w-full text-left">
-                            <thead><tr className="border-b border-aureum-border">
-                                {['User', 'Monthly Amount', 'Total Invested', 'Gold Accumulated', 'Next Deposit', 'Frequency'].map(h => <th key={h} className="px-3 py-2 text-[9px] font-mono font-semibold text-aureum-dim uppercase tracking-wider">{h}</th>)}
+                            <thead><tr className="border-b border-reiks-border">
+                                {['User', 'Monthly Amount', 'Total Invested', 'Gold Accumulated', 'Next Deposit', 'Frequency'].map(h => <th key={h} className="px-3 py-2 text-[9px] font-mono font-semibold text-reiks-dim uppercase tracking-wider">{h}</th>)}
                             </tr></thead>
                             <tbody>
                                 {sips.map((s, i) => (
@@ -335,7 +335,7 @@ export default function AdminPage() {
                                         <td className="px-3 py-2 text-xs font-mono text-gold">₹{s.amount.toLocaleString()}</td>
                                         <td className="px-3 py-2 text-xs font-mono">₹{s.totalInvested.toLocaleString()}</td>
                                         <td className="px-3 py-2 text-xs font-mono font-bold text-success">{s.goldAccumulated.toFixed(4)}g</td>
-                                        <td className="px-3 py-2 text-xs font-mono text-aureum-mid">{s.nextDate}</td>
+                                        <td className="px-3 py-2 text-xs font-mono text-reiks-mid">{s.nextDate}</td>
                                         <td className="px-3 py-2"><Badge text={s.frequency.toUpperCase()} color="#60a5fa" /></td>
                                     </tr>
                                 ))}
@@ -346,11 +346,11 @@ export default function AdminPage() {
             )}
 
             <Card>
-                <h3 className="text-sm font-semibold text-aureum-white mb-3">Active Price Locks</h3>
+                <h3 className="text-sm font-semibold text-reiks-white mb-3">Active Price Locks</h3>
                 <div className="overflow-x-auto">
                     <table className="w-full text-left">
-                        <thead><tr className="border-b border-aureum-border">
-                            {['ID', 'User', 'Product', 'Locked', 'Current', 'P&L', 'Duration', 'Premium', 'Expires', 'Status'].map(h => <th key={h} className="px-3 py-2 text-[9px] font-mono font-semibold text-aureum-dim uppercase tracking-wider">{h}</th>)}
+                        <thead><tr className="border-b border-reiks-border">
+                            {['ID', 'User', 'Product', 'Locked', 'Current', 'P&L', 'Duration', 'Premium', 'Expires', 'Status'].map(h => <th key={h} className="px-3 py-2 text-[9px] font-mono font-semibold text-reiks-dim uppercase tracking-wider">{h}</th>)}
                         </tr></thead>
                         <tbody>
                             {locks.map(l => {
@@ -359,13 +359,13 @@ export default function AdminPage() {
                                     <tr key={l.id} className="border-b border-[#111]">
                                         <td className="px-3 py-2 text-xs font-mono text-gold">{l.id}</td>
                                         <td className="px-3 py-2 text-xs">{l.user}</td>
-                                        <td className="px-3 py-2 text-xs text-aureum-mid">{l.product}</td>
+                                        <td className="px-3 py-2 text-xs text-reiks-mid">{l.product}</td>
                                         <td className="px-3 py-2 text-xs font-mono">₹{l.locked.toLocaleString()}</td>
                                         <td className="px-3 py-2 text-xs font-mono">₹{l.current.toLocaleString()}</td>
                                         <td className={`px-3 py-2 text-xs font-mono font-bold ${pnl >= 0 ? 'text-success' : 'text-error'}`}>{pnl >= 0 ? '+' : ''}₹{pnl.toLocaleString()}</td>
-                                        <td className="px-3 py-2 text-xs font-mono text-aureum-mid">{l.duration}</td>
+                                        <td className="px-3 py-2 text-xs font-mono text-reiks-mid">{l.duration}</td>
                                         <td className="px-3 py-2 text-xs font-mono text-gold">₹{l.premium.toLocaleString()}</td>
-                                        <td className={`px-3 py-2 text-xs font-mono ${l.status === 'active' ? 'text-warning' : 'text-aureum-dim'}`}>{l.expires}</td>
+                                        <td className={`px-3 py-2 text-xs font-mono ${l.status === 'active' ? 'text-warning' : 'text-reiks-dim'}`}>{l.expires}</td>
                                         <td className="px-3 py-2"><Badge text={l.status.toUpperCase()} color={l.status === 'active' ? '#4ade80' : l.status === 'converted' ? '#60a5fa' : '#555'} /></td>
                                     </tr>
                                 )
@@ -375,19 +375,19 @@ export default function AdminPage() {
                 </div>
             </Card>
             <Card>
-                <h3 className="text-sm font-semibold text-aureum-white mb-3">Goldsmith Partners</h3>
+                <h3 className="text-sm font-semibold text-reiks-white mb-3">Goldsmith Partners</h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                     {GOLDSMITHS.map(g => (
-                        <div key={g.name} className="p-3 bg-[#111] rounded-lg border border-aureum-border">
+                        <div key={g.name} className="p-3 bg-[#111] rounded-lg border border-reiks-border">
                             <div className="flex justify-between items-center">
-                                <span className="text-sm font-semibold text-aureum-white">{g.name}</span>
+                                <span className="text-sm font-semibold text-reiks-white">{g.name}</span>
                                 <Badge text={`★ ${g.rating}`} color="#D4A853" />
                             </div>
-                            <div className="text-[10px] text-aureum-dim mt-1">{g.location} · {g.speciality}</div>
+                            <div className="text-[10px] text-reiks-dim mt-1">{g.location} · {g.speciality}</div>
                             <div className="flex gap-4 mt-2">
-                                <div><span className="text-base font-mono font-bold text-aureum-white">{g.active}</span><span className="text-[9px] text-aureum-dim ml-1">active</span></div>
-                                <div><span className="text-base font-mono font-bold text-aureum-mid">{g.completed}</span><span className="text-[9px] text-aureum-dim ml-1">done</span></div>
-                                <div><span className="text-base font-mono font-bold text-gold">{g.avgDays}d</span><span className="text-[9px] text-aureum-dim ml-1">avg</span></div>
+                                <div><span className="text-base font-mono font-bold text-reiks-white">{g.active}</span><span className="text-[9px] text-reiks-dim ml-1">active</span></div>
+                                <div><span className="text-base font-mono font-bold text-reiks-mid">{g.completed}</span><span className="text-[9px] text-reiks-dim ml-1">done</span></div>
+                                <div><span className="text-base font-mono font-bold text-gold">{g.avgDays}d</span><span className="text-[9px] text-reiks-dim ml-1">avg</span></div>
                             </div>
                         </div>
                     ))}
@@ -407,7 +407,7 @@ export default function AdminPage() {
 
             <Card>
                 <div className="flex justify-between items-center mb-6">
-                    <h3 className="text-sm font-semibold text-aureum-white font-heading tracking-tight">GOLD SIP INVESTORS</h3>
+                    <h3 className="text-sm font-semibold text-reiks-white font-heading tracking-tight">GOLD SIP INVESTORS</h3>
                     <div className="flex gap-2">
                         <Badge text="AUTO-BUY ACTIVE" color="#4ade80" />
                         <Badge text="REBALANCE: 3d" color="#D4A853" />
@@ -416,13 +416,13 @@ export default function AdminPage() {
                 <div className="overflow-x-auto -mx-4">
                     <table className="w-full text-left border-collapse min-w-[700px]">
                         <thead>
-                            <tr className="border-b border-aureum-border bg-[#0a0a0a]">
-                                <th className="px-6 py-3 text-[10px] font-mono text-aureum-dim uppercase tracking-wider">Investor</th>
-                                <th className="px-6 py-3 text-[10px] font-mono text-aureum-dim uppercase tracking-wider">Plan</th>
-                                <th className="px-6 py-3 text-[10px] font-mono text-aureum-dim uppercase tracking-wider">Weight</th>
-                                <th className="px-6 py-3 text-[10px] font-mono text-aureum-dim uppercase tracking-wider">Next Buy</th>
-                                <th className="px-6 py-3 text-[10px] font-mono text-aureum-dim uppercase tracking-wider">ROI</th>
-                                <th className="px-6 py-3 text-[10px] font-mono text-aureum-dim uppercase tracking-wider text-right">Action</th>
+                            <tr className="border-b border-reiks-border bg-[#0a0a0a]">
+                                <th className="px-6 py-3 text-[10px] font-mono text-reiks-dim uppercase tracking-wider">Investor</th>
+                                <th className="px-6 py-3 text-[10px] font-mono text-reiks-dim uppercase tracking-wider">Plan</th>
+                                <th className="px-6 py-3 text-[10px] font-mono text-reiks-dim uppercase tracking-wider">Weight</th>
+                                <th className="px-6 py-3 text-[10px] font-mono text-reiks-dim uppercase tracking-wider">Next Buy</th>
+                                <th className="px-6 py-3 text-[10px] font-mono text-reiks-dim uppercase tracking-wider">ROI</th>
+                                <th className="px-6 py-3 text-[10px] font-mono text-reiks-dim uppercase tracking-wider text-right">Action</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-[#111]">
@@ -435,15 +435,15 @@ export default function AdminPage() {
                             ].map(sip => (
                                 <tr key={sip.id} className="hover:bg-gold/5 transition-colors group">
                                     <td className="px-6 py-4 whitespace-nowrap">
-                                        <div className="text-sm font-medium text-aureum-white">{sip.user}</div>
-                                        <div className="text-[10px] text-aureum-dim">ID: {sip.id * 123}</div>
+                                        <div className="text-sm font-medium text-reiks-white">{sip.user}</div>
+                                        <div className="text-[10px] text-reiks-dim">ID: {sip.id * 123}</div>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         <div className="text-xs text-gold font-mono">₹{sip.amount.toLocaleString()}</div>
-                                        <div className="text-[10px] text-aureum-mid">{sip.freq}</div>
+                                        <div className="text-[10px] text-reiks-mid">{sip.freq}</div>
                                     </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-aureum-white">{sip.weight}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-xs text-aureum-mid">{sip.date}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-reiks-white">{sip.weight}</td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-xs text-reiks-mid">{sip.date}</td>
                                     <td className="px-6 py-4 whitespace-nowrap"><Badge text={sip.roi} color="#4ade80" /></td>
                                     <td className="px-6 py-4 whitespace-nowrap text-right">
                                         <button className={`px-3 py-1.5 rounded-md text-[10px] font-bold tracking-tight transition-all border ${sip.status === 'active' ? 'bg-orange-500/10 border-orange-500/30 text-orange-500 hover:bg-orange-500/20' : 'bg-success/10 border-success/30 text-success hover:bg-success/20'}`}>
@@ -464,10 +464,10 @@ export default function AdminPage() {
                     </h3>
                     <div className="space-y-3 font-mono text-[10px]">
                         {[
-                            { t: "14:22:01", m: "Buy window open for 12 users", c: "text-aureum-mid" },
+                            { t: "14:22:01", m: "Buy window open for 12 users", c: "text-reiks-mid" },
                             { t: "14:22:05", m: "Price dip detected: ₹14,548 (-0.2%)", c: "text-success" },
                             { t: "14:22:06", m: "Executing batch purchase: 14.2g", c: "text-gold" },
-                            { t: "14:23:10", m: "Razorpay mandate captured: ₹2,000 (Arjun M.)", c: "text-aureum-dim" },
+                            { t: "14:23:10", m: "Razorpay mandate captured: ₹2,000 (Arjun M.)", c: "text-reiks-dim" },
                         ].map((log, i) => (
                             <div key={i} className="flex gap-3 border-l border-gold/20 pl-3">
                                 <span className="text-gold/50 shrink-0">{log.t}</span>
@@ -478,21 +478,21 @@ export default function AdminPage() {
                 </Card>
                 <div className="space-y-4">
                     <Card>
-                        <h4 className="text-xs font-bold text-aureum-white mb-2">MATERIALIZATION PIPELINE</h4>
-                        <div className="flex justify-between items-center bg-[#111] p-3 rounded-lg border border-aureum-border">
+                        <h4 className="text-xs font-bold text-reiks-white mb-2">MATERIALIZATION PIPELINE</h4>
+                        <div className="flex justify-between items-center bg-[#111] p-3 rounded-lg border border-reiks-border">
                             <div>
                                 <div className="text-xs text-gold font-bold">Vikram T.</div>
-                                <div className="text-[10px] text-aureum-dim">28.4g ready to materialize</div>
+                                <div className="text-[10px] text-reiks-dim">28.4g ready to materialize</div>
                             </div>
                             <button className="bg-gold text-black px-3 py-1.5 rounded-md text-[10px] font-bold hover:bg-gold-light transition-colors">START FORGE</button>
                         </div>
                     </Card>
                     <Card>
-                        <h4 className="text-xs font-bold text-aureum-white mb-2">SIP GROWTH TARGETS</h4>
+                        <h4 className="text-xs font-bold text-reiks-white mb-2">SIP GROWTH TARGETS</h4>
                         <div className="space-y-2">
-                            <div className="flex justify-between text-[10px] text-aureum-mid"><span>Investor Retention</span><span>92%</span></div>
+                            <div className="flex justify-between text-[10px] text-reiks-mid"><span>Investor Retention</span><span>92%</span></div>
                             <div className="w-full h-1.5 bg-[#111] rounded-full overflow-hidden"><div className="h-full bg-gold" style={{ width: '92%' }}></div></div>
-                            <div className="flex justify-between text-[10px] text-aureum-mid"><span>AUM Growth (MTD)</span><span>₹1.2L / ₹2.0L</span></div>
+                            <div className="flex justify-between text-[10px] text-reiks-mid"><span>AUM Growth (MTD)</span><span>₹1.2L / ₹2.0L</span></div>
                             <div className="w-full h-1.5 bg-[#111] rounded-full overflow-hidden"><div className="h-full bg-success" style={{ width: '60%' }}></div></div>
                         </div>
                     </Card>
@@ -513,24 +513,24 @@ export default function AdminPage() {
                 <Stat label="Fulfillment Rate" value="96.7%" trend="Healthy" />
             </div>
             <Card>
-                <h3 className="text-sm font-semibold text-aureum-white mb-3">Full Order Pipeline</h3>
+                <h3 className="text-sm font-semibold text-reiks-white mb-3">Full Order Pipeline</h3>
                 <div className="overflow-x-auto">
                     <table className="w-full text-left">
-                        <thead><tr className="border-b border-aureum-border">
-                            {['Order', 'Customer', 'Product', 'Amount', 'Weight', 'Gold ₹/g', 'Margin', 'Lock', 'Goldsmith', 'Status', 'Actions'].map(h => <th key={h} className="px-3 py-2 text-[9px] font-mono font-semibold text-aureum-dim uppercase tracking-wider">{h}</th>)}
+                        <thead><tr className="border-b border-reiks-border">
+                            {['Order', 'Customer', 'Product', 'Amount', 'Weight', 'Gold ₹/g', 'Margin', 'Lock', 'Goldsmith', 'Status', 'Actions'].map(h => <th key={h} className="px-3 py-2 text-[9px] font-mono font-semibold text-reiks-dim uppercase tracking-wider">{h}</th>)}
                         </tr></thead>
                         <tbody>
                             {orders.map(o => (
                                 <tr key={o.id} className="border-b border-[#111]">
                                     <td className="px-3 py-2 text-xs font-mono text-gold">{o.id}</td>
                                     <td className="px-3 py-2 text-xs">{o.customer}</td>
-                                    <td className="px-3 py-2 text-xs text-aureum-mid">{o.product}</td>
+                                    <td className="px-3 py-2 text-xs text-reiks-mid">{o.product}</td>
                                     <td className="px-3 py-2 text-xs font-mono font-bold">₹{o.amount.toLocaleString()}</td>
                                     <td className="px-3 py-2 text-xs font-mono">{o.weight}</td>
-                                    <td className="px-3 py-2 text-xs font-mono text-aureum-mid">₹{o.goldAt}</td>
+                                    <td className="px-3 py-2 text-xs font-mono text-reiks-mid">₹{o.goldAt}</td>
                                     <td className="px-3 py-2 text-xs font-mono text-success">₹{o.margin.toLocaleString()}</td>
-                                    <td className="px-3 py-2 text-xs font-mono text-aureum-dim">{o.lockId || '—'}</td>
-                                    <td className="px-3 py-2 text-xs text-aureum-mid">{o.goldsmith}</td>
+                                    <td className="px-3 py-2 text-xs font-mono text-reiks-dim">{o.lockId || '—'}</td>
+                                    <td className="px-3 py-2 text-xs text-reiks-mid">{o.goldsmith}</td>
                                     <td className="px-3 py-2"><Badge text={o.status.replace('_', ' ').toUpperCase()} color={orderColor(o.status)} /></td>
                                     <td className="px-3 py-2">
                                         <div className="flex gap-1">
@@ -559,11 +559,11 @@ export default function AdminPage() {
                 <Stat label="Cost per User" value="₹1.82" sub="Per active user today" />
             </div>
             <Card>
-                <h3 className="text-sm font-semibold text-aureum-white mb-3">AI Processing Queue</h3>
+                <h3 className="text-sm font-semibold text-reiks-white mb-3">AI Processing Queue</h3>
                 <div className="overflow-x-auto">
                     <table className="w-full text-left">
-                        <thead><tr className="border-b border-aureum-border">
-                            {['ID', 'User', 'Type', 'Model', 'Input', 'Duration', 'Cost', 'Status'].map(h => <th key={h} className="px-3 py-2 text-[9px] font-mono font-semibold text-aureum-dim uppercase tracking-wider">{h}</th>)}
+                        <thead><tr className="border-b border-reiks-border">
+                            {['ID', 'User', 'Type', 'Model', 'Input', 'Duration', 'Cost', 'Status'].map(h => <th key={h} className="px-3 py-2 text-[9px] font-mono font-semibold text-reiks-dim uppercase tracking-wider">{h}</th>)}
                         </tr></thead>
                         <tbody>
                             {AI_QUEUE.map(q => (
@@ -571,9 +571,9 @@ export default function AdminPage() {
                                     <td className="px-3 py-2 text-xs font-mono text-gold">{q.id}</td>
                                     <td className="px-3 py-2 text-xs">{q.user}</td>
                                     <td className="px-3 py-2"><Badge text={q.type.replace('_', ' ')} color={q.type === 'design_gen' ? '#c084fc' : q.type === 'vision' ? '#60a5fa' : q.type === 'chat' ? '#4ade80' : '#fbbf24'} /></td>
-                                    <td className="px-3 py-2 text-xs font-mono text-aureum-mid">{q.model}</td>
-                                    <td className="px-3 py-2 text-xs text-aureum-mid max-w-[200px] truncate">{q.input}</td>
-                                    <td className="px-3 py-2 text-xs font-mono text-aureum-mid">{q.duration}</td>
+                                    <td className="px-3 py-2 text-xs font-mono text-reiks-mid">{q.model}</td>
+                                    <td className="px-3 py-2 text-xs text-reiks-mid max-w-[200px] truncate">{q.input}</td>
+                                    <td className="px-3 py-2 text-xs font-mono text-reiks-mid">{q.duration}</td>
                                     <td className="px-3 py-2 text-xs font-mono text-gold">{q.cost}</td>
                                     <td className="px-3 py-2"><Badge text={q.status.toUpperCase()} color={q.status === 'completed' ? '#4ade80' : '#fbbf24'} /></td>
                                 </tr>
@@ -584,7 +584,7 @@ export default function AdminPage() {
             </Card>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 <Card>
-                    <h3 className="text-sm font-semibold text-aureum-white mb-3">Model Cost Breakdown</h3>
+                    <h3 className="text-sm font-semibold text-reiks-white mb-3">Model Cost Breakdown</h3>
                     {[
                         { model: 'Claude Haiku', calls: 312, cost: 177, per: '₹0.57', use: 'Concierge chat, certificates' },
                         { model: 'Claude Sonnet', calls: 187, cost: 137, per: '₹0.73', use: 'Vision analysis' },
@@ -594,18 +594,18 @@ export default function AdminPage() {
                     ].map(m => (
                         <div key={m.model} className="flex items-center gap-3 py-2 border-b border-[#111] last:border-0">
                             <div className="flex-1">
-                                <div className="text-xs font-semibold text-aureum-white">{m.model}</div>
-                                <div className="text-[10px] text-aureum-dim">{m.use}</div>
+                                <div className="text-xs font-semibold text-reiks-white">{m.model}</div>
+                                <div className="text-[10px] text-reiks-dim">{m.use}</div>
                             </div>
                             <div className="text-right">
                                 <div className="text-xs font-mono text-gold">₹{m.cost}</div>
-                                <div className="text-[9px] text-aureum-dim">{m.calls} calls · {m.per}/call</div>
+                                <div className="text-[9px] text-reiks-dim">{m.calls} calls · {m.per}/call</div>
                             </div>
                         </div>
                     ))}
                 </Card>
                 <Card>
-                    <h3 className="text-sm font-semibold text-aureum-white mb-3">AI Feature Flows</h3>
+                    <h3 className="text-sm font-semibold text-reiks-white mb-3">AI Feature Flows</h3>
                     {[
                         { flow: 'Design Studio', steps: 'Upload → Vision → FLUX ×4 → Editor', cost: '₹4.73/session' },
                         { flow: 'Concierge Chat', steps: 'Msg → Haiku → Response + products', cost: '₹0.57/chat' },
@@ -614,10 +614,10 @@ export default function AdminPage() {
                     ].map(f => (
                         <div key={f.flow} className="py-2 border-b border-[#111] last:border-0">
                             <div className="flex justify-between">
-                                <span className="text-xs font-semibold text-aureum-white">{f.flow}</span>
+                                <span className="text-xs font-semibold text-reiks-white">{f.flow}</span>
                                 <span className="text-[10px] font-mono text-gold">{f.cost}</span>
                             </div>
-                            <div className="text-[10px] text-aureum-dim mt-1">{f.steps}</div>
+                            <div className="text-[10px] text-reiks-dim mt-1">{f.steps}</div>
                         </div>
                     ))}
                 </Card>
@@ -636,25 +636,25 @@ export default function AdminPage() {
                 <Stat label="Top Spender" value="₹3.45L" sub="Vikram T." />
             </div>
             <Card>
-                <h3 className="text-sm font-semibold text-aureum-white mb-3">User Management</h3>
+                <h3 className="text-sm font-semibold text-reiks-white mb-3">User Management</h3>
                 <div className="overflow-x-auto">
                     <table className="w-full text-left">
-                        <thead><tr className="border-b border-aureum-border">
-                            {['User', 'Tier', 'Spent', 'Designs', 'Locks', 'Orders', 'AI Calls', 'SIP', 'Pass', 'Last Active'].map(h => <th key={h} className="px-3 py-2 text-[9px] font-mono font-semibold text-aureum-dim uppercase tracking-wider">{h}</th>)}
+                        <thead><tr className="border-b border-reiks-border">
+                            {['User', 'Tier', 'Spent', 'Designs', 'Locks', 'Orders', 'AI Calls', 'SIP', 'Pass', 'Last Active'].map(h => <th key={h} className="px-3 py-2 text-[9px] font-mono font-semibold text-reiks-dim uppercase tracking-wider">{h}</th>)}
                         </tr></thead>
                         <tbody>
                             {USERS.map(u => (
                                 <tr key={u.id} className="border-b border-[#111] hover:bg-[#111] cursor-pointer transition-colors">
-                                    <td className="px-3 py-2"><div className="text-xs font-medium text-aureum-white">{u.name}</div><div className="text-[9px] text-aureum-dim">{u.email}</div></td>
+                                    <td className="px-3 py-2"><div className="text-xs font-medium text-reiks-white">{u.name}</div><div className="text-[9px] text-reiks-dim">{u.email}</div></td>
                                     <td className="px-3 py-2"><Badge text={u.tier} color={tierColor(u.tier)} /></td>
                                     <td className="px-3 py-2 text-xs font-mono font-bold">{u.spent > 0 ? `₹${(u.spent / 1000).toFixed(1)}K` : '—'}</td>
                                     <td className="px-3 py-2 text-xs font-mono">{u.designs}</td>
                                     <td className="px-3 py-2 text-xs font-mono">{u.locks}</td>
                                     <td className="px-3 py-2 text-xs font-mono">{u.orders}</td>
                                     <td className="px-3 py-2 text-xs font-mono">{u.aiCalls}</td>
-                                    <td className="px-3 py-2">{u.sip ? <Badge text="SIP" color="#4ade80" /> : <span className="text-aureum-dim text-xs">—</span>}</td>
-                                    <td className="px-3 py-2">{u.forgePass ? <Badge text="PASS" color="#D4A853" /> : <span className="text-aureum-dim text-xs">—</span>}</td>
-                                    <td className="px-3 py-2 text-xs text-aureum-dim">{u.lastActive}</td>
+                                    <td className="px-3 py-2">{u.sip ? <Badge text="SIP" color="#4ade80" /> : <span className="text-reiks-dim text-xs">—</span>}</td>
+                                    <td className="px-3 py-2">{u.forgePass ? <Badge text="PASS" color="#D4A853" /> : <span className="text-reiks-dim text-xs">—</span>}</td>
+                                    <td className="px-3 py-2 text-xs text-reiks-dim">{u.lastActive}</td>
                                 </tr>
                             ))}
                         </tbody>
@@ -672,9 +672,9 @@ export default function AdminPage() {
                     ].map(t => (
                         <div key={t.tier} className="p-3 bg-[#0a0a0a] rounded-lg" style={{ border: `1px solid ${t.color}33` }}>
                             <div className="text-sm font-bold" style={{ color: t.color }}>{t.tier}</div>
-                            <div className="text-[11px] font-mono text-aureum-mid">{t.range} spent</div>
-                            <div className="text-lg font-mono font-bold text-aureum-white my-1">{t.users}</div>
-                            <div className="text-[10px] text-aureum-dim leading-relaxed">{t.perks}</div>
+                            <div className="text-[11px] font-mono text-reiks-mid">{t.range} spent</div>
+                            <div className="text-lg font-mono font-bold text-reiks-white my-1">{t.users}</div>
+                            <div className="text-[10px] text-reiks-dim leading-relaxed">{t.perks}</div>
                         </div>
                     ))}
                 </div>
@@ -694,7 +694,7 @@ export default function AdminPage() {
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 <Card>
-                    <h3 className="text-sm font-semibold text-aureum-white mb-3">Revenue Streams</h3>
+                    <h3 className="text-sm font-semibold text-reiks-white mb-3">Revenue Streams</h3>
                     <div className="h-48">
                         <ResponsiveContainer width="100%" height="100%">
                             <PieChart><Pie data={REVENUE_STREAMS} cx="50%" cy="50%" innerRadius={45} outerRadius={75} dataKey="value" stroke="none">{REVENUE_STREAMS.map((e, i) => <Cell key={i} fill={e.color} />)}</Pie><Tooltip contentStyle={{ background: '#111', border: '1px solid #333', borderRadius: 6, fontSize: 11 }} formatter={(v: number | string | undefined) => `₹${typeof v === 'number' ? v.toLocaleString() : v}`} /></PieChart>
@@ -702,13 +702,13 @@ export default function AdminPage() {
                     </div>
                     {REVENUE_STREAMS.map(r => (
                         <div key={r.name} className="flex justify-between items-center py-1 text-[11px]">
-                            <div className="flex items-center gap-2"><div className="w-2 h-2 rounded-sm" style={{ background: r.color }} /><span className="text-aureum-mid">{r.name}</span></div>
-                            <div className="flex gap-3"><span className="font-mono text-gold">₹{r.value.toLocaleString()}</span><span className="font-mono text-aureum-dim w-8 text-right">{((r.value / totalRev) * 100).toFixed(0)}%</span></div>
+                            <div className="flex items-center gap-2"><div className="w-2 h-2 rounded-sm" style={{ background: r.color }} /><span className="text-reiks-mid">{r.name}</span></div>
+                            <div className="flex gap-3"><span className="font-mono text-gold">₹{r.value.toLocaleString()}</span><span className="font-mono text-reiks-dim w-8 text-right">{((r.value / totalRev) * 100).toFixed(0)}%</span></div>
                         </div>
                     ))}
                 </Card>
                 <Card>
-                    <h3 className="text-sm font-semibold text-aureum-white mb-3">30-Day Revenue Trend</h3>
+                    <h3 className="text-sm font-semibold text-reiks-white mb-3">30-Day Revenue Trend</h3>
                     <div className="h-48">
                         <ResponsiveContainer width="100%" height="100%">
                             <AreaChart data={dailyRev}>
@@ -722,10 +722,10 @@ export default function AdminPage() {
                         </ResponsiveContainer>
                     </div>
                     <div className="mt-4 p-3 bg-[#111] rounded-md">
-                        <div className="text-[11px] font-semibold text-aureum-white mb-2">Growth Projection</div>
+                        <div className="text-[11px] font-semibold text-reiks-white mb-2">Growth Projection</div>
                         <div className="grid grid-cols-4 gap-2 text-[10px]">
                             {[{ label: 'Month 3', gmv: '₹8.3L', users: '500' }, { label: 'Month 6', gmv: '₹40L', users: '2K' }, { label: 'Month 9', gmv: '₹1.2Cr', users: '5K' }, { label: 'Month 12', gmv: '₹2.6Cr', users: '10K' }].map(p => (
-                                <div key={p.label}><div className="text-aureum-dim">{p.label}</div><div className="font-mono text-gold font-semibold">{p.gmv}</div><div className="text-aureum-dim">{p.users} users</div></div>
+                                <div key={p.label}><div className="text-reiks-dim">{p.label}</div><div className="font-mono text-gold font-semibold">{p.gmv}</div><div className="text-reiks-dim">{p.users} users</div></div>
                             ))}
                         </div>
                     </div>
@@ -743,11 +743,11 @@ export default function AdminPage() {
                 <Stat label="Uptime" value="99.9%" sub="Last 30 days" />
             </div>
             <Card>
-                <h3 className="text-sm font-semibold text-aureum-white mb-3">API Service Monitor</h3>
+                <h3 className="text-sm font-semibold text-reiks-white mb-3">API Service Monitor</h3>
                 <div className="overflow-x-auto">
                     <table className="w-full text-left">
-                        <thead><tr className="border-b border-aureum-border">
-                            {['Service', 'Status', 'Latency', 'Calls', 'Limit', 'Usage', 'Cost', 'Plan'].map(h => <th key={h} className="px-3 py-2 text-[9px] font-mono font-semibold text-aureum-dim uppercase tracking-wider">{h}</th>)}
+                        <thead><tr className="border-b border-reiks-border">
+                            {['Service', 'Status', 'Latency', 'Calls', 'Limit', 'Usage', 'Cost', 'Plan'].map(h => <th key={h} className="px-3 py-2 text-[9px] font-mono font-semibold text-reiks-dim uppercase tracking-wider">{h}</th>)}
                         </tr></thead>
                         <tbody>
                             {API_SERVICES.map(api => {
@@ -756,12 +756,12 @@ export default function AdminPage() {
                                     <tr key={api.name} className="border-b border-[#111] hover:bg-[#111] transition-colors">
                                         <td className="px-3 py-2 text-xs font-semibold"><span className="inline-block w-2 h-2 rounded-full mr-2" style={{ background: statusColor(api.status) }} />{api.name}</td>
                                         <td className="px-3 py-2"><Badge text={api.status.toUpperCase()} color={statusColor(api.status)} /></td>
-                                        <td className="px-3 py-2 text-xs font-mono text-aureum-mid">{api.latency}</td>
+                                        <td className="px-3 py-2 text-xs font-mono text-reiks-mid">{api.latency}</td>
                                         <td className="px-3 py-2 text-xs font-mono">{api.calls ?? '—'}</td>
-                                        <td className="px-3 py-2 text-xs font-mono text-aureum-dim">{api.limit?.toLocaleString() ?? '∞'}</td>
-                                        <td className="px-3 py-2">{usage !== null ? <div className="flex items-center gap-2"><div className="w-14 h-1.5 bg-[#1a1a1a] rounded-full overflow-hidden"><div className="h-full rounded-full" style={{ width: `${Math.min(usage, 100)}%`, background: usage > 80 ? '#f87171' : usage > 60 ? '#fbbf24' : '#D4A853' }} /></div><span className="text-[10px] font-mono" style={{ color: usage > 80 ? '#f87171' : '#888' }}>{usage.toFixed(0)}%</span></div> : <span className="text-[10px] text-aureum-dim">—</span>}</td>
+                                        <td className="px-3 py-2 text-xs font-mono text-reiks-dim">{api.limit?.toLocaleString() ?? '∞'}</td>
+                                        <td className="px-3 py-2">{usage !== null ? <div className="flex items-center gap-2"><div className="w-14 h-1.5 bg-[#1a1a1a] rounded-full overflow-hidden"><div className="h-full rounded-full" style={{ width: `${Math.min(usage, 100)}%`, background: usage > 80 ? '#f87171' : usage > 60 ? '#fbbf24' : '#D4A853' }} /></div><span className="text-[10px] font-mono" style={{ color: usage > 80 ? '#f87171' : '#888' }}>{usage.toFixed(0)}%</span></div> : <span className="text-[10px] text-reiks-dim">—</span>}</td>
                                         <td className="px-3 py-2 text-xs font-mono" style={{ color: api.cost > 0 ? '#D4A853' : '#4ade80' }}>{api.cost > 0 ? `₹${api.cost}` : 'FREE'}</td>
-                                        <td className="px-3 py-2 text-xs text-aureum-dim">{api.plan}</td>
+                                        <td className="px-3 py-2 text-xs text-reiks-dim">{api.plan}</td>
                                     </tr>
                                 )
                             })}
@@ -776,7 +776,7 @@ export default function AdminPage() {
         <div className="space-y-4">
             <Card>
                 <div className="flex justify-between items-center mb-4">
-                    <h3 className="text-sm font-semibold text-aureum-white">Live API Credentials</h3>
+                    <h3 className="text-sm font-semibold text-reiks-white">Live API Credentials</h3>
                     <div className="flex items-center gap-3">
                         <button
                             onClick={handleSaveKeys}
@@ -791,7 +791,7 @@ export default function AdminPage() {
                 <div className="space-y-4">
                     <div>
                         <div className="flex justify-between items-center mb-1">
-                            <label className="text-xs text-aureum-dim block">Anthropic API Key (Claude - Chat & Vision)</label>
+                            <label className="text-xs text-reiks-dim block">Anthropic API Key (Claude - Chat & Vision)</label>
                             <button onClick={() => testKey('anthropic', anthropicKey)} disabled={testingKey === 'anthropic'} className="text-[10px] text-gold hover:text-white transition-colors disabled:opacity-50">{testingKey === 'anthropic' ? 'Testing...' : 'Test Connection'}</button>
                         </div>
                         <input
@@ -799,11 +799,11 @@ export default function AdminPage() {
                             value={anthropicKey}
                             onChange={e => setAnthropicKey(e.target.value)}
                             onBlur={() => {
-                                localStorage.setItem('aureum_anthropic_key', anthropicKey)
+                                localStorage.setItem('reiks_anthropic_key', anthropicKey)
                                 alert('Anthropic API key saved.')
                             }}
                             placeholder="sk-ant-api03-..."
-                            className="w-full px-3 py-2 bg-[#111] border border-aureum-border rounded-md text-xs font-mono text-aureum-white placeholder:text-aureum-dim focus:border-gold/50 focus:outline-none placeholder:opacity-40 transition-colors"
+                            className="w-full px-3 py-2 bg-[#111] border border-reiks-border rounded-md text-xs font-mono text-reiks-white placeholder:text-reiks-dim focus:border-gold/50 focus:outline-none placeholder:opacity-40 transition-colors"
                         />
                         {testResults['anthropic'] && (
                             <div className={`text-[10px] mt-1.5 font-mono ${testResults['anthropic'].status === 'success' ? 'text-success' : 'text-error'}`}>
@@ -813,7 +813,7 @@ export default function AdminPage() {
                     </div>
                     <div>
                         <div className="flex justify-between items-center mb-1">
-                            <label className="text-xs text-aureum-dim block">Replicate API Token (FLUX - Image Gen)</label>
+                            <label className="text-xs text-reiks-dim block">Replicate API Token (FLUX - Image Gen)</label>
                             <button onClick={() => testKey('replicate', replicateKey)} disabled={testingKey === 'replicate'} className="text-[10px] text-gold hover:text-white transition-colors disabled:opacity-50">{testingKey === 'replicate' ? 'Testing...' : 'Test Connection'}</button>
                         </div>
                         <input
@@ -821,11 +821,11 @@ export default function AdminPage() {
                             value={replicateKey}
                             onChange={e => setReplicateKey(e.target.value)}
                             onBlur={() => {
-                                localStorage.setItem('aureum_replicate_key', replicateKey)
+                                localStorage.setItem('reiks_replicate_key', replicateKey)
                                 alert('Replicate API token saved.')
                             }}
                             placeholder="r8_..."
-                            className="w-full px-3 py-2 bg-[#111] border border-aureum-border rounded-md text-xs font-mono text-aureum-white placeholder:text-aureum-dim focus:border-gold/50 focus:outline-none placeholder:opacity-40 transition-colors"
+                            className="w-full px-3 py-2 bg-[#111] border border-reiks-border rounded-md text-xs font-mono text-reiks-white placeholder:text-reiks-dim focus:border-gold/50 focus:outline-none placeholder:opacity-40 transition-colors"
                         />
                         {testResults['replicate'] && (
                             <div className={`text-[10px] mt-1.5 font-mono ${testResults['replicate'].status === 'success' ? 'text-success' : 'text-error'}`}>
@@ -835,7 +835,7 @@ export default function AdminPage() {
                     </div>
                     <div>
                         <div className="flex justify-between items-center mb-1">
-                            <label className="text-xs text-aureum-dim block">Meshy 3D API Key (Fallback Image Gen)</label>
+                            <label className="text-xs text-reiks-dim block">Meshy 3D API Key (Fallback Image Gen)</label>
                             <button onClick={() => testKey('meshy', meshyKey)} disabled={testingKey === 'meshy'} className="text-[10px] text-gold hover:text-white transition-colors disabled:opacity-50">{testingKey === 'meshy' ? 'Testing...' : 'Test Connection'}</button>
                         </div>
                         <input
@@ -843,10 +843,10 @@ export default function AdminPage() {
                             value={meshyKey}
                             onChange={e => setMeshyKey(e.target.value)}
                             onBlur={() => {
-                                localStorage.setItem('aureum_meshy_key', meshyKey)
+                                localStorage.setItem('reiks_meshy_key', meshyKey)
                             }}
                             placeholder="msy_..."
-                            className="w-full px-3 py-2 bg-[#111] border border-aureum-border rounded-md text-xs font-mono text-aureum-white placeholder:text-aureum-dim focus:border-gold/50 focus:outline-none placeholder:opacity-40 transition-colors"
+                            className="w-full px-3 py-2 bg-[#111] border border-reiks-border rounded-md text-xs font-mono text-reiks-white placeholder:text-reiks-dim focus:border-gold/50 focus:outline-none placeholder:opacity-40 transition-colors"
                         />
                         {testResults['meshy'] && (
                             <div className={`text-[10px] mt-1.5 font-mono ${testResults['meshy'].status === 'success' ? 'text-success' : 'text-error'}`}>
@@ -857,15 +857,15 @@ export default function AdminPage() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <div className="flex justify-between items-center mb-1">
-                                <label className="text-xs text-aureum-dim block">Metals-API Key</label>
+                                <label className="text-xs text-reiks-dim block">Metals-API Key</label>
                                 <button onClick={() => testKey('metals', metalsKey)} disabled={testingKey === 'metals'} className="text-[10px] text-gold hover:text-white disabled:opacity-50">{testingKey === 'metals' ? 'Testing...' : 'Test'}</button>
                             </div>
                             <input
                                 type="password"
                                 value={metalsKey}
                                 onChange={e => setMetalsKey(e.target.value)}
-                                onBlur={() => localStorage.setItem('aureum_metals_key', metalsKey)}
-                                className="w-full px-3 py-2 bg-[#111] border border-aureum-border rounded-md text-xs font-mono text-aureum-white focus:border-gold/50 focus:outline-none"
+                                onBlur={() => localStorage.setItem('reiks_metals_key', metalsKey)}
+                                className="w-full px-3 py-2 bg-[#111] border border-reiks-border rounded-md text-xs font-mono text-reiks-white focus:border-gold/50 focus:outline-none"
                             />
                             {testResults['metals'] && (
                                 <div className={`text-[9px] mt-1 font-mono ${testResults['metals'].status === 'success' ? 'text-success' : 'text-error'}`}>
@@ -875,15 +875,15 @@ export default function AdminPage() {
                         </div>
                         <div>
                             <div className="flex justify-between items-center mb-1">
-                                <label className="text-xs text-aureum-dim block">GoldAPI.io Key</label>
+                                <label className="text-xs text-reiks-dim block">GoldAPI.io Key</label>
                                 <button onClick={() => testKey('goldapi', goldApiKey)} disabled={testingKey === 'goldapi'} className="text-[10px] text-gold hover:text-white disabled:opacity-50">{testingKey === 'goldapi' ? 'Testing...' : 'Test'}</button>
                             </div>
                             <input
                                 type="password"
                                 value={goldApiKey}
                                 onChange={e => setGoldApiKey(e.target.value)}
-                                onBlur={() => localStorage.setItem('aureum_gold_api_key', goldApiKey)}
-                                className="w-full px-3 py-2 bg-[#111] border border-aureum-border rounded-md text-xs font-mono text-aureum-white focus:border-gold/50 focus:outline-none"
+                                onBlur={() => localStorage.setItem('reiks_gold_api_key', goldApiKey)}
+                                className="w-full px-3 py-2 bg-[#111] border border-reiks-border rounded-md text-xs font-mono text-reiks-white focus:border-gold/50 focus:outline-none"
                             />
                             {testResults['goldapi'] && (
                                 <div className={`text-[9px] mt-1 font-mono ${testResults['goldapi'].status === 'success' ? 'text-success' : 'text-error'}`}>
@@ -894,16 +894,16 @@ export default function AdminPage() {
                     </div>
                     <div>
                         <div className="flex justify-between items-center mb-1">
-                            <label className="text-xs text-aureum-dim block">Razorpay API Key (Live/Test ID)</label>
+                            <label className="text-xs text-reiks-dim block">Razorpay API Key (Live/Test ID)</label>
                             <button onClick={() => testKey('razorpay', razorpayKey)} disabled={testingKey === 'razorpay'} className="text-[10px] text-gold hover:text-white disabled:opacity-50">{testingKey === 'razorpay' ? 'Testing...' : 'Test'}</button>
                         </div>
                         <input
                             type="text"
                             value={razorpayKey}
                             onChange={e => setRazorpayKey(e.target.value)}
-                            onBlur={() => localStorage.setItem('aureum_razorpay_key', razorpayKey)}
+                            onBlur={() => localStorage.setItem('reiks_razorpay_key', razorpayKey)}
                             placeholder="rzp_live_..."
-                            className="w-full px-3 py-2 bg-[#111] border border-aureum-border rounded-md text-xs font-mono text-aureum-white focus:border-gold/50 focus:outline-none"
+                            className="w-full px-3 py-2 bg-[#111] border border-reiks-border rounded-md text-xs font-mono text-reiks-white focus:border-gold/50 focus:outline-none"
                         />
                         {testResults['razorpay'] && (
                             <div className={`text-[9px] mt-1 font-mono ${testResults['razorpay'].status === 'success' ? 'text-success' : 'text-error'}`}>
@@ -914,16 +914,16 @@ export default function AdminPage() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <div className="flex justify-between items-center mb-1">
-                                <label className="text-xs text-aureum-dim block">Supabase Project URL</label>
+                                <label className="text-xs text-reiks-dim block">Supabase Project URL</label>
                                 <button onClick={() => testKey('supabaseUrl', supabaseUrl)} disabled={testingKey === 'supabaseUrl'} className="text-[10px] text-gold hover:text-white disabled:opacity-50">{testingKey === 'supabaseUrl' ? 'Testing...' : 'Test'}</button>
                             </div>
                             <input
                                 type="text"
                                 value={supabaseUrl}
                                 onChange={e => setSupabaseUrl(e.target.value)}
-                                onBlur={() => localStorage.setItem('aureum_supabase_url', supabaseUrl)}
+                                onBlur={() => localStorage.setItem('reiks_supabase_url', supabaseUrl)}
                                 placeholder="https://xxx.supabase.co"
-                                className="w-full px-3 py-2 bg-[#111] border border-aureum-border rounded-md text-xs font-mono text-aureum-white focus:border-gold/50 focus:outline-none"
+                                className="w-full px-3 py-2 bg-[#111] border border-reiks-border rounded-md text-xs font-mono text-reiks-white focus:border-gold/50 focus:outline-none"
                             />
                             {testResults['supabaseUrl'] && (
                                 <div className={`text-[9px] mt-1 font-mono ${testResults['supabaseUrl'].status === 'success' ? 'text-success' : 'text-error'}`}>
@@ -933,15 +933,15 @@ export default function AdminPage() {
                         </div>
                         <div>
                             <div className="flex justify-between items-center mb-1">
-                                <label className="text-xs text-aureum-dim block">Supabase Anon Key</label>
+                                <label className="text-xs text-reiks-dim block">Supabase Anon Key</label>
                                 <button onClick={() => testKey('supabaseKey', supabaseAnonKey)} disabled={testingKey === 'supabaseKey'} className="text-[10px] text-gold hover:text-white disabled:opacity-50">{testingKey === 'supabaseKey' ? 'Testing...' : 'Test'}</button>
                             </div>
                             <input
                                 type="password"
                                 value={supabaseAnonKey}
                                 onChange={e => setSupabaseAnonKey(e.target.value)}
-                                onBlur={() => localStorage.setItem('aureum_supabase_anon_key', supabaseAnonKey)}
-                                className="w-full px-3 py-2 bg-[#111] border border-aureum-border rounded-md text-xs font-mono text-aureum-white focus:border-gold/50 focus:outline-none"
+                                onBlur={() => localStorage.setItem('reiks_supabase_anon_key', supabaseAnonKey)}
+                                className="w-full px-3 py-2 bg-[#111] border border-reiks-border rounded-md text-xs font-mono text-reiks-white focus:border-gold/50 focus:outline-none"
                             />
                             {testResults['supabaseKey'] && (
                                 <div className={`text-[9px] mt-1 font-mono ${testResults['supabaseKey'].status === 'success' ? 'text-success' : 'text-error'}`}>
@@ -953,15 +953,15 @@ export default function AdminPage() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <div className="flex justify-between items-center mb-1">
-                                <label className="text-xs text-aureum-dim block">Upstash Redis REST URL</label>
+                                <label className="text-xs text-reiks-dim block">Upstash Redis REST URL</label>
                                 <button onClick={() => testKey('upstashUrl', upstashUrl)} disabled={testingKey === 'upstashUrl'} className="text-[10px] text-gold hover:text-white disabled:opacity-50">{testingKey === 'upstashUrl' ? 'Testing...' : 'Test'}</button>
                             </div>
                             <input
                                 type="text"
                                 value={upstashUrl}
                                 onChange={e => setUpstashUrl(e.target.value)}
-                                onBlur={() => localStorage.setItem('aureum_upstash_url', upstashUrl)}
-                                className="w-full px-3 py-2 bg-[#111] border border-aureum-border rounded-md text-xs font-mono text-aureum-white focus:border-gold/50 focus:outline-none"
+                                onBlur={() => localStorage.setItem('reiks_upstash_url', upstashUrl)}
+                                className="w-full px-3 py-2 bg-[#111] border border-reiks-border rounded-md text-xs font-mono text-reiks-white focus:border-gold/50 focus:outline-none"
                             />
                             {testResults['upstashUrl'] && (
                                 <div className={`text-[9px] mt-1 font-mono ${testResults['upstashUrl'].status === 'success' ? 'text-success' : 'text-error'}`}>
@@ -971,15 +971,15 @@ export default function AdminPage() {
                         </div>
                         <div>
                             <div className="flex justify-between items-center mb-1">
-                                <label className="text-xs text-aureum-dim block">Upstash Redis REST Token</label>
+                                <label className="text-xs text-reiks-dim block">Upstash Redis REST Token</label>
                                 <button onClick={() => testKey('upstashKey', upstashToken)} disabled={testingKey === 'upstashKey'} className="text-[10px] text-gold hover:text-white disabled:opacity-50">{testingKey === 'upstashKey' ? 'Testing...' : 'Test'}</button>
                             </div>
                             <input
                                 type="password"
                                 value={upstashToken}
                                 onChange={e => setUpstashToken(e.target.value)}
-                                onBlur={() => localStorage.setItem('aureum_upstash_token', upstashToken)}
-                                className="w-full px-3 py-2 bg-[#111] border border-aureum-border rounded-md text-xs font-mono text-aureum-white focus:border-gold/50 focus:outline-none"
+                                onBlur={() => localStorage.setItem('reiks_upstash_token', upstashToken)}
+                                className="w-full px-3 py-2 bg-[#111] border border-reiks-border rounded-md text-xs font-mono text-reiks-white focus:border-gold/50 focus:outline-none"
                             />
                             {testResults['upstashKey'] && (
                                 <div className={`text-[9px] mt-1 font-mono ${testResults['upstashKey'].status === 'success' ? 'text-success' : 'text-error'}`}>
@@ -988,14 +988,14 @@ export default function AdminPage() {
                             )}
                         </div>
                     </div>
-                    <p className="text-[10px] text-aureum-dim flex items-start gap-1.5 mt-2">
+                    <p className="text-[10px] text-reiks-dim flex items-start gap-1.5 mt-2">
                         <AlertTriangle size={12} className="shrink-0 mt-0.5 text-warning" />
                         Credentials saved here are stored in your browser's localStorage and injected into API requests. This allows you to test live integrations immediately.
                     </p>
                 </div>
             </Card>
             <Card>
-                <h3 className="text-sm font-semibold text-aureum-white mb-3">Feature Toggles <span className="text-[10px] text-aureum-dim font-normal ml-2">{activeFeatures} active · {features.length - activeFeatures} disabled</span></h3>
+                <h3 className="text-sm font-semibold text-reiks-white mb-3">Feature Toggles <span className="text-[10px] text-reiks-dim font-normal ml-2">{activeFeatures} active · {features.length - activeFeatures} disabled</span></h3>
                 {['core', 'ai', 'finance', 'monetization', 'premium'].map(cat => (
                     <div key={cat} className="mb-4">
                         <div className="text-[10px] text-gold uppercase tracking-widest font-mono mb-2">{cat}</div>
@@ -1005,11 +1005,11 @@ export default function AdminPage() {
                                     <div className={`w-3.5 h-3.5 rounded-full bg-white absolute top-[3px] transition-all ${f.status ? 'left-[18px]' : 'left-[3px]'}`} />
                                 </button>
                                 <div className="flex-1 min-w-0">
-                                    <div className={`text-xs font-semibold ${f.status ? 'text-aureum-white' : 'text-aureum-dim'}`}>{f.name}</div>
-                                    <div className="text-[10px] text-aureum-dim">{f.desc}</div>
+                                    <div className={`text-xs font-semibold ${f.status ? 'text-reiks-white' : 'text-reiks-dim'}`}>{f.name}</div>
+                                    <div className="text-[10px] text-reiks-dim">{f.desc}</div>
                                 </div>
                                 <div className="text-right shrink-0">
-                                    <div className="text-[10px] font-mono text-aureum-mid">{f.api}</div>
+                                    <div className="text-[10px] font-mono text-reiks-mid">{f.api}</div>
                                     <div className={`text-[10px] font-mono ${f.cost.startsWith('Revenue') ? 'text-success' : 'text-gold'}`}>{f.cost}</div>
                                 </div>
                             </div>
@@ -1023,11 +1023,11 @@ export default function AdminPage() {
                     <div>
                         <div className="text-[11px] text-gold font-semibold mb-2">Lock Premiums</div>
                         {[{ dur: '24h', pct: '0.5%' }, { dur: '48h', pct: '1.0%' }, { dur: '7d', pct: '2.0%' }].map(l => (
-                            <div key={l.dur} className="flex justify-between py-1.5 border-b border-[#1a1a1a] text-xs"><span className="text-aureum-white">{l.dur} lock</span><span className="font-mono text-gold">{l.pct}</span></div>
+                            <div key={l.dur} className="flex justify-between py-1.5 border-b border-[#1a1a1a] text-xs"><span className="text-reiks-white">{l.dur} lock</span><span className="font-mono text-gold">{l.pct}</span></div>
                         ))}
                         <div className="text-[11px] text-gold font-semibold mt-3 mb-2">Making Charges</div>
-                        <div className="flex justify-between py-1.5 border-b border-[#1a1a1a] text-xs"><span className="text-aureum-white">Per gram</span><span className="font-mono text-gold">₹500</span></div>
-                        <div className="flex justify-between py-1.5 text-xs"><span className="text-aureum-white">Rush multiplier</span><span className="font-mono text-gold">1.25x</span></div>
+                        <div className="flex justify-between py-1.5 border-b border-[#1a1a1a] text-xs"><span className="text-reiks-white">Per gram</span><span className="font-mono text-gold">₹500</span></div>
+                        <div className="flex justify-between py-1.5 text-xs"><span className="text-reiks-white">Rush multiplier</span><span className="font-mono text-gold">1.25x</span></div>
                     </div>
                     <div>
                         <div className="text-[11px] text-gold font-semibold mb-2">Monetization Pricing</div>
@@ -1039,7 +1039,7 @@ export default function AdminPage() {
                             { label: 'SIP Mgmt Fee', value: '1% AUM/yr' },
                             { label: 'Target Margin', value: '18%' },
                         ].map(p => (
-                            <div key={p.label} className="flex justify-between py-1 border-b border-[#1a1a1a] text-[11px]"><span className="text-aureum-mid">{p.label}</span><span className="font-mono text-gold">{p.value}</span></div>
+                            <div key={p.label} className="flex justify-between py-1 border-b border-[#1a1a1a] text-[11px]"><span className="text-reiks-mid">{p.label}</span><span className="font-mono text-gold">{p.value}</span></div>
                         ))}
                     </div>
                 </div>
@@ -1062,7 +1062,7 @@ export default function AdminPage() {
                                     <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                                         <div className={`max-w-[80%] p-3 rounded-xl text-xs leading-relaxed ${msg.role === 'user'
                                             ? 'bg-gold text-black rounded-tr-none'
-                                            : 'bg-[#111] border border-aureum-border text-aureum-white rounded-tl-none'
+                                            : 'bg-[#111] border border-reiks-border text-reiks-white rounded-tl-none'
                                             }`}>
                                             {msg.text}
                                         </div>
@@ -1070,7 +1070,7 @@ export default function AdminPage() {
                                 ))}
                                 {isAgentTyping && (
                                     <div className="flex justify-start">
-                                        <div className="bg-[#111] border border-aureum-border text-aureum-dim p-3 rounded-xl rounded-tl-none text-xs italic">
+                                        <div className="bg-[#111] border border-reiks-border text-reiks-dim p-3 rounded-xl rounded-tl-none text-xs italic">
                                             COO is analyzing logs...
                                         </div>
                                     </div>
@@ -1083,7 +1083,7 @@ export default function AdminPage() {
                                     onChange={e => setAgentPrompt(e.target.value)}
                                     onKeyDown={e => e.key === 'Enter' && handleAgentChat()}
                                     placeholder="Ask about business performance, logs, or costs..."
-                                    className="flex-1 bg-[#0a0a0a] border border-aureum-border rounded-lg px-4 py-2 text-xs focus:border-gold/50 outline-none"
+                                    className="flex-1 bg-[#0a0a0a] border border-reiks-border rounded-lg px-4 py-2 text-xs focus:border-gold/50 outline-none"
                                 />
                                 <button
                                     onClick={() => handleAgentChat()}
@@ -1100,37 +1100,37 @@ export default function AdminPage() {
                 {/* Agent Briefing & Alerts (Option 2A, 2B, 2C) */}
                 <div className="space-y-4">
                     <Card>
-                        <h3 className="text-sm font-bold text-aureum-white mb-3">DAILY BRIEFING (2A)</h3>
+                        <h3 className="text-sm font-bold text-reiks-white mb-3">DAILY BRIEFING (2A)</h3>
                         <button
                             onClick={() => handleAgentChat("Give me a comprehensive daily briefing based on the logs.")}
                             className="w-full py-2 bg-gold/10 border border-gold/30 text-gold text-[10px] font-bold rounded mb-3 hover:bg-gold/20 transition-colors"
                         >
                             GENERATE MORNING BRIEF
                         </button>
-                        <div className="text-[10px] text-aureum-dim leading-relaxed p-3 bg-[#111] rounded-lg border border-aureum-border">
+                        <div className="text-[10px] text-reiks-dim leading-relaxed p-3 bg-[#111] rounded-lg border border-reiks-border">
                             Nightly report status: <span className="text-success">Generated at 08:00 AM</span>
-                            <div className="mt-2 text-aureum-mid">
+                            <div className="mt-2 text-reiks-mid">
                                 "High activity on Forge AI today. One user spent 12 mins on a custom design — follow up recommended."
                             </div>
                         </div>
                     </Card>
 
                     <Card>
-                        <h3 className="text-sm font-bold text-aureum-white mb-3">GUARDIAN ALERTS (2B, 2C)</h3>
+                        <h3 className="text-sm font-bold text-reiks-white mb-3">GUARDIAN ALERTS (2B, 2C)</h3>
                         <div className="space-y-3">
                             <div className="p-2.5 bg-error/5 border border-error/20 rounded-lg">
                                 <div className="text-[10px] font-bold text-error flex justify-between">
                                     <span>FINANCIAL RISK</span>
                                     <span>2h ago</span>
                                 </div>
-                                <div className="text-[10px] text-aureum-dim mt-1">Gold price spiked 1.2%. Profit margin on 7d locks now below 5%.</div>
+                                <div className="text-[10px] text-reiks-dim mt-1">Gold price spiked 1.2%. Profit margin on 7d locks now below 5%.</div>
                             </div>
                             <div className="p-2.5 bg-success/5 border border-success/20 rounded-lg">
                                 <div className="text-[10px] font-bold text-success flex justify-between">
                                     <span>SALES OPPORTUNITY</span>
                                     <span>5h ago</span>
                                 </div>
-                                <div className="text-[10px] text-aureum-dim mt-1">High-intent user abandoned a ₹1.2L checkout. Discount ping sent via Agent 2B.</div>
+                                <div className="text-[10px] text-reiks-dim mt-1">High-intent user abandoned a ₹1.2L checkout. Discount ping sent via Agent 2B.</div>
                             </div>
                         </div>
                     </Card>
@@ -1152,7 +1152,7 @@ export default function AdminPage() {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'x-anthropic-key': localStorage.getItem('aureum_anthropic_key') || ''
+                    'x-anthropic-key': localStorage.getItem('reiks_anthropic_key') || ''
                 },
                 body: JSON.stringify({ logs: events, query })
             })
@@ -1173,32 +1173,32 @@ export default function AdminPage() {
         <div className="space-y-4">
             <Card>
                 <div className="flex justify-between items-center mb-4">
-                    <h3 className="text-sm font-semibold text-aureum-white">User Activity Logs</h3>
-                    <div className="text-aureum-dim text-xs">Last 500 actions</div>
+                    <h3 className="text-sm font-semibold text-reiks-white">User Activity Logs</h3>
+                    <div className="text-reiks-dim text-xs">Last 500 actions</div>
                 </div>
                 <div className="overflow-x-auto">
                     <table className="w-full text-left">
-                        <thead><tr className="border-b border-aureum-border">
-                            {['Timestamp', 'Action', 'Metadata'].map(h => <th key={h} className="px-3 py-2 text-[9px] font-mono font-semibold text-aureum-dim uppercase tracking-wider">{h}</th>)}
+                        <thead><tr className="border-b border-reiks-border">
+                            {['Timestamp', 'Action', 'Metadata'].map(h => <th key={h} className="px-3 py-2 text-[9px] font-mono font-semibold text-reiks-dim uppercase tracking-wider">{h}</th>)}
                         </tr></thead>
                         <tbody>
                             {events.map((e, i) => (
                                 <tr key={e.id || i} className="border-b border-[#111] hover:bg-[#111] transition-colors">
-                                    <td className="px-3 py-2 text-[10px] text-aureum-dim whitespace-nowrap">{new Date(e.timestamp).toLocaleString()}</td>
+                                    <td className="px-3 py-2 text-[10px] text-reiks-dim whitespace-nowrap">{new Date(e.timestamp).toLocaleString()}</td>
                                     <td className="px-3 py-2">
                                         <Badge
                                             text={e.action.toUpperCase()}
                                             color={e.action.includes('buy') ? '#4ade80' : e.action.includes('design') || e.action.includes('forge') ? '#c084fc' : e.action.includes('chat') ? '#60a5fa' : '#fbbf24'}
                                         />
                                     </td>
-                                    <td className="px-3 py-2 text-[10px] font-mono text-aureum-mid max-w-lg truncate">
+                                    <td className="px-3 py-2 text-[10px] font-mono text-reiks-mid max-w-lg truncate">
                                         {JSON.stringify(e.metadata)}
                                     </td>
                                 </tr>
                             ))}
                             {events.length === 0 && (
                                 <tr>
-                                    <td colSpan={3} className="px-3 py-8 text-center text-aureum-dim text-xs">
+                                    <td colSpan={3} className="px-3 py-8 text-center text-reiks-dim text-xs">
                                         No recent activity to display.
                                     </td>
                                 </tr>
@@ -1225,20 +1225,20 @@ export default function AdminPage() {
     }
 
     return (
-        <div className="flex min-h-screen bg-[#080808] text-aureum-white font-body">
+        <div className="flex min-h-screen bg-[#080808] text-reiks-white font-body">
             {/* SIDEBAR */}
-            <div className={`${collapsed ? 'w-14' : 'w-48'} bg-[#0a0a0a] border-r border-aureum-border flex flex-col shrink-0 transition-all duration-200 overflow-hidden sticky top-0 h-screen`}>
-                <div className={`${collapsed ? 'px-2 py-4' : 'px-5 py-4'} border-b border-aureum-border flex items-center gap-2 cursor-pointer`} onClick={() => setCollapsed(!collapsed)}>
+            <div className={`${collapsed ? 'w-14' : 'w-48'} bg-[#0a0a0a] border-r border-reiks-border flex flex-col shrink-0 transition-all duration-200 overflow-hidden sticky top-0 h-screen`}>
+                <div className={`${collapsed ? 'px-2 py-4' : 'px-5 py-4'} border-b border-reiks-border flex items-center gap-2 cursor-pointer`} onClick={() => setCollapsed(!collapsed)}>
                     <span className="text-lg text-gold font-heading font-extrabold">A</span>
-                    {!collapsed && <span className="text-sm text-gold font-heading font-extrabold tracking-widest">AUREUM</span>}
+                    {!collapsed && <span className="text-sm text-gold font-heading font-extrabold tracking-widest">REIKS</span>}
                 </div>
-                <div className={`${collapsed ? 'px-1 py-2' : 'px-4 py-2'} border-b border-aureum-border text-center`}>
+                <div className={`${collapsed ? 'px-1 py-2' : 'px-4 py-2'} border-b border-reiks-border text-center`}>
                     <div className={`${collapsed ? 'text-[10px]' : 'text-base'} font-mono font-bold text-gold`}>₹{goldPrice.toFixed(0)}</div>
                     {!collapsed && <div className="text-[10px] font-mono" style={{ color: goldDelta >= 0 ? '#4ade80' : '#f87171' }}>{goldDelta >= 0 ? '▲' : '▼'}{Math.abs(goldDelta).toFixed(2)}% <span style={{ color: sessionClr }}>● {session}</span></div>}
                 </div>
                 <div className="flex-1 py-2">
                     {NAV_ITEMS.map(item => (
-                        <div key={item.id} onClick={() => setNav(item.id)} className={`flex items-center gap-2.5 ${collapsed ? 'px-0 justify-center' : 'px-5'} py-2.5 cursor-pointer transition-all text-sm ${nav === item.id ? 'text-gold' : 'text-aureum-dim hover:text-aureum-mid'}`} style={{ borderLeft: collapsed ? 'none' : nav === item.id ? '3px solid #D4A853' : '3px solid transparent', background: nav === item.id ? '#D4A85315' : 'transparent' }}>
+                        <div key={item.id} onClick={() => setNav(item.id)} className={`flex items-center gap-2.5 ${collapsed ? 'px-0 justify-center' : 'px-5'} py-2.5 cursor-pointer transition-all text-sm ${nav === item.id ? 'text-gold' : 'text-reiks-dim hover:text-reiks-mid'}`} style={{ borderLeft: collapsed ? 'none' : nav === item.id ? '3px solid #D4A853' : '3px solid transparent', background: nav === item.id ? '#D4A85315' : 'transparent' }}>
                             <span className="text-sm w-5 text-center">{item.icon}</span>
                             {!collapsed && <span className={`whitespace-nowrap ${nav === item.id ? 'font-semibold' : ''}`}>{item.label}</span>}
                             {!collapsed && item.id === 'system' && unresolvedAlerts > 0 && <span className="ml-auto text-[9px] font-mono font-bold bg-error text-white px-1.5 py-0.5 rounded-full">{unresolvedAlerts}</span>}
@@ -1246,7 +1246,7 @@ export default function AdminPage() {
                     ))}
                 </div>
                 {!collapsed && (
-                    <div className="px-4 py-3 border-t border-aureum-border text-[9px] text-aureum-dim">
+                    <div className="px-4 py-3 border-t border-reiks-border text-[9px] text-reiks-dim">
                         <div>{time.toLocaleTimeString()}</div>
                         <div>{time.toLocaleDateString('en-IN', { weekday: 'short', month: 'short', day: 'numeric' })}</div>
                     </div>
@@ -1255,14 +1255,14 @@ export default function AdminPage() {
 
             {/* MAIN */}
             <div className="flex-1 flex flex-col min-w-0">
-                <div className="px-6 py-2.5 border-b border-aureum-border bg-[#0a0a0a] flex justify-between items-center shrink-0 sticky top-0 z-10">
+                <div className="px-6 py-2.5 border-b border-reiks-border bg-[#0a0a0a] flex justify-between items-center shrink-0 sticky top-0 z-10">
                     <div className="flex items-center gap-3">
-                        <span className="text-base font-bold text-aureum-white">{NAV_ITEMS.find(n => n.id === nav)?.label}</span>
+                        <span className="text-base font-bold text-reiks-white">{NAV_ITEMS.find(n => n.id === nav)?.label}</span>
                         <Badge text="LIVE" color="#4ade80" />
                     </div>
                     <div className="flex items-center gap-3">
                         <div className="px-2.5 py-1 bg-[#111] rounded-md text-[11px] font-mono">
-                            <span className="text-aureum-mid">XAU </span>
+                            <span className="text-reiks-mid">XAU </span>
                             <span className="text-gold font-semibold">₹{goldPrice.toFixed(0)}</span>
                             <span className={`ml-1.5 ${goldDelta >= 0 ? 'text-success' : 'text-error'}`}>{goldDelta >= 0 ? '▲' : '▼'}{Math.abs(goldDelta).toFixed(2)}%</span>
                         </div>

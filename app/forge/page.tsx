@@ -65,8 +65,8 @@ function ForgeStudioContent() {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'x-replicate-key': localStorage.getItem('aureum_replicate_key') || '',
-                    'x-meshy-key': localStorage.getItem('aureum_meshy_key') || ''
+                    'x-replicate-key': localStorage.getItem('reiks_replicate_key') || '',
+                    'x-meshy-key': localStorage.getItem('reiks_meshy_key') || ''
                 },
                 body: JSON.stringify({ prompt: genPrompt, metal: genMetal, karat: genKarat, category: genCategory }),
             })
@@ -93,8 +93,8 @@ function ForgeStudioContent() {
                 image: images[0] || 'https://placehold.co/512x512/111111/D4A853?text=Design+Failed',
                 date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
             }
-            const existingDesigns = JSON.parse(localStorage.getItem('aureum_designs') || '[]')
-            localStorage.setItem('aureum_designs', JSON.stringify([newDesign, ...existingDesigns]))
+            const existingDesigns = JSON.parse(localStorage.getItem('reiks_designs') || '[]')
+            localStorage.setItem('reiks_designs', JSON.stringify([newDesign, ...existingDesigns]))
 
             setStage('results')
         } catch {
@@ -136,7 +136,7 @@ function ForgeStudioContent() {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'x-anthropic-key': localStorage.getItem('aureum_anthropic_key') || ''
+                    'x-anthropic-key': localStorage.getItem('reiks_anthropic_key') || ''
                 },
                 body: JSON.stringify({ imageBase64: base64, mediaType }),
             })
@@ -210,10 +210,10 @@ function ForgeStudioContent() {
                 <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                     {/* Header */}
                     <div className="text-center mb-10">
-                        <h1 className="text-3xl md:text-4xl font-heading font-bold text-aureum-white">
+                        <h1 className="text-3xl md:text-4xl font-heading font-bold text-reiks-white">
                             <span className="text-gold">Forge</span> AI Studio
                         </h1>
-                        <p className="mt-2 text-sm text-aureum-mid">
+                        <p className="mt-2 text-sm text-reiks-mid">
                             Upload any inspiration → AI analyzes it → Generate custom designs → Buy
                         </p>
                     </div>
@@ -226,13 +226,13 @@ function ForgeStudioContent() {
                             const isPast = i < stages.findIndex(s => s.includes(stage))
                             return (
                                 <div key={step} className="flex items-center gap-2">
-                                    <div className={`text-xs font-mono px-3 py-1 rounded-full transition-colors ${isActive ? 'bg-gold text-aureum-black font-bold' :
+                                    <div className={`text-xs font-mono px-3 py-1 rounded-full transition-colors ${isActive ? 'bg-gold text-reiks-black font-bold' :
                                         isPast ? 'bg-gold/20 text-gold' :
-                                            'bg-aureum-card text-aureum-dim border border-aureum-border'
+                                            'bg-reiks-card text-reiks-dim border border-reiks-border'
                                         }`}>
                                         {step}
                                     </div>
-                                    {i < 3 && <ChevronRight size={12} className="text-aureum-dim" />}
+                                    {i < 3 && <ChevronRight size={12} className="text-reiks-dim" />}
                                 </div>
                             )
                         })}
@@ -246,11 +246,11 @@ function ForgeStudioContent() {
                                     onDrop={handleDrop}
                                     onDragOver={e => e.preventDefault()}
                                     onClick={() => fileRef.current?.click()}
-                                    className="border-2 border-dashed border-aureum-border hover:border-gold/40 rounded-2xl p-16 text-center cursor-pointer transition-colors group"
+                                    className="border-2 border-dashed border-reiks-border hover:border-gold/40 rounded-2xl p-16 text-center cursor-pointer transition-colors group"
                                 >
-                                    <Upload size={48} className="mx-auto text-aureum-dim group-hover:text-gold transition-colors mb-4" />
-                                    <h3 className="text-lg font-semibold text-aureum-white mb-2">Drop your inspiration image</h3>
-                                    <p className="text-sm text-aureum-dim mb-6">
+                                    <Upload size={48} className="mx-auto text-reiks-dim group-hover:text-gold transition-colors mb-4" />
+                                    <h3 className="text-lg font-semibold text-reiks-white mb-2">Drop your inspiration image</h3>
+                                    <p className="text-sm text-reiks-dim mb-6">
                                         A Pinterest pin, wedding photo, sketch — anything with jewelry
                                     </p>
                                     <button className="btn-gold px-6 py-2.5 rounded-lg text-sm">
@@ -265,15 +265,15 @@ function ForgeStudioContent() {
                                 </div>
 
                                 {/* Or text prompt */}
-                                <div className="mt-8 text-center border-t border-aureum-border pt-8 max-w-xl mx-auto">
-                                    <p className="text-xs text-aureum-dim mb-3">Or simply describe the design you want to generate:</p>
+                                <div className="mt-8 text-center border-t border-reiks-border pt-8 max-w-xl mx-auto">
+                                    <p className="text-xs text-reiks-dim mb-3">Or simply describe the design you want to generate:</p>
                                     <div className="flex items-center gap-3 max-w-lg mx-auto">
                                         <input
                                             type="text"
                                             placeholder="A minimalist 18K gold ring with wave pattern..."
                                             value={prompt}
                                             onChange={e => setPrompt(e.target.value)}
-                                            className="flex-1 px-4 py-3 bg-aureum-card border border-aureum-border rounded-lg text-sm text-aureum-white placeholder:text-aureum-dim focus:outline-none focus:border-gold/40"
+                                            className="flex-1 px-4 py-3 bg-reiks-card border border-reiks-border rounded-lg text-sm text-reiks-white placeholder:text-reiks-dim focus:outline-none focus:border-gold/40"
                                         />
                                         <button
                                             onClick={() => { if (prompt) { setStage('generating'); handleGenerate() } }}
@@ -291,8 +291,8 @@ function ForgeStudioContent() {
                         {stage === 'analyzing' && (
                             <motion.div key="analyzing" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="text-center py-16">
                                 <Loader2 size={48} className="mx-auto text-gold animate-spin mb-4" />
-                                <h3 className="text-lg font-semibold text-aureum-white mb-2">Analyzing with Claude Vision...</h3>
-                                <p className="text-sm text-aureum-dim">Identifying metal, style, weight, motifs</p>
+                                <h3 className="text-lg font-semibold text-reiks-white mb-2">Analyzing with Claude Vision...</h3>
+                                <p className="text-sm text-reiks-dim">Identifying metal, style, weight, motifs</p>
                             </motion.div>
                         )}
 
@@ -301,14 +301,14 @@ function ForgeStudioContent() {
                             <motion.div key="analysis" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }}>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     {/* Uploaded image */}
-                                    <div className="rounded-xl overflow-hidden border border-aureum-border">
+                                    <div className="rounded-xl overflow-hidden border border-reiks-border">
                                         {uploadedImage && (
                                             <img src={uploadedImage} alt="Uploaded" className="w-full aspect-square object-cover" />
                                         )}
                                     </div>
 
                                     {/* Analysis details */}
-                                    <div className="p-6 bg-aureum-card rounded-xl border border-aureum-border">
+                                    <div className="p-6 bg-reiks-card rounded-xl border border-reiks-border">
                                         <h3 className="text-lg font-heading font-bold text-gold mb-4">AI Analysis</h3>
                                         <div className="space-y-3">
                                             {[
@@ -320,12 +320,12 @@ function ForgeStudioContent() {
                                                 { label: 'Suggested', value: `${analysis.suggested_karat}K` },
                                             ].map(item => (
                                                 <div key={item.label} className="flex justify-between text-sm">
-                                                    <span className="text-aureum-dim">{item.label}</span>
-                                                    <span className="text-aureum-white font-medium capitalize">{item.value}</span>
+                                                    <span className="text-reiks-dim">{item.label}</span>
+                                                    <span className="text-reiks-white font-medium capitalize">{item.value}</span>
                                                 </div>
                                             ))}
                                             <div className="pt-2">
-                                                <span className="text-xs text-aureum-dim">Motifs</span>
+                                                <span className="text-xs text-reiks-dim">Motifs</span>
                                                 <div className="flex flex-wrap gap-1.5 mt-1">
                                                     {analysis.motifs.map(m => (
                                                         <span key={m} className="text-[10px] font-mono px-2 py-0.5 bg-gold/10 text-gold rounded">{m}</span>
@@ -336,12 +336,12 @@ function ForgeStudioContent() {
 
                                         {/* Editable prompt */}
                                         <div className="mt-6">
-                                            <label className="text-xs text-aureum-dim mb-2 block">Design Prompt</label>
+                                            <label className="text-xs text-reiks-dim mb-2 block">Design Prompt</label>
                                             <textarea
                                                 value={prompt}
                                                 onChange={e => setPrompt(e.target.value)}
                                                 rows={3}
-                                                className="w-full px-3 py-2 bg-aureum-dark border border-aureum-border rounded-lg text-sm text-aureum-white focus:outline-none focus:border-gold/40 resize-none"
+                                                className="w-full px-3 py-2 bg-reiks-dark border border-reiks-border rounded-lg text-sm text-reiks-white focus:outline-none focus:border-gold/40 resize-none"
                                             />
                                         </div>
 
@@ -361,15 +361,15 @@ function ForgeStudioContent() {
                             <motion.div key="generating" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
                                 <div className="grid grid-cols-2 gap-4 max-w-xl mx-auto">
                                     {[1, 2, 3, 4].map(i => (
-                                        <div key={i} className="aspect-square bg-aureum-card rounded-xl border border-aureum-border animate-pulse flex items-center justify-center">
+                                        <div key={i} className="aspect-square bg-reiks-card rounded-xl border border-reiks-border animate-pulse flex items-center justify-center">
                                             <div className="text-center">
                                                 <Loader2 size={24} className="mx-auto text-gold animate-spin mb-2" />
-                                                <span className="text-[10px] font-mono text-aureum-dim">Variation {i}</span>
+                                                <span className="text-[10px] font-mono text-reiks-dim">Variation {i}</span>
                                             </div>
                                         </div>
                                     ))}
                                 </div>
-                                <p className="text-center text-sm text-aureum-dim mt-6">Generating with FLUX... ~20 seconds</p>
+                                <p className="text-center text-sm text-reiks-dim mt-6">Generating with FLUX... ~20 seconds</p>
                             </motion.div>
                         )}
 
@@ -381,14 +381,14 @@ function ForgeStudioContent() {
                                         <button
                                             key={i}
                                             onClick={() => { setSelectedImage(img); setStage('editing') }}
-                                            className={`aspect-square rounded-xl overflow-hidden border-2 transition-all ${selectedImage === img ? 'border-gold' : 'border-aureum-border hover:border-gold/40'
+                                            className={`aspect-square rounded-xl overflow-hidden border-2 transition-all ${selectedImage === img ? 'border-gold' : 'border-reiks-border hover:border-gold/40'
                                                 }`}
                                         >
                                             <img src={img} alt={`Design ${i + 1}`} className="w-full h-full object-cover" />
                                         </button>
                                     ))}
                                 </div>
-                                <p className="text-center text-sm text-aureum-dim mt-4">Click a design to customize and price it</p>
+                                <p className="text-center text-sm text-reiks-dim mt-4">Click a design to customize and price it</p>
                             </motion.div>
                         )}
 
@@ -400,19 +400,19 @@ function ForgeStudioContent() {
                                         <img src={selectedImage} alt="Selected design" className="w-full aspect-square object-cover" />
                                     </div>
 
-                                    <div className="p-6 bg-aureum-card rounded-xl border border-aureum-border">
+                                    <div className="p-6 bg-reiks-card rounded-xl border border-reiks-border">
                                         <h3 className="text-lg font-heading font-bold text-gold mb-4">Customize</h3>
 
                                         {/* Metal */}
                                         <div className="mb-4">
-                                            <label className="text-xs text-aureum-dim uppercase tracking-wider mb-2 block">Metal</label>
+                                            <label className="text-xs text-reiks-dim uppercase tracking-wider mb-2 block">Metal</label>
                                             <div className="flex gap-2">
                                                 {(['gold', 'rose_gold', 'silver', 'platinum'] as MetalType[]).map(m => (
                                                     <button
                                                         key={m}
                                                         onClick={() => handleMetalChange(m)}
                                                         disabled={regenerating}
-                                                        className={`px-3 py-2 rounded-lg text-xs font-medium transition-all ${metal === m ? 'bg-gold text-aureum-black' : 'bg-aureum-dark text-aureum-mid border border-aureum-border hover:border-gold/30'
+                                                        className={`px-3 py-2 rounded-lg text-xs font-medium transition-all ${metal === m ? 'bg-gold text-reiks-black' : 'bg-reiks-dark text-reiks-mid border border-reiks-border hover:border-gold/30'
                                                             } ${regenerating ? 'opacity-50 cursor-wait' : ''}`}
                                                     >
                                                         {metalLabel(m)}
@@ -429,13 +429,13 @@ function ForgeStudioContent() {
 
                                         {/* Karat */}
                                         <div className="mb-4">
-                                            <label className="text-xs text-aureum-dim uppercase tracking-wider mb-2 block">Karat</label>
+                                            <label className="text-xs text-reiks-dim uppercase tracking-wider mb-2 block">Karat</label>
                                             <div className="flex gap-2">
                                                 {([14, 18, 22] as Karat[]).map(k => (
                                                     <button
                                                         key={k}
                                                         onClick={() => setKarat(k)}
-                                                        className={`px-4 py-2 rounded-lg text-sm font-mono font-semibold transition-all ${karat === k ? 'bg-gold text-aureum-black' : 'bg-aureum-dark text-aureum-mid border border-aureum-border hover:border-gold/30'
+                                                        className={`px-4 py-2 rounded-lg text-sm font-mono font-semibold transition-all ${karat === k ? 'bg-gold text-reiks-black' : 'bg-reiks-dark text-reiks-mid border border-reiks-border hover:border-gold/30'
                                                             }`}
                                                     >
                                                         {k}K
@@ -446,7 +446,7 @@ function ForgeStudioContent() {
 
                                         {/* Weight */}
                                         <div className="mb-6">
-                                            <label className="text-xs text-aureum-dim uppercase tracking-wider mb-2 block">
+                                            <label className="text-xs text-reiks-dim uppercase tracking-wider mb-2 block">
                                                 Weight: {weight}g
                                             </label>
                                             <input
@@ -461,15 +461,15 @@ function ForgeStudioContent() {
                                         </div>
 
                                         {/* Price */}
-                                        <div className="p-4 bg-aureum-dark rounded-xl border border-aureum-border">
-                                            <div className="flex justify-between text-xs text-aureum-dim mb-2">
+                                        <div className="p-4 bg-reiks-dark rounded-xl border border-reiks-border">
+                                            <div className="flex justify-between text-xs text-reiks-dim mb-2">
                                                 <span>Estimated Total</span>
                                                 <span>{price?.isLive ? 'LIVE' : 'SIM'}</span>
                                             </div>
                                             <div className="text-2xl font-mono font-bold text-gold">
                                                 {priceBreakdown ? formatINR(priceBreakdown.total) : '...'}
                                             </div>
-                                            <div className="text-xs text-aureum-dim mt-1">
+                                            <div className="text-xs text-reiks-dim mt-1">
                                                 Gold: {priceBreakdown ? formatINR(priceBreakdown.goldCost) : '...'} + Making: {priceBreakdown ? formatINR(priceBreakdown.makingCharges) : '...'} + GST
                                             </div>
                                         </div>
@@ -492,7 +492,7 @@ function ForgeStudioContent() {
 
                                         <button
                                             onClick={() => setStage('results')}
-                                            className="mt-3 text-xs text-aureum-dim hover:text-gold transition-colors w-full text-center"
+                                            className="mt-3 text-xs text-reiks-dim hover:text-gold transition-colors w-full text-center"
                                         >
                                             ← Back to all designs
                                         </button>
@@ -514,7 +514,7 @@ function ForgeStudioContent() {
                                 setPrompt('')
                                 setError(null)
                             }}
-                            className="mt-8 text-xs text-aureum-dim hover:text-gold transition-colors flex items-center gap-1 mx-auto"
+                            className="mt-8 text-xs text-reiks-dim hover:text-gold transition-colors flex items-center gap-1 mx-auto"
                         >
                             <X size={12} /> Start Over
                         </button>
@@ -542,7 +542,7 @@ function InstagramSelector({ onSelect }: { onSelect: (url: string) => void }) {
         <div className="relative inline-block">
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="px-6 py-2.5 rounded-lg text-sm border border-[#E1306C]/50 hover:border-[#E1306C] bg-gradient-to-r hover:from-[#f09433]/10 hover:via-[#e6683c]/10 hover:to-[#bc1888]/10 text-aureum-white transition-all flex items-center gap-2 mx-auto justify-center group"
+                className="px-6 py-2.5 rounded-lg text-sm border border-[#E1306C]/50 hover:border-[#E1306C] bg-gradient-to-r hover:from-[#f09433]/10 hover:via-[#e6683c]/10 hover:to-[#bc1888]/10 text-reiks-white transition-all flex items-center gap-2 mx-auto justify-center group"
             >
                 <Instagram size={16} className="text-[#E1306C] group-hover:scale-110 transition-transform" />
                 Connect Instagram to Select Photo
@@ -554,11 +554,11 @@ function InstagramSelector({ onSelect }: { onSelect: (url: string) => void }) {
                         initial={{ opacity: 0, y: 10, scale: 0.95 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                        className="absolute top-full left-1/2 -translate-x-1/2 mt-4 p-4 bg-aureum-card border border-aureum-border rounded-xl shadow-2xl z-50 w-[300px] sm:w-[400px]"
+                        className="absolute top-full left-1/2 -translate-x-1/2 mt-4 p-4 bg-reiks-card border border-reiks-border rounded-xl shadow-2xl z-50 w-[300px] sm:w-[400px]"
                     >
                         <div className="flex justify-between items-center mb-4">
-                            <h4 className="text-xs font-bold text-aureum-white uppercase tracking-wider">Select Instagram Photo</h4>
-                            <button onClick={() => setIsOpen(false)} className="text-aureum-dim hover:text-aureum-white"><X size={14} /></button>
+                            <h4 className="text-xs font-bold text-reiks-white uppercase tracking-wider">Select Instagram Photo</h4>
+                            <button onClick={() => setIsOpen(false)} className="text-reiks-dim hover:text-reiks-white"><X size={14} /></button>
                         </div>
                         <div className="grid grid-cols-3 gap-2">
                             {instagramPhotos.map((url, i) => (
@@ -571,8 +571,8 @@ function InstagramSelector({ onSelect }: { onSelect: (url: string) => void }) {
                                 </button>
                             ))}
                         </div>
-                        <p className="mt-4 text-[10px] text-aureum-dim text-center">
-                            Signed in as <span className="text-gold">@aureum_vault</span>
+                        <p className="mt-4 text-[10px] text-reiks-dim text-center">
+                            Signed in as <span className="text-gold">@reiks_vault</span>
                         </p>
                     </motion.div>
                 )}

@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════
-// AUREUM — Utility Functions
+// REIKS — Utility Functions
 // ═══════════════════════════════════════════
 
 import type { Karat, PriceBreakdown, TradingSession } from './types'

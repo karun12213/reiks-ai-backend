@@ -1,19 +1,19 @@
 @import "tailwindcss";
 
 /* ═══════════════════════════════════════════ */
-/* AUREUM — Design System                      */
+/* REIKS — Design System                      */
 /* ═══════════════════════════════════════════ */
 
 @theme {
   /* ─── Brand Colors ─── */
-  --color-aureum-black: #080808;
-  --color-aureum-dark: #0d0d0d;
-  --color-aureum-card: #111111;
-  --color-aureum-border: #1a1a1a;
-  --color-aureum-dim: #555555;
-  --color-aureum-mid: #888888;
-  --color-aureum-light: #cccccc;
-  --color-aureum-white: #f0f0f0;
+  --color-reiks-black: #080808;
+  --color-reiks-dark: #0d0d0d;
+  --color-reiks-card: #111111;
+  --color-reiks-border: #1a1a1a;
+  --color-reiks-dim: #555555;
+  --color-reiks-mid: #888888;
+  --color-reiks-light: #cccccc;
+  --color-reiks-white: #f0f0f0;
   --color-gold: #D4A853;
   --color-gold-dark: #8B6914;
   --color-gold-light: #E8C547;

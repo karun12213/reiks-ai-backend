@@ -44,7 +44,7 @@ export default function VaultPage() {
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
-            setLocalLocks(JSON.parse(localStorage.getItem('aureum_locks') || '[]'))
+            setLocalLocks(JSON.parse(localStorage.getItem('reiks_locks') || '[]'))
         }
     }, [])
 
@@ -76,16 +76,16 @@ export default function VaultPage() {
                     {/* Header */}
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
                         <div>
-                            <h1 className="text-3xl md:text-4xl font-heading font-bold text-aureum-white">
+                            <h1 className="text-3xl md:text-4xl font-heading font-bold text-reiks-white">
                                 <span className="text-gold">Vault</span>Trade
                             </h1>
-                            <p className="text-sm text-aureum-mid mt-1">Lock gold prices • Track your positions • Gold SIP</p>
+                            <p className="text-sm text-reiks-mid mt-1">Lock gold prices • Track your positions • Gold SIP</p>
                         </div>
                         {price && sessionInfo && (
-                            <div className="flex items-center gap-3 px-4 py-2 bg-aureum-card rounded-xl border border-aureum-border">
+                            <div className="flex items-center gap-3 px-4 py-2 bg-reiks-card rounded-xl border border-reiks-border">
                                 <div className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: sessionInfo.color }} />
                                 <div>
-                                    <span className="text-[10px] font-mono text-aureum-dim">{price.session} SESSION</span>
+                                    <span className="text-[10px] font-mono text-reiks-dim">{price.session} SESSION</span>
                                     <div className="text-lg font-mono font-bold text-gold">₹{price.gold_24k_gram.toFixed(0)}</div>
                                 </div>
                             </div>
@@ -93,18 +93,18 @@ export default function VaultPage() {
                     </div>
 
                     {/* Gold Price Chart */}
-                    <div className="bg-aureum-card rounded-2xl border border-aureum-border p-6 mb-8">
+                    <div className="bg-reiks-card rounded-2xl border border-reiks-border p-6 mb-8">
                         <div className="flex items-center justify-between mb-4">
                             <div className="flex items-center gap-2">
                                 <LineChartIcon size={16} className="text-gold" />
-                                <h2 className="text-sm font-semibold text-aureum-white">Gold Price (24K, ₹/gram)</h2>
+                                <h2 className="text-sm font-semibold text-reiks-white">Gold Price (24K, ₹/gram)</h2>
                             </div>
                             <div className="flex gap-1">
                                 {(['24h', '7d', '30d'] as TimeRange[]).map(r => (
                                     <button
                                         key={r}
                                         onClick={() => setTimeRange(r)}
-                                        className={`px-3 py-1 rounded-md text-xs font-mono transition-colors ${timeRange === r ? 'bg-gold text-aureum-black font-bold' : 'text-aureum-dim hover:text-gold'
+                                        className={`px-3 py-1 rounded-md text-xs font-mono transition-colors ${timeRange === r ? 'bg-gold text-reiks-black font-bold' : 'text-reiks-dim hover:text-gold'
                                             }`}
                                     >
                                         {r}
@@ -138,22 +138,22 @@ export default function VaultPage() {
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                         {/* Price Lock Creator */}
-                        <div className="bg-aureum-card rounded-2xl border border-aureum-border p-6">
+                        <div className="bg-reiks-card rounded-2xl border border-reiks-border p-6">
                             <div className="flex items-center gap-2 mb-6">
                                 <Lock size={18} className="text-gold" />
-                                <h2 className="text-lg font-heading font-bold text-aureum-white">Create Price Lock</h2>
+                                <h2 className="text-lg font-heading font-bold text-reiks-white">Create Price Lock</h2>
                             </div>
 
                             <div className="space-y-4">
                                 {/* Duration */}
                                 <div>
-                                    <label className="text-xs text-aureum-dim uppercase tracking-wider mb-2 block">Lock Duration</label>
+                                    <label className="text-xs text-reiks-dim uppercase tracking-wider mb-2 block">Lock Duration</label>
                                     <div className="grid grid-cols-3 gap-2">
                                         {(['24h', '48h', '7d'] as LockDuration[]).map(d => (
                                             <button
                                                 key={d}
                                                 onClick={() => setLockDuration(d)}
-                                                className={`py-3 rounded-lg text-sm font-mono text-center transition-all ${lockDuration === d ? 'bg-gold text-aureum-black font-bold' : 'bg-aureum-dark border border-aureum-border text-aureum-mid hover:border-gold/30'
+                                                className={`py-3 rounded-lg text-sm font-mono text-center transition-all ${lockDuration === d ? 'bg-gold text-reiks-black font-bold' : 'bg-reiks-dark border border-reiks-border text-reiks-mid hover:border-gold/30'
                                                     }`}
                                             >
                                                 <div className="font-bold">{d}</div>
@@ -165,13 +165,13 @@ export default function VaultPage() {
 
                                 {/* Karat */}
                                 <div>
-                                    <label className="text-xs text-aureum-dim uppercase tracking-wider mb-2 block">Karat</label>
+                                    <label className="text-xs text-reiks-dim uppercase tracking-wider mb-2 block">Karat</label>
                                     <div className="flex gap-2">
                                         {([14, 18, 22] as Karat[]).map(k => (
                                             <button
                                                 key={k}
                                                 onClick={() => setLockKarat(k)}
-                                                className={`flex-1 py-2 rounded-lg text-sm font-mono transition-all ${lockKarat === k ? 'bg-gold text-aureum-black font-bold' : 'bg-aureum-dark border border-aureum-border text-aureum-mid hover:border-gold/30'
+                                                className={`flex-1 py-2 rounded-lg text-sm font-mono transition-all ${lockKarat === k ? 'bg-gold text-reiks-black font-bold' : 'bg-reiks-dark border border-reiks-border text-reiks-mid hover:border-gold/30'
                                                     }`}
                                             >
                                                 {k}K
@@ -182,22 +182,22 @@ export default function VaultPage() {
 
                                 {/* Weight */}
                                 <div>
-                                    <label className="text-xs text-aureum-dim uppercase tracking-wider mb-2 block">Weight: {lockWeight}g</label>
+                                    <label className="text-xs text-reiks-dim uppercase tracking-wider mb-2 block">Weight: {lockWeight}g</label>
                                     <input type="range" min={2} max={50} step={1} value={lockWeight} onChange={e => setLockWeight(parseInt(e.target.value))} className="w-full accent-gold" />
                                 </div>
 
                                 {/* Summary */}
-                                <div className="p-4 bg-aureum-dark rounded-xl border border-aureum-border">
+                                <div className="p-4 bg-reiks-dark rounded-xl border border-reiks-border">
                                     <div className="flex justify-between text-sm mb-2">
-                                        <span className="text-aureum-dim">Locked Value</span>
-                                        <span className="text-aureum-white font-mono font-bold">{lockBreakdown ? formatINR(lockBreakdown.total) : '...'}</span>
+                                        <span className="text-reiks-dim">Locked Value</span>
+                                        <span className="text-reiks-white font-mono font-bold">{lockBreakdown ? formatINR(lockBreakdown.total) : '...'}</span>
                                     </div>
                                     <div className="flex justify-between text-sm mb-2">
-                                        <span className="text-aureum-dim">Lock Premium ({LOCK_PREMIUM_RATES[lockDuration] * 100}%)</span>
+                                        <span className="text-reiks-dim">Lock Premium ({LOCK_PREMIUM_RATES[lockDuration] * 100}%)</span>
                                         <span className="text-warning font-mono">{formatINR(lockPremium)}</span>
                                     </div>
-                                    <div className="flex justify-between text-sm pt-2 border-t border-aureum-border">
-                                        <span className="text-aureum-mid font-medium">Pay Now</span>
+                                    <div className="flex justify-between text-sm pt-2 border-t border-reiks-border">
+                                        <span className="text-reiks-mid font-medium">Pay Now</span>
                                         <span className="text-gold font-mono font-bold">{formatINR(lockPremium)}</span>
                                     </div>
                                 </div>
@@ -219,7 +219,7 @@ export default function VaultPage() {
                                             <Check size={14} className="text-success" />
                                             <div>
                                                 <div className="text-xs font-semibold text-success">Price Locked!</div>
-                                                <div className="text-[10px] text-aureum-dim">Gold at ₹{price?.gold_24k_gram.toFixed(0)}/g for {lockDuration}. Premium: {formatINR(lockPremium)}.</div>
+                                                <div className="text-[10px] text-reiks-dim">Gold at ₹{price?.gold_24k_gram.toFixed(0)}/g for {lockDuration}. Premium: {formatINR(lockPremium)}.</div>
                                             </div>
                                         </motion.div>
                                     )}
@@ -228,39 +228,39 @@ export default function VaultPage() {
                         </div>
 
                         {/* Active Locks */}
-                        <div className="bg-aureum-card rounded-2xl border border-aureum-border p-6">
+                        <div className="bg-reiks-card rounded-2xl border border-reiks-border p-6">
                             <div className="flex items-center gap-2 mb-6">
                                 <Shield size={18} className="text-gold" />
-                                <h2 className="text-lg font-heading font-bold text-aureum-white">Active Locks</h2>
-                                <span className="text-[10px] font-mono text-aureum-dim ml-auto">{activeLocks.length} active</span>
+                                <h2 className="text-lg font-heading font-bold text-reiks-white">Active Locks</h2>
+                                <span className="text-[10px] font-mono text-reiks-dim ml-auto">{activeLocks.length} active</span>
                             </div>
 
                             <div className="space-y-3">
                                 {activeLocks.map(lock => (
-                                    <div key={lock.id} className="p-4 bg-aureum-dark rounded-xl border border-aureum-border">
+                                    <div key={lock.id} className="p-4 bg-reiks-dark rounded-xl border border-reiks-border">
                                         <div className="flex items-center justify-between mb-2">
-                                            <span className="text-sm font-semibold text-aureum-white">{lock.product}</span>
+                                            <span className="text-sm font-semibold text-reiks-white">{lock.product}</span>
                                             <span className="text-xs font-mono px-2 py-0.5 bg-gold/10 text-gold rounded">{lock.duration}</span>
                                         </div>
                                         <div className="grid grid-cols-3 gap-4 text-center">
                                             <div>
-                                                <div className="text-[10px] text-aureum-dim">Locked</div>
-                                                <div className="text-sm font-mono text-aureum-mid">₹{lock.locked}/g</div>
+                                                <div className="text-[10px] text-reiks-dim">Locked</div>
+                                                <div className="text-sm font-mono text-reiks-mid">₹{lock.locked}/g</div>
                                             </div>
                                             <div>
-                                                <div className="text-[10px] text-aureum-dim">Current</div>
-                                                <div className="text-sm font-mono text-aureum-mid">₹{lock.current?.toFixed(0)}/g</div>
+                                                <div className="text-[10px] text-reiks-dim">Current</div>
+                                                <div className="text-sm font-mono text-reiks-mid">₹{lock.current?.toFixed(0)}/g</div>
                                             </div>
                                             <div>
-                                                <div className="text-[10px] text-aureum-dim">P&L</div>
+                                                <div className="text-[10px] text-reiks-dim">P&L</div>
                                                 <div className={`text-sm font-mono font-bold flex items-center justify-center gap-1 ${lock.pnl >= 0 ? 'text-success' : 'text-error'}`}>
                                                     {lock.pnl >= 0 ? <ArrowUp size={10} /> : <ArrowDown size={10} />}
                                                     {formatINR(Math.abs(lock.pnl))}
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="flex items-center justify-between mt-3 pt-2 border-t border-aureum-border/50">
-                                            <span className="text-[10px] text-aureum-dim flex items-center gap-1">
+                                        <div className="flex items-center justify-between mt-3 pt-2 border-t border-reiks-border/50">
+                                            <span className="text-[10px] text-reiks-dim flex items-center gap-1">
                                                 <Clock size={10} /> Expires in {lock.expiresIn}
                                             </span>
                                             <button
@@ -275,12 +275,12 @@ export default function VaultPage() {
                             </div>
 
                             {/* SIP Section */}
-                            <div className="mt-6 p-4 bg-aureum-dark rounded-xl border border-aureum-border">
+                            <div className="mt-6 p-4 bg-reiks-dark rounded-xl border border-reiks-border">
                                 <div className="flex items-center gap-2 mb-3">
                                     <Wallet size={16} className="text-gold" />
-                                    <h3 className="text-sm font-semibold text-aureum-white">Gold SIP</h3>
+                                    <h3 className="text-sm font-semibold text-reiks-white">Gold SIP</h3>
                                 </div>
-                                <p className="text-xs text-aureum-dim mb-3">
+                                <p className="text-xs text-reiks-dim mb-3">
                                     Invest ₹500+/month in gold automatically. Dollar-cost average into the market.
                                 </p>
                                 <button onClick={() => setSipModal(true)} className="btn-outline-gold w-full py-2 rounded-lg text-xs">
@@ -308,7 +308,7 @@ export default function VaultPage() {
                             animate={{ scale: 1, opacity: 1 }}
                             exit={{ scale: 0.9, opacity: 0 }}
                             onClick={e => e.stopPropagation()}
-                            className="w-full max-w-sm bg-aureum-card border border-aureum-border rounded-2xl p-6"
+                            className="w-full max-w-sm bg-reiks-card border border-reiks-border rounded-2xl p-6"
                         >
                             {sipSuccess ? (
                                 <div className="text-center py-6 relative overflow-hidden">
@@ -318,34 +318,34 @@ export default function VaultPage() {
                                             <Sparkles size={28} className="text-success drop-shadow-[0_0_15px_rgba(22,163,74,0.5)]" />
                                         </div>
                                     </motion.div>
-                                    <h4 className="text-xl font-heading font-bold text-aureum-white mb-2 relative z-10">Gold SIP Activated</h4>
-                                    <p className="text-sm text-aureum-dim mb-8 relative z-10">Your monthly investment of <span className="text-success font-mono font-medium">₹{sipAmount.toLocaleString()}</span> is now algorithmically accumulating gold.</p>
-                                    <button onClick={() => { setSipModal(false); setTimeout(() => setSipSuccess(false), 500) }} className="bg-aureum-dark hover:bg-aureum-border border border-aureum-border transition-colors w-full py-3 rounded-lg text-sm text-aureum-white font-medium relative z-10">Return to Vault</button>
+                                    <h4 className="text-xl font-heading font-bold text-reiks-white mb-2 relative z-10">Gold SIP Activated</h4>
+                                    <p className="text-sm text-reiks-dim mb-8 relative z-10">Your monthly investment of <span className="text-success font-mono font-medium">₹{sipAmount.toLocaleString()}</span> is now algorithmically accumulating gold.</p>
+                                    <button onClick={() => { setSipModal(false); setTimeout(() => setSipSuccess(false), 500) }} className="bg-reiks-dark hover:bg-reiks-border border border-reiks-border transition-colors w-full py-3 rounded-lg text-sm text-reiks-white font-medium relative z-10">Return to Vault</button>
                                 </div>
                             ) : (
                                 <>
                                     <div className="flex items-center justify-between mb-4">
                                         <div className="flex items-center gap-2">
                                             <Sparkles size={18} className="text-gold" />
-                                            <h3 className="text-lg font-heading font-bold text-aureum-white">Start Gold SIP</h3>
+                                            <h3 className="text-lg font-heading font-bold text-reiks-white">Start Gold SIP</h3>
                                         </div>
-                                        <button onClick={() => setSipModal(false)} className="p-1 text-aureum-dim hover:text-gold"><X size={16} /></button>
+                                        <button onClick={() => setSipModal(false)} className="p-1 text-reiks-dim hover:text-gold"><X size={16} /></button>
                                     </div>
-                                    <p className="text-xs text-aureum-dim mb-4">Invest monthly in gold. We buy at optimal prices using AI timing.</p>
-                                    <label className="text-xs text-aureum-dim uppercase tracking-wider mb-2 block">Monthly Amount: ₹{sipAmount.toLocaleString()}</label>
+                                    <p className="text-xs text-reiks-dim mb-4">Invest monthly in gold. We buy at optimal prices using AI timing.</p>
+                                    <label className="text-xs text-reiks-dim uppercase tracking-wider mb-2 block">Monthly Amount: ₹{sipAmount.toLocaleString()}</label>
                                     <input type="range" min={500} max={50000} step={500} value={sipAmount} onChange={e => setSipAmount(parseInt(e.target.value))} className="w-full accent-gold mb-4" />
                                     <div className="grid grid-cols-3 gap-2 mb-4">
                                         {[1000, 2000, 5000].map(a => (
-                                            <button key={a} onClick={() => setSipAmount(a)} className={`py-2 rounded-lg text-xs font-mono transition-all ${sipAmount === a ? 'bg-gold text-aureum-black font-bold' : 'bg-aureum-dark border border-aureum-border text-aureum-mid'}`}>₹{a.toLocaleString()}</button>
+                                            <button key={a} onClick={() => setSipAmount(a)} className={`py-2 rounded-lg text-xs font-mono transition-all ${sipAmount === a ? 'bg-gold text-reiks-black font-bold' : 'bg-reiks-dark border border-reiks-border text-reiks-mid'}`}>₹{a.toLocaleString()}</button>
                                         ))}
                                     </div>
-                                    <div className="p-3 bg-aureum-dark rounded-lg mb-4">
+                                    <div className="p-3 bg-reiks-dark rounded-lg mb-4">
                                         <div className="flex justify-between text-xs mb-1">
-                                            <span className="text-aureum-dim">Est. gold/month</span>
+                                            <span className="text-reiks-dim">Est. gold/month</span>
                                             <span className="text-gold font-mono">{price ? (sipAmount / price.gold_24k_gram).toFixed(2) : '—'}g</span>
                                         </div>
                                         <div className="flex justify-between text-xs">
-                                            <span className="text-aureum-dim">Annual estimate</span>
+                                            <span className="text-reiks-dim">Annual estimate</span>
                                             <span className="text-gold font-mono">{price ? (sipAmount * 12 / price.gold_24k_gram).toFixed(1) : '—'}g</span>
                                         </div>
                                     </div>
@@ -358,7 +358,7 @@ export default function VaultPage() {
                                             totalInvested: sipAmount, // 1st month processed upon confirmation 
                                             goldAccumulated: Number((sipAmount / (price?.gold_24k_gram || 14573)).toFixed(4)),
                                         }
-                                        localStorage.setItem('aureum_sip', JSON.stringify(newSip))
+                                        localStorage.setItem('reiks_sip', JSON.stringify(newSip))
                                     }} className="btn-gold w-full py-3 rounded-lg text-sm">Start SIP — ₹{sipAmount.toLocaleString()}/mo</button>
                                 </>
                             )}

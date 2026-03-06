@@ -1,4 +1,4 @@
-# AUREUM — India's First AI-Native Gold Jewelry Platform
+# REIKS — India's First AI-Native Gold Jewelry Platform
 
 > Design jewelry with AI, lock live gold prices, buy from master goldsmiths. Zero markup on gold. Every piece made to order.
 
@@ -10,7 +10,7 @@
 ## 🏗️ Architecture
 
 ```
-aureum-next/
+reiks-next/
 ├── app/                          # Next.js App Router pages & API routes
 │   ├── page.tsx                  # Homepage — hero, gold ticker, CTAs
 │   ├── layout.tsx                # Root layout — fonts, theme, metadata
@@ -143,4 +143,4 @@ npm run build
 
 ---
 
-Built with ❤️ by AUREUM · *Forged by Intelligence™*
+Built with ❤️ by REIKS · *Forged by Intelligence™*

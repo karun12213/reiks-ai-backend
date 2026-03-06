@@ -26,7 +26,7 @@ export async function GET(req: Request) {
             { timestamp: new Date().toISOString(), action: 'concierge_chat', metadata: { msg: 'Do you have custom pendants?' } },
         ];
 
-        const systemPrompt = `You are the AUREUM Automated Intelligence (AAI).
+        const systemPrompt = `You are the REIKS Automated Intelligence (AAI).
 Your task is to generate a proactive "Morning Briefing" for the CEO.
 Analyze the provided activity logs and highlight:
 1. Significant user activities (Successes/Opportunities).

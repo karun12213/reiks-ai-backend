@@ -12,8 +12,8 @@ export function useGoldPrice() {
         try {
             const headers: Record<string, string> = {}
             if (typeof window !== 'undefined') {
-                const metalsKey = localStorage.getItem('aureum_metals_key')
-                const goldApiKey = localStorage.getItem('aureum_gold_api_key')
+                const metalsKey = localStorage.getItem('reiks_metals_key')
+                const goldApiKey = localStorage.getItem('reiks_gold_api_key')
                 if (metalsKey) headers['x-metals-key'] = metalsKey
                 if (goldApiKey) headers['x-goldapi-key'] = goldApiKey
             }
